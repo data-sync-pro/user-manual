@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+
+            <div class='v-space'></div>
+            <p>There are 3 methods of authorizing a Salesforce org, choose one of the following three options:</p>
+
+            <div class='v-space'></div>
+            <div class="image-outer">
+                <img src="resource/img/connection.png" onclick="window.open(this.src)"/>
+                <div class="image-title">Connection</div>
+            </div>
+
+            <div class='v-space'></div>
+            <h2 id='title'>Option #1: Current Org</h2>
+
+            <p class="double-indent">Check <span class='formula'>Is Current Org?</span> to indicate whether the current
+                Connection is the current org or not. If checked, no other credential is needed, the data execution will
+                run as the current user via APEX, instead of web services.</p>
+
+            <div class='v-space'></div>
+            <h2 id='title'>Option #2: Username + Password</h2>
+
+            <div class="double-indent">
+            <p>Type in your <span class='formula'>Username</span> and <span
+                    class='formula'>Security Token + Password</span>, and check <span class='formula'>Is Sandbox?</span>
+                if the Connection is a sandbox, and click Save.
+                On the saved record, click the <span class='formula'>Test Connection</span> quick action to check if the
+                credential is entered correctly. </p>
+            <p>
+                <div class='slds-box note-box_outer'>
+                    <div class='note-box'>
+                        <p class='title'>Note:</p>
+                        <p><span class='formula'>Password + Security Token</span> is an encrypted text field. Users with
+                            <span class='formula'>View Encrypted Data</span> permission, and having the Object, record
+                            and field level access will be able to view the decrypted value.</p>
+                    </div>
+                </div>
+            </p>
+            </div>
+
+            <div class='v-space'></div>
+            <h2 id='title'>Option #3: Named Credential</h2>
+            <div class="double-indent">
+                <p>In general, using the Named Credential is one of the most secure methods of authorizing an external web service endpoint in Salesforce. This
+                    is because no packages or custom code can restore the crendentials defined in a Named Credential,
+                    which is protected by Salesforce at the platform level. </p>
+                <p>Create your Named Credential in the setup section and add its developer name into the Connection
+                    record you are creating. DSP supports 2 types of Named Credentials - <span
+                        class='formula'>OAuth2.0</span> and <span class='formula'>Username + Password</span>. The
+                    required settings for the Named Credential are as following:</p>
+                <p> Identity Type must be <span class='formula'>Named Principal</span>, Authentication Protocol must be
+                    <span class='formula'>OAuth 2.0</span> or <span class='formula'>Password Authentication</span>,
+                    Allow Merge Fields in HTTP Header and Allow Merge Fields in HTTP Body must be checked. Use <span
+                        class='formula'>https://login.salesforce.com</span> for production and <span
+                        class='formula'>https://test.salesforce.com</span> for sandbox as the URL when the protocol is
+                    <span class='formula'>Password Authentication</span>.</p>
+
+                <div class='v-space'></div>
+                <div class='slds-box note-box_outer'>
+                    <div class='note-box'>
+                        <p class='title'>Note:</p>
+                        <p><b>Remote Site Setting</b> is a key security measure that prevents API callouts to
+                            unauthorized network addresses. A Remote Site Setting is required for Connections other than current org. DSP automatically creates the Remote Site Settings upon Connection creation
+                            or when a Connection is updated and the credential is changed, so long as the credential is
+                            valid, and the current user has the permission <span class='formula'>Customize
+                                Application</span> or <span class='formula'>Modify All Data</span>. If the current user
+                            does not have the permission to add a Remote Site Setting, check with your system
+                            administrator and add the Remote Site Setting accordingly. DSP never adds Remote Site
+                            Settings other than for the Connections authorized by your users.</p>
+
+                        <p>There could be 3 Remote Site Settings created when a Connection is saved, if not already existing -
+                            <ul>
+                                <li style="list-style-type: disc;">https://login.salesforce.com</li>
+                                <li style="list-style-type: disc;">https://test.salesforce.com</li>
+                                <li style="list-style-type: disc;">The custom domain name of the authorized org</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+
+
+
+            <div class='v-space'></div>
+            </div>
+        </div>
+</body>
+
+</html>

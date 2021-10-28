@@ -1,0 +1,352 @@
+h1 {
+    font-size: 2rem;
+    font-family: "ITC Avant Garde", system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    margin: 0.67em 0;
+    font-weight: 700;
+    color: rgb(3, 45, 96);
+}
+
+h2{
+    font-size: 1.5rem;
+    font-family: "ITC Avant Garde", system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    margin: 0.2em 0;
+    margin-top: 0.5em;
+    font-weight: 450;
+    color: rgb(3, 45, 96);
+}
+
+
+
+.slds-nav-vertical__item a{
+    font-size: 1.2 rem;
+    padding: 0.1em;
+    padding-left: 1.2rem;
+}
+
+
+.slds-nav-vertical__subitem a{
+    font-size: 1 rem;
+    padding: 0.1em;
+    padding-left: 1.3rem;
+}
+
+
+h3 {
+    padding-top: 1rem;
+    font-size: 1.2rem;
+    color: rgb(1, 118, 211);
+}
+
+.container p {
+    color: rgb(11, 11, 11);
+    display:inline-block;
+    font-family: "Salesforce Sans", system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 1.1rem;
+    margin-top: 0.65rem;
+}
+
+.container li span {
+    color: rgb(11, 11, 11);
+    font-family: "Salesforce Sans", system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 1.1rem;
+    margin-top: 0.65rem;
+}
+
+.container p img{
+    max-width: 70%;
+    margin: 1.3rem;
+}
+
+table{
+    --table-border-radius: 4px;
+    display: table;
+    width: 100%;
+    border-spacing: 0;
+    margin-top: 20px;
+    margin-bottom: 0.3rem;
+    padding-left: 0.2rem;
+    table-layout: fixed;
+    border-bottom-color: rgb(226, 232, 240);
+    border-bottom-style: solid;
+    border-bottom-width: 0px;
+    border-collapse: separate;
+    border-left-color: rgb(226, 232, 240);
+    border-left-style: solid;
+    border-left-width: 0px;
+    border-right-color: rgb(226, 232, 240);
+    border-right-style: solid;
+    border-right-width: 0px;
+    border-top-color: rgb(226, 232, 240);
+    border-top-style: solid;
+    border-top-width: 0px;
+    box-sizing: border-box;
+    font-family: "Salesforce Sans", system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 20px;
+    overflow-x: scroll;
+    text-indent: 0px;
+}
+
+thead{
+
+    width: 100%;
+}
+
+tbody{
+
+  width: 100%;
+}
+
+th{
+    background-color: rgb(241, 243, 251);
+    border-bottom-color: rgb(47, 44, 183);
+    border-bottom-style: solid;
+    border-bottom-width: 3px;
+    border-left-color: rgb(226, 232, 240);
+    border-left-style: solid;
+    border-left-width: 0px;
+    border-right-color: rgb(226, 232, 240);
+    border-right-style: solid;
+    border-right-width: 0px;
+    border-top-color: rgb(226, 232, 240);
+    border-top-left-radius: 4px;
+    border-top-style: solid;
+    border-top-width: 0px;
+    box-sizing: border-box;
+    display: table-cell;
+    font-size: 1rem;
+    font-weight: 700;
+    height: 55px;
+    line-height: 20px;
+    padding-bottom: 16px;
+    padding-left: 25px;
+    padding-right: 16px;
+    padding-top: 16px;
+    text-align: left;
+    text-indent: 0px;
+    text-size-adjust: 100%;
+    vertical-align: middle;
+}
+
+tr{
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: #e2e8f0;
+    display: table-row;
+    vertical-align: inherit;
+    min-height: 50px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+td{
+    vertical-align: middle;
+    border-bottom: 0.2rem;
+    color: rgb(11, 11, 11);
+    padding-left: 25px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 15px;
+
+    border-bottom-color: rgb(226, 232, 240);
+    border-bottom-style: solid;
+    border-bottom-width: 0.5px;
+    border-left-color: rgb(226, 232, 240);
+    border-left-style: solid;
+    border-left-width: 0.5px;
+    border-right-color: rgb(226, 232, 240);
+    border-right-style: solid;
+    border-right-width: 0.5px;
+    border-top-color: rgb(226, 232, 240);
+    border-top-style: solid;
+    border-top-width: 0.5px;
+
+    line-height: 1.5rem;
+
+    font-size: 1rem;
+}
+
+td p{
+    font-size: 1rem;
+    display: block;
+}
+
+td ul li{
+    list-style-type: disc;
+    padding-left: 1rem;
+    padding-top: 0.75rem;
+    list-style-position: inside;
+}
+
+li{
+    //list-style-type: disc;
+    padding-left: 3rem;
+    padding-top: 0.75rem;
+    list-style-position: inside;
+}
+.pli{
+    list-style-type: decimal; 
+    font-size:1.2rem;
+}
+
+.rli{
+    list-style-type: disc; 
+    font-size:1.1rem;
+}
+
+.table-column-name{
+    width: 20%;
+}
+
+.table-column-check{
+    width: 22%;
+}
+
+.table-column-wide{
+    width: 30%;
+    min-width: 380px;
+}
+
+.table-column-narrow{
+    width: 110px;
+}
+
+.table-first-column{
+    width: 18%;
+    font-weight: 600;
+    text-align: left;
+    padding-right:30px;
+    padding-left: 30px;
+}
+.p-space{
+    margin-top: 1.5rem;
+}
+
+.v-space{
+
+    margin-top: 30px;
+}
+
+.v-space-s{
+
+    margin-top: 15px;
+}
+
+.indentation{
+
+    margin-left: 1rem;
+}
+
+.double-indent{
+
+    margin-left: 2.5rem;
+}
+
+.container{
+    flex:1; padding-left:50px; padding-top:30px; padding-right:12%; background-color:white;
+}
+
+.note-box_outer{
+    margin-top: 0.6rem;
+    background-color: rgb(1, 118, 211); padding: 0; padding-left: 5px;
+}
+
+.note-box{
+    background-color: rgb(238, 244, 255);
+    padding: 1rem;
+}
+
+.note-box p{
+    color: rgb(11, 11, 11);
+    font-family: "Salesforce Sans", system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    margin-top: 0.4rem;
+    margin-left: 1rem;
+    font-size: 1rem;
+}
+
+.note-box .title{
+
+    font-size: 1.2rem;
+    display:block;
+    font-weight: 600;
+}
+
+
+td .note-box_outer{
+    margin-top: 0.6em;
+    background-color: rgb(1, 118, 211); 
+    padding: 0; 
+    padding-left: 3.5px;
+}
+
+td .note-box{
+    background-color: rgb(238, 244, 255);
+    padding: 0.8em;
+}
+
+td .note-box p{
+    color: rgb(11, 11, 11);
+    font-family: "Salesforce Sans", system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    margin-top: 0.4em;
+    margin-left: 1em;
+    font-size: 1em;
+}
+
+td .note-box .title{
+
+    font-size: 1.2em;
+    display:block;
+    font-weight: 600;
+}
+
+td b{
+    color: black;
+    font-style: italic;
+    font-weight: 550;
+    font-size: 1rem;
+}
+
+.formula{
+    color: #181818;
+    font-size: 1rem;
+    background-color: rgb(243, 243, 243);
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    font-family: Menlo, Monaco, Consol;
+    padding-left: 1px;
+    padding-right: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.back-to-top-box {
+    background:rgb(243, 243, 243);
+    position:fixed;
+    bottom:30px;
+    right: 60px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 1.2rem;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.image-outer{
+
+    max-width: 720px;
+}
+
+.image-title{
+    margin-top: 1rem;
+    text-align: center;
+    font-weight: 500;
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+
+            <div class='back-to-top-box'><a href='#title'>&#8679; Back to Top</a></div>
+
+            <h1 id="title">Batch Execution</h1>
+            <p>
+                A Batch Execution(pushtopics__BatchExecution__c) record has similar set of fields as an <a href='execution.html'>Execution</a>. 
+                The difference is it logs the details at the batch level instead of the Execution level. A Batch Execution has a master-detail relationship with the Execution object.
+            </p>
+
+            <div class="v-space"></div>
+
+            <div class='v-space'></div><div><h2>Details</h2>
+
+                <table><thead><th class='table-column-name'>Name</th><th class='table-column-wide'>Developer Name</th><th>Description</th></thead><tbody>
+                <tr><td>Batch Execution Number</td><td class='slds-truncate'>Name</td><td>Name of the Batch Execution, auto number.</td></tr>
+                <tr><td>Execution</td><td class='slds-truncate'>pushtopics__Execution__c</td><td>Master-detail relationship to the Execution object.</td></tr>
+                <tr><td>Original Batch Execution</td><td class='slds-truncate'>pushtopics__OriginalBatchExecution__c</td><td>The  Batch Execution that this current Batch Excution was orginated from.</td></tr>
+                <tr><td>Action</td><td class='slds-truncate'>pushtopics__Action__c</td><td>Formula field, equals to the Action field  on the Execution.</td></tr>
+                <tr><td>Start Time</td><td class='slds-truncate'>pushtopics__StartTime__c</td><td>The time an Execution started</td></tr>
+                <tr><td>End Time</td><td class='slds-truncate'>pushtopics__EndTime__c</td><td>The time an Execution ended</td></tr>
+                <tr><td>Succeeded?</td><td class='slds-truncate'>pushtopics__Succeeded__c</td><td>Indicates whether the Batch Execution was succeeded or not.</td></tr>
+                <tr><td>Retrieved Count</td><td class='slds-truncate'>pushtopics__RetrievedCount__c</td><td>The records count retrieved from the source for the current batch.</td></tr>
+                <tr><td>Retrieved Data in Action Count</td><td class='slds-truncate'>pushtopics__RetrievedDataInActionCount__c</td><td>The count of retrieved records which were included in the action in the current batch. For example, if there were 200 records retrieved, of which 50 were new, and the Action was "Insert" only, this value would be 50.</td></tr>
+                <tr><td>Actioned Count</td><td class='slds-truncate'>pushtopics__ActionedCount__c</td><td>The count of records actioned against the target in the current batch. For example, if there were 100 insert and 50 update records retrieved from the source, and each update record had 2 matches in the target, this value would be 100 + 50*2 = 200, instead of 150.</td></tr>
+                <tr><td>Succeeded Count</td><td class='slds-truncate'>pushtopics__SucceededCount__c</td><td>The count of records that succeeded in the action against the target.</td></tr>
+                <tr><td>Failed Count</td><td class='slds-truncate'>pushtopics__FailedCount__c</td><td>The count of records that failed in the action against the target.</td></tr>
+                </tbody></table></div>
+                
+                <div class='v-space'></div><div><h2>Execution Log</h2>
+                <table><thead><th class='table-column-name'>Name</th><th class='table-column-wide'>Developer Name</th><th>Description</th></thead><tbody>
+                <tr><td>Retrieve Query String</td><td class='slds-truncate'>pushtopics__RetrieveQueryString__c</td><td>The query string issued against the source. </td></tr>
+                <tr><td>Retrieved Data/Ids</td><td class='slds-truncate'>pushtopics__RetrievedDataOrIds__c</td><td>The retrieved source data or IDs in JSON format.</td></tr>
+                <tr><td>Action Details</td><td class='slds-truncate'>pushtopics__ActionDetails__c</td><td>The details of the action, including the source Id to target Id's map for the Update part of action, and source Id's for the Insert part of action.</td></tr>
+                <tr><td>Action Raw Responses</td><td class='slds-truncate'>pushtopics__ActionRawResponses__c</td><td>The raw response from the target as a result of an either Insert, Update or both Actions. If the target is connected via integration, the raw result also includes the status code and status, in addition to what is tracked when the target is the local org.</td></tr>
+                <tr><td>Exceptions</td><td class='slds-truncate'>pushtopics__Exceptions__c</td><td>Exception message raised during the execution. </td></tr>
+                <tr><td>Results</td><td class='slds-truncate'>pushtopics__Results__c</td><td>Stores a comprehensive view of the results in JSON. Each entry in the JSON will have the source data Id and target data Id for an Update action, "Success" which indicates success or fail, and "Errors" with the error details. If "Include Failed Data in Results?" is checked on the Mapping, the failed target data will be included as well. Copy and paste the JSON body to any JSON formatter/prettifier to better view well-structured data. <br/>This field combines the necessary data points together to help with  troubleshooting. And it does not comprise the permissions on data for the authorized user. </td></tr>
+                </tbody></table></div>
+
+
+
+            <div class='v-space'></div>
+        </div>
+    </div>
+</body>
+
+</html>

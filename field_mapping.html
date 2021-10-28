@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+
+
+            <div class='back-to-top-box'><a href='#title'>&#8679; Back to Top</a></div>
+
+            <h1 id="title">Field Mapping</h1>
+
+            <p>
+            A Field Mapping(pushtopics__FieldMapping__c) defines the field level metadata and mapping with the taget field, which has a master-detal relationship with the <a href="mapping.html">Mapping</a>. 
+
+            User should not be creating/editing the Field Mapping directly. Instead, use the <a href="mapping_fields_mapper.html">Fields Mapper</a>, 
+            where DSP auto-generates the Field Mapping records based on the configurations.
+
+            </p>
+
+            <div class='v-space'></div>
+            <div class="image-outer">
+                <img src="resource/img/field_mapping.png" onclick="window.open(this.src)"/>
+                <div class="image-title">Field Mapping</div>
+            </div>
+
+            <div class='v-space'></div>
+            
+            <h2 id='title'>Fields</h2>
+
+            <div class='v-space'></div><div>
+            <table><thead><th class='table-column-name'>Name</th><th class='table-column-check'>Developer Name</th><th class='table-column-narrow'>Required</th><th>Description</th></thead><tbody>
+            <tr><td>Createable</td><td class='slds-truncate'>pushtopics__Createable__c</td><td>N</td><td>Indicates whether this field is insertable.</td></tr>
+            <tr><td>External Id Field</td><td class='slds-truncate'>pushtopics__ExternalIdField__c</td><td>N</td><td>Defines the External Id Field of the "Reference To" object.</td></tr>
+            <tr><td>External Id Field List</td><td class='slds-truncate'>pushtopics__ExternalIdFieldList__c</td><td>N</td><td>The available External Id Fields of the "Reference To" object.</td></tr>
+            <tr><td>Field Mapping API Name</td><td class='slds-truncate'>pushtopics__ApiName__c</td><td>Y</td><td>The unique API name of the Field Mapping record.</td></tr>
+            <tr><td>Is Default Mapping Field?</td><td class='slds-truncate'>pushtopics__IsDefaultMappingField__c</td><td>N</td><td>Indicate whether this target field is a default mapping field.</td></tr>
+            <tr><td>Mapping</td><td class='slds-truncate'>pushtopics__Mapping__c</td><td>Y</td><td>The transformation logic to generate the target field's value.</td></tr>
+            <tr><td>Nillable</td><td class='slds-truncate'>pushtopics__Nillable__c</td><td>N</td><td>Indicate whether this target field can be set to null.</td></tr>
+            <tr><td>Object Mapping</td><td class='slds-truncate'>pushtopics__ObjectMapping__c</td><td>Y</td><td>Master-Detail relationship with the Mapping object.</td></tr>
+            <tr><td>Reference To</td><td class='slds-truncate'>pushtopics__ReferenceTo__c</td><td>N</td><td>When the target field is a reference type of field, either a lookup or master-detail, this field defines which object it references to. It is only required when the reference field is populated with the External IDs. </td></tr>
+            <tr><td>Reference To Options</td><td class='slds-truncate'>pushtopics__Reference_To_Options__c</td><td>N</td><td>The Object list if the target field is a reference type of field.</td></tr>
+            <tr><td>Relationship Name</td><td class='slds-truncate'>pushtopics__RelationshipName__c</td><td>N</td><td>The relationship name if the target field is a reference type of field.</td></tr>
+            <tr><td>Show in Data Viewer</td><td class='slds-truncate'>pushtopics__ShowInDataViewer__c</td><td>N</td><td>Indicate whether the source fields in the "Mapping" field will be displayed in the "Source Data Viewer" component.</td></tr>
+            <tr><td>Target Field Name</td><td class='slds-truncate'>Name</td><td>Y</td><td>The target field name.</td></tr>
+            <tr><td>Type</td><td class='slds-truncate'>pushtopics__Type__c</td><td>N</td><td>The type of the target field.</td></tr>
+            <tr><td>Updateable</td><td class='slds-truncate'>pushtopics__Updateable__c</td><td>N</td><td>Indicates whether this field is updateable.</td></tr>
+            
+            
+            </tbody></table></div><div class='v-space'></div>
+            
+
+        </div>
+    </div>
+</body>
+
+</html>

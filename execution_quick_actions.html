@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+                
+
+            <h1 id='title'>Quick Actions</h1>
+
+            <h2>ReExecute Failed Batches</h2>
+            <div class="double-indent">
+                <p>Opens the <b>Status Tracker</b> modal and starts re-executing all the failed Batch Executions related to the current Execution, based on the source data IDs in the log.
+                    Under the hood, DSP creates a new Execution and one Batch Execution for each Execution. 
+                    Each Batch Execution is linked with the original failed Batch Execution, and the new Execution is linked with its original Execution.
+                    The action only applies to batchable Executions and only when the Execution contains failed Batch Executions.
+                </p>
+
+                <iframe src="https://youtube.com/embed/XZu-Wo0gSLU" width="750px" height="450" frameborder="0"
+                    allowfullscreen style="padding-left:1rem;padding-top:1rem;padding-bottom: 1rem;"></iframe>
+            </div>
+
+
+            <h2>ReExecute</h2>
+            <div class="double-indent">
+                <p>
+                    Re-run the original Execution, similar to the "ReExecute Failed Batches" functionality descripbed above, based on the source data IDs in the log. The difference is this action re-runs the original 
+                    Execution entirely, not just the failed batches. 
+                </p>
+
+            </div>
+
+
+
+            <div class='v-space'></div>
+            <h2 id='title'>Delete</h2>
+            <div class="double-indent">
+                <p>
+                    The standard Salesforce Delete quick action. As a result, the deletion also deletes all of the related Batch Executions.
+            </div>
+            <div class='v-space'></div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+
+            <h1>Fields Mapper</h1>
+
+            <p>Fields Mapper is a component on the Mapping record page where the field level mappings or transformations from the
+                source to the target can be configured. 
+            </p>
+
+            <p>Upon clicking the Fields Mapper tab, DSP fetches the target fields' metadata for the target
+                object defined in the Mapping, and merges with the related Field Mappings for review (without saving). 
+                The field mapping entries are displayed in the following 4 category buckets in order, and within each bucket, 
+                mapped fields are shown prior to the un-mapped fields as sub-buckets. Within each sub-bucket, the fields are ordered alphabetically.
+            </p>
+            <ul>
+                <li class='rli'>The target key field </li>
+                <li class='rli'>The reference type of fields</li>
+                <li class='rli'>The rest mappable fields</li>
+                <li class='rli'>The non-mappable fields</li>
+            </ul>
+
+            <div class='v-space'></div>
+
+            <h2>Buttons</h2>
+            <p>There are 3 buttons available in the component.</p>
+
+            <div class="double-indent">
+                <h3>Clear Mappings</h3>
+                <p>Clicking the button will clear all the existing fields' Mappings in the UI (without saving in the database).</p>
+
+                <h3>Add Default Mappings</h3>
+
+                <p>Clicking the button will map the source fields with
+                    the target fields automatically in the UI(without saving in the database) if the source object has the same field as the target field, in terms of the field's type and API name. 
+                </p>
+                
+                <h3>Save Mappings</h3>
+                <p>Upon clicking the button, DSP saves all the mapped field entries as Field Mappings in the database, and deletes all the irrelevant Field Mappings if there are any such existing.
+                    The Field Mapping object has a master-detail relationship with the Mapping object.
+                </p>
+            </div>
+
+            <div class='v-space'></div>
+
+            <h2>Field Level Mapping</h2>
+
+            <div class="double-indent">
+
+                <h3>Viewable checkbox</h3>
+                <p>
+                    Every mappable field can be checked as "Viewable", which tells the "View Source Data" component to display the source fields mentioned in the "Map with Source" field.
+                </p>
+
+                <h3>Map with Source</h3>
+                <p>
+                    DSP surpports fully featured transformation at the field level, check out <a href='mapping_formula_operators_and_functions.html'></a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

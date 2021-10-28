@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+            <div class='back-to-top-box'><a href='#title'>&#8679; Back to Top</a></div>
+<h1 id='title'>Execution</h1>
+
+<p>An Execution(pushtopics__Execution__c) carries over the settings from the Mapping at the time when it was executed and tracks the status of the execution.</p>
+<div class='slds-box note-box_outer'><div class='note-box'><p class='title'>Note:</p><p>Most of the fields on the page layout are read-only, however, a super user with “Modify All Data” access will be able to edit the fields anyway. Do NOT manually update the Exectuion record except for the "Stopped" field when there is a need to stop an uncompleted execution.</p></div></div>
+
+<div class='v-space'></div><div><h2>Details</h2>
+<table><thead><th class='table-column-name'>Name</th><th class='table-column-wide'>Developer Name</th><th>Description</th></thead><tbody>
+<tr><td style='width:25%'>Execution Name</td><td style='width:25%' class='slds-truncate'>Name</td><td>Auto-generated, using a concatenation of the Name of the Mapping and the timestamp when the Mapping Execution was created (in the current user’s time zone).</td></tr>
+<tr><td>Mapping</td><td class='slds-truncate'>pushtopics__ObjectMapping__c</td><td>Master-detail relationship field with the Mapping object.</td></tr>
+<tr><td>Action</td><td class='slds-truncate'>pushtopics__Action__c</td><td>The Action taken in the execution.</td></tr>
+<tr><td>Job Execution</td><td class='slds-truncate'>pushtopics__JobExecution__c</td><td>A lookup field references to the Job Execution if it was kicked off from a Job.</td></tr>
+<tr><td>Retrieve Parameters</td><td class='slds-truncate'>pushtopics__RetrieveParameters__c</td><td>Copied from the Mapping at the time it was executed.</td></tr>
+<tr><td>Original Execution</td><td class='slds-truncate'>pushtopics__OriginalExecution__c</td><td>A lookup field references to the original Mapping Execution if it was re-executed either from the original Mapping Execution itself or a Batch Execution associated with the original Mapping Execution.</td></tr>
+<tr><td>Retrieve Limit</td><td class='slds-truncate'>pushtopics__RetrieveLimit__c</td><td>Copied from the Mapping at the time it was executed.</td></tr>
+<tr><td>Batchable?</td><td class='slds-truncate'>pushtopics__Batchable__c</td><td>Copied from the Mapping at the time it was executed.</td></tr>
+<tr><td>Retrieve Size (Integration Only)</td><td class='slds-truncate'>pushtopics__RetrieveSize__c</td><td>Copied from the Mapping at the time it was executed.</td></tr>
+<tr><td>Batch Size</td><td class='slds-truncate'>pushtopics__BatchSize__c</td><td>Copied from the Mapping at the time it was executed.</td></tr>
+<tr><td>All or Nothing?</td><td class='slds-truncate'>pushtopics__AllOrNothing__c</td><td>Copied from the Mapping at the time it was executed.</td></tr>
+<tr><td>Include Failed Data in Results?</td><td class='slds-truncate'>pushtopics__IncludeFailedDataInResults__c</td><td>Copied from the Mapping at the time it was executed.</td></tr>
+<tr><td>Skip Nulls?</td><td class='slds-truncate'>pushtopics__SkipNulls__c</td><td>Copied from the Mapping at the time it was executed.</td></tr>
+<tr><td>Use Default Assignment Rule?</td><td class='slds-truncate'>pushtopics__UseDefaultAssignmentRule__c</td><td>Copied from the Mapping at the time it was executed.</td></tr>
+<tr><td>Bypass Duplicate Rule Alerts?</td><td class='slds-truncate'>pushtopics__BypassDuplicateRuleAlerts__c</td><td>Copied from the Mapping at the time it was executed.</td></tr>
+<tr><td>Disable Feed Tracking (Integration Only)?</td><td class='slds-truncate'>pushtopics__DisableFeedTracking__c</td><td>Copied from the Mapping at the time it was executed.</td></tr>
+</tbody></table></div>
+
+<div class='v-space'></div><div><h2>Results</h2>
+<table><thead><th class='table-column-name'>Name</th><th class='table-column-wide'>Developer Name</th><th>Description</th></thead><tbody>
+<tr><td>Start Time</td><td class='slds-truncate'>pushtopics__StartTime__c</td><td>The time when the Mapping Execution starts</td></tr>
+<tr><td>End Time</td><td class='slds-truncate'>pushtopics__EndTime__c</td><td>The time when the Mapping Execution ends</td></tr>
+<tr><td>Completed?</td><td class='slds-truncate'>pushtopics__Completed__c</td><td>Indicates whether the Execution was completed or not.</td></tr>
+<tr><td>Stopped?</td><td class='slds-truncate'>pushtopics__Stopped__c</td><td>Indicates whether the Execution was stopped or not.</td></tr>
+<tr><td>Succeeded?</td><td class='slds-truncate'>pushtopics__Succeeded__c</td><td>Indicates whether the Execution was successful or not.</td></tr>
+<tr><td>Total Retrieved</td><td class='slds-truncate'>pushtopics__TotalRetrieved__c</td><td>The total records count retrieved from the source that are passed to the execution. </td></tr>
+<tr><td>Total Retrived Data in Action</td><td class='slds-truncate'>pushtopics__TotalRetrievedDataInAction__c</td><td>The total count of retrieved records participated in the action. For example, if there were 2000 records retrieved, 500 of them were new, and the Action was "Insert" only, this value would be 500.</td></tr>
+<tr><td>Total Actioned</td><td class='slds-truncate'>pushtopics__TotalActioned__c</td><td>The total count of records actioned against the target. For example, if there were 1000 inert and 500 update records retrieved from the source, and each update record had 2 matches in the target, this value would be 1000 + 500*2 = 2000, instead of 1500.</td></tr>
+<tr><td>Total Succeeded</td><td class='slds-truncate'>pushtopics__Succeeded__c</td><td>The total count of records that were succeeded in the action against the target.</td></tr>
+<tr><td>Total Failed</td><td class='slds-truncate'>pushtopics__TotalFailed__c</td><td>The total count of records that were failed in the action against the target.</td></tr>
+<tr><td>Exceptions</td><td class='slds-truncate'>pushtopics__Exceptions__c</td><td>The execeptions occurred at the Execution level. Note: In the batch mode, if there are unexpected exceptions which failed the batches without being able to create Batch Execution records, the exceptional message will be logged in this field.</td></tr>
+</tbody></table></div>
+
+<div class='v-space'></div><div><h2>Execution Log</h2>
+<table><thead><th class='table-column-name'>Name</th><th class='table-column-wide'>Developer Name</th><th>Description</th></thead><tbody>
+<tr><td>Retrieve Query String</td><td class='slds-truncate'>pushtopics__RetrieveParameters__c</td><td>The query string issued against the source. </td></tr>
+<tr><td>Retrieved Data/Ids</td><td class='slds-truncate'>pushtopics__RetrievedDataOrIds__c</td><td>The retrieved source data or IDs in JSON format.</td></tr>
+<tr><td>Action Details</td><td class='slds-truncate'>pushtopics__ActionDetails__c</td><td>The details of the action, including the source Id to target Ids map for the Upsert part of action, and source Ids for the Insert part of action.</td></tr>
+<tr><td>Action Raw Responses</td><td class='slds-truncate'>pushtopics__ActionRawResponses__c</td><td>The raw response from the target as a result of an either Insert, Update or both Actions. If the target is connected via integration, the raw result includes the status code and status additionally than when the target is the local org.</td></tr>
+<tr><td>Results</td><td class='slds-truncate'>pushtopics__Results__c</td><td>Stores a comprehensive view of the results in JSON. Each entry in the JSON will have the source data Id, target data Id for an Update action, "Success" which indicates success or fail, and "Errors" with the error details. If "Include Failed Data in Results?" is checked on the Mapping, the failed target data in action will be included as well. Copy and paste the JSON body to any JSON formatter/beautifier/prettier to view a well-structured data. <br/>This field puts the necessary data points together to help with the troubleshooting. And it does not comprise the permission to the data of the authorized user. The maximum number of characters can be included is 131072, the characters beyond that number will be truncacted.</td></tr>
+</tbody></table></div><div class='v-space'></div>
+        </div>
+    </div>
+</body>
+
+</html>

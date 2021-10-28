@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+
+
+            <div class='back-to-top-box'><a href='#title'>&#8679; Back to Top</a></div>
+
+
+            <p id='title'>
+                The following are the quick actions available on the Mapping record page.
+            </p>
+
+            <h2>Execute</h2>
+
+            <div class="double-indent">
+                <p>Opens the <b>Status Tracker</b> modal and starts execution based on the object level settings on the
+                    Mapping
+                    record and its associated Field Mappings.</p>
+                <p>
+                    If the Mapping is batchable, the execution runs in batch mode, where the Execution record is created
+                    in
+                    the back and the <b>Status Tracker</b> keeps the latest results (and corresponding hyperlink) at the top. The
+                    source
+                    data is split into
+                    batches based on the <b>Batch Size</b> configured on the Mapping. Whenever a batch completes its
+                    execution, the Status Tracker updates by adding the Batch Execution result right below the Execution
+                    result and update the summary of the Execution result. The maximum number of batch
+                    results shown in the <b>Status Tracker</b> is 200, after the first 200 batches, when a new batch
+                    result
+                    comes in, the
+                    earliest successful batch result is removed from the tracker. To view the full list of batches, go
+                    to the Related List on Execution record page.
+                </p>
+                <p>
+                    If the Mapping is not batchable, the execution runs in non-batch mode, where instead of tracking the
+                    results of both Execution and Batch Execution,
+                    only the Execution result is tracked.
+                </p>
+                <p>
+                    Click the hyperlink on the Execution Name to see the result of the Execution; And click the
+                    hyperlink on
+                    the Batch Name to see the details of the Batch Execution.
+                </p>
+
+                <iframe src="https://youtube.com/embed/so7WZrEZn4M" width="750px" height="450" frameborder="0"
+                allowfullscreen style="padding-left:1rem;padding-top:1rem;padding-bottom: 1rem;"></iframe>
+
+                <h3>Close</h3>
+                <p class="double-indent">
+                    Click the <b>Close</b> button to close the Status Tracker modal, but note that after the modal is
+                    closed, the execution continues in the back.
+                </p>
+
+
+                <h3>Stop Execution</h3>
+                <div class="double-indent">
+                    <p>Click the <b>Stop Execution</b> button to stop the execution which is running in batch mode.</p>
+                    <div class='slds-box note-box_outer'>
+                        <div class='note-box'>
+                            <p class='title'>Note: </p>
+                            <p>
+                                If you wish to stop the Execution, you may either click the
+                                <span class='formula'>Stop Execution</span> button, or check the <span
+                                    class='formula'>Stopped</span> field and save the execution record if it
+                                is
+                                yet
+                                completed, or call the <span class='formula'>stopExecution</span> method on the <span
+                                    class='formula'>pushtopics.ExecutionService</span> class
+                                using
+                                Apex.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class='v-space'></div>
+            <h2 id='title'>Check Source Count</h2>
+
+            <div class="double-indent">
+                <p>
+                    Opens the modal that shows the source record count based on the Source Object Name and Retrieve
+                    Parameters defined on the
+                    Mapping.
+
+                    <div class='slds-box note-box_outer'>
+                        <div class='note-box'>
+                            <p class='title'>Note: </p>
+                            <p>Even if the Retrieve Limit is set to a static value, the Check Source Count still shows
+                                the total count of the source records based on the Retrieve Parameters without
+                                considering the Retrieve Limit.
+                            </p>
+                        </div>
+                    </div>
+                </p>
+            </div>
+
+
+            <div class='v-space'></div>
+            <h2 id='title'>Clone Mapping</h2>
+            <div class="double-indent">
+                <p>
+                    Opens the modal to fill in a few basic fields based on the current Mapping's settings and clone the
+                    Mapping along with all its associated Field Mappings upon clicking the "Clone Mapping" button.
+                </p>
+            </div>
+
+            <div class='v-space'></div>
+            <h2 id='title'>Delete Executions</h2>
+            <div class="double-indent">
+                <p>
+                    Delete all the Executions and their Batch Executions associated with the Mapping.
+                </p>
+            </div>
+
+
+            <div class='v-space'></div>
+            <h2 id='title'>Edit</h2>
+            <div class="double-indent">
+                <p>
+                    The standard Salesforce Edit quick action.
+                </p>
+            </div>
+
+            <div class='v-space'></div>
+            <h2 id='title'>Delete</h2>
+
+            <div class="double-indent">
+                <p>
+                    The standard Salesforce Delete quick action. As a result, it
+                    also cascade deletes all the related records with Master-Detail relationships.
+                </p>
+            </div>
+            <div class='v-space'></div>
+            <div class='v-space'></div>
+
+        </div>
+    </div>
+</body>
+
+</html>

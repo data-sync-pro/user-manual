@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px;">
+        </div>
+
+        <div style="margin-bottom: 5rem;" class="container">
+
+
+
+            <div class='back-to-top-box'><a href='#title'>&#8679; Back to Top</a></div>
+            <h1 id='title'>Formula</h1>
+            
+            
+            
+            <div><ul>
+            <li><a href='#elements_of_a_formula'>Elements of a Formula</a></li>
+            <li><a href='#math_operators'>Math Operators</a></li>
+            <li><a href='#logical_operators'>Logical Operators</a></li>
+            <li><a href='#text_operators'>Text Operators</a></li>
+            <li><a href='#date_and_time_functions'>Date and Time Functions</a></li>
+            <li><a href='#logical_functions'>Logical Functions</a></li>
+            <li><a href='#math_functions'>Math Functions</a></li>
+            <li><a href='#text_functions'>Text Functions</a></li>
+            <li><a href='#advanced_functions'>Advanced Functions</a></li>
+            
+            </ul></div>
+            
+            
+            
+            <div class='v-space'></div><div id='elements_of_a_formula'><h2>Elements of a Formula</h2>
+            <p>A formula can contain references to the values of source fields, operators, functions, literal values, or other formulas. Use any or all of these elements to build a formula.</p>
+            <table><thead><th class='table-column-name'>Element</th><th>Description</th></thead><tbody>
+            <tr><td>Literal Value</td><td><p>A text string or number you enter that is not calculated or changed. For example, if you have a value that’s always multiplied by 2% of an amount, your formula would contain the literal value of 2% of that amount: <span class='formula'>ROUND((Amount*0.02), 2)</span><p>This example contains every possible part of a formula:</p><ul><li>A function called <span class='formula'>ROUND</span> used to return a number rounded to a specified number of decimal places.</li><li>A field reference called <span class='formula'>Amount</span>.</li><li>An operator, <span class='formula'>*</span>, that tells the formula builder to multiply the contents of the Amount field by the literal value, <span class='formula'>0.02</span>.</li><li>A literal number, <span class='formula'>0.02</span>. Use the decimal value for all percents. To include actual text in your formula, enclose it in quotes.</li><li>The last number <span class='formula'>2</span> in this formula is the input required for the <span class='formula'>ROUND</span> function that determines the number of decimal places to return.</li></ul></td></tr>
+            <tr><td>Field Reference</td><td>Reference the value of another custom or standard field using a merge field. The syntax for a merge field is <span class='formula'>field_name</span> for a standard field or <span class='formula'>field_name__c</span> for a custom field. The syntax for a merge field on a related object is <span class='formula'>object_name__r.field_name</span>. <div class='slds-box note-box_outer'><div class='note-box'><p class='title'>Note:</p><p>The <span class='formula'>Field Reference</span> is case sensitive.</p></div></div></td></tr>
+            <tr><td>Function</td><td>A system-defined formula that can require input from you and returns a value or values. For example, <span class='formula'>TODAY()</span> does not require input but returns the current date. The <span class='formula'>TEXT(value)</span> function requires your percent, number, or currency input and returns text.</td></tr>
+            <tr><td>Operator</td><td>A symbol that specifies the type of calculation to perform or the order in which to do it. For example, the <span class='formula'>+</span> symbol specifies two values should be added. The open and close parentheses specify which expressions you want evaluated first.</td></tr>
+            <tr><td>Apex Class</td><td>A custom Apex class name that implements the package Apex interface <span class='formula'>pushtopics.TargetValueMapper</span> to handle complex transformation logic. The format to be defined in the mapping is  <span class='formula'>{!apexClassName}</span>.</td></tr>
+            </tbody></table></div>
+            
+            
+            
+            <div class='v-space'></div><div id='math_operators'><h2>Math Operators</h2>
+            <table><thead><th class='table-column-name'>Operator</th><th>Description</th></thead><tbody>
+            <tr><td>+ (Add)</td><td>Calculates the sum of two values.</td></tr>
+            <tr><td>- (Subtract)</td><td>Calculates the difference of two values.</td></tr>
+            <tr><td>* (Multiply)</td><td>Multiplies its values.</td></tr>
+            <tr><td>/ (Divide)</td><td>Divides its values.</td></tr>
+            <tr><td>() (Open Parenthesis and Close Parenthesis)</td><td>Specifies that the expressions within the open parenthesis and close parenthesis are evaluated first. All other expressions are evaluated using standard operator precedence.</td></tr>
+            </tbody></table></div>
+            
+            
+            
+            <div class='v-space'></div><div id='logical_operators'><h2>Logical Operators</h2>
+            <table><thead><th class='table-column-name'>Operator</th><th>Description</th></thead><tbody>
+            <tr><td>== (Equal)</td><td>Evaluates if two values are equivalent. The = and == operators are interchangeable.</td></tr>
+            <tr><td>!= (Not Equal)</td><td>Evaluates if two values aren’t equivalent.</td></tr>
+            <tr><td>&lt; (Less Than)</td><td>Evaluates if a value is less than the value that follows this symbol.</td></tr>
+            <tr><td>&gt; (Greater Than)</td><td>Evaluates if a value is greater than the value that follows this symbol.</td></tr>
+            <tr><td>&lt;= (Less Than or Equal)</td><td>Evaluates if a value is less than or equal to the value that follows this symbol.</td></tr>
+            <tr><td>&gt;= (Greater Than or Equal)</td><td>Evaluates if a value is greater than or equal to the value that follows this symbol.</td></tr>
+            <tr><td>&amp;&amp; (AND)</td><td>Evaluates if two values or expressions are both true. Use this operator as an alternative to the logical function AND.</td></tr>
+            <tr><td>|| (OR)</td><td>Evaluates if at least one of multiple values or expressions is true. Use this operator as an alternative to the logical function OR.</td></tr>
+            </tbody></table></div>
+            
+            
+            
+            <div class='v-space'></div><div id='text_operators'><h2>Text Operators</h2>
+            <table><thead><th class='table-column-name'>Operator</th><th>Description</th></thead><tbody>
+            <tr><td>&amp; (Concatenate)</td><td>Connects two or more strings.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='date_and_time_functions'><h2>Date and Time Functions</h2>
+            <table><thead><th class='table-column-name'>Function</th><th>Description</th></thead><tbody>
+            <tr><td><a href='mapping_calculate_field_values.html#adddays'>ADDDAYS</A></td><td>Returns the date that is the indicated number of days before or after a specified date/datetime. </td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#addmonths'>ADDMONTHS</A></td><td>Returns the date that is the indicated number of months before or after a specified date/datetime. If the specified date is the last day of the month, the resulting date is the last day of the resulting month. Otherwise, the result has the same date component as the specified date.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#date'>DATE</A></td><td>Returns a date value from year, month, and day values you enter.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#datevalue'>DATEVALUE</A></td><td>Returns a date value for a date/time or text expression.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#daysbetween'>DAYSBETWEEN</A></td><td>Returns the date difference between the two days.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#now'>NOW</A></td><td>Returns a date/time representing the current moment.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#today'>TODAY</A></td><td>Returns the current date as a date data type.</td></tr>
+            </tbody></table></div>
+            
+            
+            
+            <div class='v-space'></div><div id='logical_functions'><h2>Logical Functions</h2>
+            <table><thead><th class='table-column-name'>Function</th><th>Description</th></thead><tbody>
+            <tr><td><a href='mapping_calculate_field_values.html#and'>AND</A></td><td>Returns a TRUE response if all values are true; returns a FALSE response if one or more values are false.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#blankvalue'>BLANKVALUE</A></td><td>Determines if an expression has a value and returns a substitute expression if it doesn’t. If the expression has a value, returns the value of the expression.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#if'>IF</A></td><td>Determines if expressions are true or false. Returns a given value if true and another value if false.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#isblank'>ISBLANK</A></td><td>Determines if an expression has a value and returns TRUE if it does not. If it contains a value, this function returns FALSE.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#isnumber'>ISNUMBER</A></td><td>Determines if a text value is a number and returns TRUE if it is. Otherwise, it returns FALSE.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#not'>NOT</A></td><td>Returns FALSE for TRUE and TRUE for FALSE.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#or'>OR</A></td><td>Determines if expressions are true or false. Returns TRUE if any expression is true. Returns FALSE if all expressions are false.</td></tr>
+            </tbody></table></div>
+            
+            
+            <div class='v-space'></div><div id='math_functions'><h2>Math Functions</h2>
+            <table><thead><th class='table-column-name'>Function</th><th>Description</th></thead><tbody>
+            <tr><td><a href='mapping_calculate_field_values.html#max'>MAX</A></td><td>Returns the highest number from a list of numbers.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#min'>MIN</A></td><td>Returns the lowest number from a list of numbers.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#round'>ROUND</A></td><td>Returns the nearest number to a number you specify, constraining the new number by a specified number of digits.</td></tr>
+            </tbody></table></div>
+            
+            
+            <div class='v-space'></div><div id='text_functions'><h2>Text Functions</h2>
+            <table><thead><th class='table-column-name'>Function</th><th>Description</th></thead><tbody>
+            <tr><td><a href='mapping_calculate_field_values.html#begins'>BEGINS</A></td><td>Determines if text begins with specific characters and returns TRUE if it does. Returns FALSE if it doesn't.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#contains'>CONTAINS</A></td><td>Compares two arguments of text and returns TRUE if the first argument contains the second argument. If not, returns FALSE.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#left'>LEFT</A></td><td>Returns the specified number of characters from the beginning of a text string.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#len'>LEN</A></td><td>Returns the number of characters in a specified text string.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#lower'>LOWER</A></td><td>Converts all letters in the specified text string to lowercase. Any characters that are not letters are unaffected by this function. </td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#right'>RIGHT</A></td><td>Returns the specified number of characters from the end of a text string.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#substitude'>SUBSTITUDE</A></td><td>Substitutes new text for old text in a text string.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#text'>TEXT</A></td><td>Converts a percent, number, date, date/time, or currency type field into text anywhere formulas are used, equals to String.valueOf in APEX. </td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#trim'>TRIM</A></td><td>Removes the spaces and tabs from the beginning and end of a text string.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#upper'>UPPER</A></td><td>Converts all letters in the specified text string to uppercase. Any characters that are not letters are unaffected by this function. </td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#value'>VALUE</A></td><td>Converts a text string to a number.</td></tr>
+            </tbody></table></div>
+            
+            
+            <div class='v-space'></div><div id='advanced_functions'><h2>Advanced Functions</h2>
+            <table><thead><th class='table-column-name'>Function</th><th>Description</th></thead><tbody>
+            <tr><td><a href='mapping_calculate_field_values.html#scramble'>SCRAMBLE</A></td><td>Returns the field value on a random record within the retrieved source data. </td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#randomize'>RANDOMIZE</A></td><td>Masks the input value randomly based on the data types.</td></tr>
+            <tr><td><a href='mapping_calculate_field_values.html#vlookup'>VLOOKUP</A></td><td>Returns a value by looking up a related value on a custom object similar to the <span class='formula'>VLOOKUP()</span> Excel function.</td></tr>
+            </tbody></table></div>
+            <div class='v-space'></div>
+
+
+        </div>
+    </div>
+</body>
+
+</html>

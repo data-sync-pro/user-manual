@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+
+            <h1 id='title'>Quick Actions</h1>
+
+            <h2>Execute</h2>
+            <div class="double-indent">
+                <p>Opens the <b>Status Tracker</b> modal and starts executing the associated Mappings in sequantial order based on the <b>Seq No.</b> values. As long
+                    as there is a result from a Mapping's execution, the Tracker updates
+                    with the latest status. Click the hyperlink of any <b>Execution</b> to check the details.
+                </p>
+                <p>
+                    In the back end, DSP creates a Job Execution record, along with the Execution records for the associated Mappings.
+                </p>
+
+
+                <iframe src="https://youtube.com/embed/x3efgTK8dfA" width="750px" height="450" frameborder="0"
+                    allowfullscreen style="padding-left:1rem;padding-top:1rem;padding-bottom: 1rem;"></iframe>
+
+                <h3>Close</h3>
+                <p class="double-indent">
+                    Click <b>Close</b> button to close the Status Tracker modal, but note that after the modal is closed, the
+                    Job Execution still continues in the back. 
+                </p>
+                <p>
+                    <h3>Stop Execution</h3>
+                    <div class="double-indent">
+                        <p>Click the <b>Stop Execution</b> button to stop the remaining Executions..</p>
+                        <div class='slds-box note-box_outer'>
+                            <div class='note-box'>
+                                <p class='title'>Note: </p>
+                                <p>
+                                    If you wish to stop the remaining Executions, you
+                                    may either click the <span class='formula'>Stop Execution</span> button, or check the <span class='formula'>Stopped</span> field and save the Job Execution
+                                    record if it is not completed, or call the <span class='formula'>stopJobExecution</span> method on the
+                                    <span class='formula'>pushtopics.ExecutionService</span> class using Apex.
+                                </p>
+                            </div>
+                        </div>
+    
+                    </div>
+            </div>
+
+            <div class='v-space'></div>
+            <h2 id='title'>Check Source Counts</h2>
+            <div class="double-indent">
+                <p>
+                    Opens the modal that shows the source record counts based on the Retrieve Parameters configured on the Mappings associated with the Job. 
+                    
+                    <div class='slds-box note-box_outer'>
+                        <div class='note-box'>
+                            <p class='title'>Note: </p>
+                            <p>For each Mapping, even if the Retrieve Limit is set to a static value, 
+                                the count value is still the total count of the source records based on the Retrieve Parameters without considering the Retrieve Limit.
+                            </p>
+                        </div>
+                    </div>
+                </p>
+
+                <iframe src="https://youtube.com/embed/QGMiXFzE88c" width="750px" height="450" frameborder="0"
+                    allowfullscreen style="padding-left:1rem;padding-top:1rem;padding-bottom: 1rem;"></iframe>
+            </div>
+
+
+            <div class='v-space'></div>
+            <h2 id='title'>Clone Job</h2>
+            <div class="double-indent">
+                <p>
+                    Opens the modal to fill in a few basic fields based on the current Job's settings and 
+                    clone the Job along with all its associated Mappings and their Field Mappings upon clicking the "Clone Job" button.
+                </p>
+            </div>
+
+
+
+            <div class='v-space'></div>
+            <h2 id='title'>Delete Executions</h2>
+            <div class="double-indent">
+                <p>
+                    Delete all the associated Job Executions and their Executions, Batch Executions.
+                </p>
+            </div>
+
+
+
+            <div class='v-space'></div>
+            <h2 id='title'>Delete Mappings</h2>
+            <div class="double-indent">
+                <p>
+                    Delete all the associated Mappings and their Field Mappings, Executions, Batch Executions.
+                </p>
+            </div>
+
+
+
+            <div class='v-space'></div>
+            <h2 id='title'>Edit</h2>
+            <div class="double-indent">
+                <p>
+                    The standard Salesforce Edit quick action.
+                </p>
+            </div>
+
+
+            <div class='v-space'></div>
+            <h2 id='title'>Delete</h2>
+            <div class="double-indent">
+                <p>
+                    The standard Salesforce Delete quick action.  As a result, it
+                    also cascade deletes all the related records with Master-Detail relationships.
+                </p>
+            </div>
+
+            
+            <div class='v-space'></div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+
+            <div class='back-to-top-box'><a href='#title'>&#8679; Back to Top</a></div>
+
+
+            <h1 id="title">
+                Job Builder
+            </h1>
+
+            <div class='v-space'></div>
+
+
+            <p>The <b>Job Builder</b> is a component that can help with creating a comprehensive list of related
+                Mappings, while maintaining
+                relationships, determining execution order and inherited criteria, within just a few minutes.
+            </p>
+
+            <div class='v-space'></div>
+
+            <span style='display:block'>
+                <ul>
+                    <li class="rli"><a href='#quick_example'>Quick Example</a></li>
+                    <li class="rli"><a href='#paths_identification'>Identify Paths</a></li>
+
+                    <li class="rli"><a href='#create_mappings'>Create Mappings</a></li>
+                </ul>
+            </span>
+
+
+            <div class='v-space'></div>
+
+            <div class='slds-box note-box_outer'>
+                <div class='note-box'>
+                    <p class='title'>Note: </p>
+
+                    <ul>
+                        <li class="rli">
+                            This powerful component can improve work efficiency of creating relational Mappings by 90%, 
+                            which is great for senior level users who have good knowledge in their data model and understand the referential denpendency between objects. 
+                            But don't think you have to use it to build your object and field-level Mappings. 
+                            DSP is still the easiest tool to create individual Mappings mannually.
+                        </li>
+
+
+                        <li class="rli">
+                            Job Builder generates the Mappings in the order of DFS(Deep-First-Search), in other words, 
+                            top objects have lower Sequence Numbers than the bottom ones and left objects are prior 
+                            to the right ones, for selected objects in the tree grid. </li>
+
+                        <li class="rli">
+                            Only prior objects in the order
+                            will be mapped in the reference fields of the subsequent mappings. 
+                        </li>
+
+                        <li class="rli">
+                        With the above being said, you
+                            are free to modify the object-level settings and field-level mappings after the mappings are generated.</li>
+                    </ul>
+                </div>
+            </div>
+
+
+
+
+            <div style="height: 30px;"></div>
+            <div>
+
+                <h2 id="quick_example">Quick Example</h2>
+                <p>To see how easily this can be done, let us first take an example of migrating data for a list of
+                    objects related to the Opportunity Management.
+                    In a nutshell, two major steps are required to create the relevant mappings.</p>
+                <ul>
+                    <li class="pli">
+                        Identify the dependency Paths as described in the <a href='#paths_identification'>Identify
+                            Paths</a> section.
+
+
+                        <div class="image-outer">
+                            <img src="resource/img/erd_opp_paths.jpg" />
+                            <div class="image-title">Data Model</div>
+                        </div>
+                    </li>
+
+                    <li class="pli">
+                        Add the objects path by path to the tree grid, in the <b>reversed</b> order as the sequence
+                        identified above, select the leaf nodes and fill out the required mapping details,
+                        then hit the "Create Mappings" button, see the demo video below and the instructions <a
+                            href='#create_mappings'>Create Mappings</a>.
+                        <br>
+                        <iframe src="https://youtube.com/embed/yBXyHrN21Ko" width="750px" height="450" frameborder="0"
+                            allowfullscreen style="padding-left:1rem;padding-top:1rem;padding-bottom: 1rem;"></iframe>
+
+                    </li>
+                </ul>
+            </div>
+
+            <div class='v-space'></div>
+
+            <p id="paths_identification">
+                <h2>Identify Paths</h2>
+            </p>
+
+            <ul>
+
+                <li class="pli">Have your Entity Relationship Diagram(ERD) of your target org in front of you. For
+                    example, the following diagram is a brief version of the Opportunity Management data model.
+                    <div class="image-outer">
+
+                        <img src="resource/img/job_builder_data_model.png" />
+
+                        <div class="image-title">Step 1</div>
+                    </div>
+                </li>
+                <li class="pli">Determine the root objects needed in the migration. Root objects are those which do
+                    not depend on
+                    any parent data to be migrated prior to their migration. In this example, we have <b>A</b>,
+                    <b>B</b>, <b>C</b> as the root objects.
+
+                    <div class="image-outer"><img src="resource/img/job_builder_roots.png" />
+                        <div class="image-title">Step 2</div>
+                    </div>
+                </li>
+                <li class="pli">
+
+                    Identify all the to-be-deployed-to objects from the roots along the paths in the ERD network till
+                    the leaf nodes. The leaf nodes are the lowest level objects which do not have descendents that are
+                    dependent on them in the migration. If a
+                    path is cyclic, try to break the cycle by removing asyclic path, for example <span class='formula'>X
+                        -> Y -> Z -> X</span> can be decycled to either
+                    <span class='formula'>X -> Y -> Z</span> or <span class='formula'>Y -> Z -> X</span>. (To update the
+                    relational fields that are removed from the cyle,
+                    you can always create a Mapping separately with just the relevant relational fields and execute it
+                    at the end.)
+
+                    <div class='v-space'></div>
+                    In our example, we assume all the objects in the diagram need to be migrated.
+
+                    <div class="image-outer"><img src="resource/img/job_builder_all_nodes.png" />
+                        <div class="image-title">Step 3</div>
+                    </div>
+                </li>
+
+                <li class="pli">Find the longest path between any root object and any unmarked node in the network and
+                    mark the path (<span class='formula'>path 1 in the below diagram</span>).
+                    <div class="image-outer">
+                        <img src="resource/img/job_builder_longest_path.png" />
+                        <div class="image-title">Step 4</div>
+                    </div>
+                </li>
+                <li class="pli">Then find the next longest paths maximumly along the previously marked path until all
+                    the
+                    descendent nodes for the root object in the path are identified, mark the paths in the order
+                    based on when the path is identified
+                    (<span class='formula'>path 2 and 3 in the diagrams</span>).
+
+                    <div class="image-outer"><img src="resource/img/job_builder_2nd_path.png" />
+                        <div class="image-title">Step 5</div>
+                    </div>
+                    <div class='v-space'></div>
+                    <div class="image-outer"><img src="resource/img/job_builder_3rd_path.png" />
+                        <div class="image-title">Step 6</div>
+                    </div>
+                </li>
+                <li class="pli">Keep doing this excise to find the next longest paths until all the root objects have
+                    their paths identified (Path 3, 4 in the diagram).
+
+                    <div class="image-outer"><img src="resource/img/job_builder_final.png" />
+                        <div class="image-title">Step 7</div>
+                    </div>
+                </li>
+            </ul>
+            <div class='v-space'></div>
+
+            <h2 id="create_mappings">Create Mappings</h2>
+            <ul>
+                <li class="pli">Go to the <b>Job</b> record where the new Mappings will be created and assiciated to it,
+                    click the <b>Job Builder</b> tab.
+                </li>
+                <li class="pli">Add the root object of the next available path identifed above to the tree grid.
+
+                    <div class='slds-box note-box_outer'>
+                        <div class='note-box'>
+                            <p class='title'>Note: </p>
+                            <p>The order of the paths to be added is <b>reversed</b> as they were identified in the
+                                paths idendification steps.
+                                In other words, the last identified path should be added first to the tree grid, and the
+                                first identified path should be the last.
+                            </p>
+                        </div>
+                    </div>
+
+                </li>
+                <li class="pli">Expand the root object all the way down to the leaf node of the path.</li>
+                <li class="pli">Check the leaf node which will result in all the objects in the path being selected.
+
+
+                    <div class='v-space'></div>
+
+                    <div class="image-outer"><img src="resource/img/job_builder_tree_grid.png"
+                            onclick="window.open(this.src)" />
+                    </div>
+
+                    <div class='v-space'></div>
+                </li>
+
+                <li class="pli">The <b>Set Mappings</b> modal pops up automatically. The order of the Mappings displayed
+                    is the same order when the Mappings are created successfully.
+
+                    Select the External Id Field for the target objects, map out the Source Objects and the Source Key
+                    Fields. Click <b>Validate Mappings</b> to make sure the settings are valid.
+
+
+
+                    <div class='v-space'></div>
+                    <div class="image-outer"><img src="resource/img/job_builder_set_mappings.png"
+                            onclick="window.open(this.src)" />
+                    </div>
+
+                    <div class='v-space'></div>
+                </li>
+                <li class="pli">Repeat step 2 thru step 5 to add the next paths (in reversed order).</li>
+                <li class="pli">
+                    If there is a need to add criteria to a Mapping for retrieving the source data, click the edit icon
+                    on the right of the node, fill out the criteria and
+                    click <b>Validate Criteria</b> to check the validation, which if successful will show how many
+                    records are there in the source object for the criteria defined.
+                    <div class='v-space'></div>
+                    <div class="image-outer"><img src="resource/img/job_builder_criteria.png"
+                            onclick="window.open(this.src)" />
+                    </div>
+                    <div class='v-space'></div>
+                    <p>
+                        Check "Inherit Relationship's Criteria (Beta)" if you wish to have the child Mappings inherits
+                        the
+                        criteria defined in their upper hierarchy along the same path, up to 5 levels.
+                        If there is a need for a Mapping to inherit criteria from multiple paths, make sure the same
+                        object
+                        is selected in those paths, in which scenario, the <b>Job Builder</b>
+                        will only create one Mapping for that object, but combines criteria inherited from multiple
+                        paths.
+                    </p>
+
+
+                    <div class='slds-box note-box_outer'>
+                        <div class='note-box'>
+                            <p class='title'>Note: </p>
+                            <p class="rli">
+                                During the creation of the Mappings, the field and object level mappings are being
+                                validated, but the criteria is not.
+
+                                Make sure you validate it while defining it on the screen.</p>
+                        </div>
+
+                    </div>
+                    <div class='v-space'></div>
+                    <div class="image-outer"><img src="resource/img/job_builder_inherit_criteria.png"
+                            onclick="window.open(this.src)" />
+                    </div>
+                    <div class='v-space'></div>
+
+                </li>
+
+                <li class="pli">Click “Create Mappings”, the Job Builder generates the Mappings along with the default
+                    Field
+                    Mappings and the Criteria, then reloads the page after completion. </li>
+
+
+                </li>
+            </ul>
+
+
+            <div class='v-space'></div>
+
+            <div class='slds-box note-box_outer'>
+                <div class='note-box'>
+                    <p class='title'>Note: </p>
+
+                    <ul>
+                        <li class="rli">
+                            The Job Builder is a convenient tool for creating a comprehensive list of Mappings with just
+                            a few clicks.
+                            For the convenience, the generated Mappings are defaulted with the most generally used
+                            settings.
+                            Make sure you validate and tailor them before data execution.</li>
+
+
+                        <li class="rli">
+                            Once the Mappings are created, the Job Builder will not restore them in the tree grid.
+                            New Mappings created via Job Builder will be brand new Mappings added to the related list of
+                            the Job.</li>
+                        <li class="rli">
+                            The sequence of the Mappings finnally generated is in DFS(Deep First Search) order.
+                            Only the preceeding Mappings will be mapped the relational fields in the later generaged
+                            Mappings if there is any.</li>
+                        <li class="rli">
+                            Default-created Field Mappings are either non-reference types of fields which have the same
+                            field type and developer name between the
+                            Source and Target objects, or the reference type of fields whose reference-to-object is
+                            mapped preceding the current
+                            object.
+                        </li>
+                        <li class="rli">
+                            You cannot select the same objects twice in the same path.
+                        </li>
+                        <li class="rli">
+                            The Job Builder only supports the Mappings creation where the Target Key Fields are External
+                            ID fields.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class='v-space' style="height: 50px;"></div>
+        </div>
+    </div>
+</body>
+
+</html>

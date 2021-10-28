@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+
+            <h1 id='title'>Direction</h1>
+            <p>A Direction(pushtopics__Direction__c) is a reusable component that defines the Source and Target Connections, i.e. a 'direction' of data transfer. 
+                The Source is the Connection where the data is retrieved from, whereas the Target is the
+                Connection where the data is synced to. 
+				A Direction can be specified for a Job, which consists of a number of
+                object level Mappings which will utilize the same direction of data transfer. Alternatively, a Direction can be specified for a single Mapping, which would override the Direction specified in the overall Job. 
+                The following table describes the relevant fields in detail.
+            </p>
+
+
+            <div class='v-space'></div><div>
+
+<!--here-->
+<h2>Fields</h2>
+<div class='v-space'></div><div>
+    <table><thead><th class='table-column-name'>Name</th><th class='table-column-wide'>Developer Name</th><th class='table-column-narrow'>Required</th><th>Description</th></thead><tbody>
+    <tr><td>API Name</td><td>pushtopics__ApiName__c</td><td>Y</td><td> API Name of the Direction. It is a unique and external Id field, by default hidden from the page layout  and always defaulted to the Name field value.</td></tr>
+    <tr><td>Description</td><td>pushtopics__Description__c</td><td>N</td><td>Description of the Direction.</td></tr>
+    <tr><td>Direction Name</td><td>Name</td><td>Y</td><td>Name of the Direction.</td></tr>
+    <tr><td>Source</td><td>pushtopics__Source__c</td><td>Y</td><td>The Connection where the data will be retrieved from.</td></tr>
+    <tr><td>Target</td><td>pushtopics__Target__c</td><td>Y</td><td>The Connection where the data will be synced to.</td></tr>
+    </tbody></table></div><div class='v-space'></div>
+<!--here-->
+
+
+            <div class='slds-box note-box_outer'><div class='note-box'>
+            <p class='title'>Best Practices: </p>
+            <ul>
+            <li>
+                <span>A good naming convention is always helpful. Usually, a Direction can be named as <b>source => target</b> or <b>source2target</b> etc.</span>
+            </li>
+            <li>
+                <span>
+                    Installing DSP in the source org and having the <span class='formula'>Current Org</span> checked on the Connection record will gain the maximum parallelism and hence will have the best performance. 
+                    The following depicts performance (data processing speed) from fastest to slowest: 
+                    1. Current => Current 2. Current => Integration, 3. Integration => Current, 4. Integration => Integration. </span>
+            </li>
+            </ul>
+            </div></div>
+
+            <div class='v-space'></div>
+
+        </div>
+    </div>
+</body>
+
+</html>

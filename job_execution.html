@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+                
+            
+            <h1 id='title'>Execution</h1>
+            
+            <p>A Job Execution(pushtopics__JobExecution__c) is a logging object that tracks the status of execution for a Job, which consists of a list of sequentially ordered Mappings. 
+                Each Mapping has a corresponding <a href='execution.html'>Execution</a> record created during the Job's execution to track the individual Mapping's execution status.
+                
+                And all of those Mapping Execution records are assocated with the Job Execution.
+            </p>
+
+            
+            <div class='v-space'></div>
+            <div class="image-outer">
+                <img src="resource/img/job_execution.png" onclick="window.open(this.src)"/>
+                <div class="image-title">Job Execution</div>
+            </div>
+
+            <div class='v-space'></div><div><h2>Details</h2>
+
+                <table><thead><th class='table-column-name'>Name</th><th class='table-column-wide'>Developer Name</th><th>Description</th></thead><tbody>
+                <tr><td>Job Execution Name</td><td class='slds-truncate'>Name</td><td>Name of the Job Execution. It is auto-generated, where value is the concatenation of Job's Name and the time when the Job Execution is created.</td></tr>
+                <tr><td>Job</td><td class='slds-truncate'>pushtopics__Job__c</td><td>Master-detail relationship with the Job object.</td></tr>
+                <tr><td>Start Time</td><td class='slds-truncate'>pushtopics__StartTime__c</td><td>The time a Job Execution started.</td></tr>
+                <tr><td>End Time</td><td class='slds-truncate'>pushtopics__EndTime__c</td><td>The time a Job Execution ended.</td></tr>
+                <tr><td>Succeeded Executions</td><td class='slds-truncate'>pushtopics__SucceededExecutions__c</td><td>The succeeceeded Mapping's Executions count associated with the Job Execution.</td></tr>
+                <tr><td>Failed Executions</td><td class='slds-truncate'>pushtopics__FailedExecutions__c</td><td>The failed Mapping's Executions count associated with the Job Execution.</td></tr>
+                <tr><td>Succeeded?</td><td class='slds-truncate'>pushtopics__Succeeded__c</td><td>Indicates whether the Job Execution was succeeded or not.</td></tr>
+                <tr><td>Completed</td><td class='slds-truncate'>pushtopics__Completed__c</td><td>Indicates whether the Job Execution is completed or still running in progress.</td></tr>
+                <tr><td>Stopped</td><td class='slds-truncate'>pushtopics__Stopped__c</td><td>Indicates whether the Job Execution was stopped or not.</td></tr>
+                </tbody></table></div>
+
+                <div class='v-space'></div>
+        </div>
+    </div>
+</body>
+
+</html>
