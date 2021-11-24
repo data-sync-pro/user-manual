@@ -11,10 +11,10 @@ var catalog = JSON.parse(
     ,"Quick Actions"
     
     
-    ],"Mapping":[
+    ],"Executable":[
     
     {"Fields Mapper":[
-    "Elements of Mapping"
+    "Formula"
     ,"Calculate Field Values"
     ]}
     ,"View Source Data"
@@ -31,6 +31,10 @@ var catalog = JSON.parse(
     
     ],"Batch Execution":[
     "Quick Actions"
+    
+    ],"Schedule":[
+    "Executable Schedule"
+    ,"Job Schedule"
     
     
     ]}

@@ -30,7 +30,9 @@
 
             <div class='v-space'></div>
 <!--here-->
+
 <h2>Fields</h2>
+
 <div class='v-space'></div><div>
     <table><thead><th class='table-column-name'>Name</th><th class='table-column-wide'>Developer Name</th><th class='table-column-narrow'>Required</th><th>Description</th></thead><tbody>
     <tr><td>Description</td><td class='slds-truncate'>pushtopics__Description__c</td><td>N</td><td>Description of the Job.</td></tr>
@@ -38,10 +40,11 @@
     <tr><td>Failure Message</td><td class='slds-truncate'>pushtopics__FailureMessage__c</td><td>N</td><td>If defined, the message will be shown in the notification when the Job Execution fails. If undefined, a system default message will be displayed.</td></tr>
     <tr><td>Job API Name</td><td class='slds-truncate'>pushtopics__ApiName__c</td><td>Y</td><td>The API Name of a Job. It is a unique and external Id field, by default hidden from the page layout  and always defaulted to the Name field value.</td></tr>
     <tr><td>Job Name</td><td class='slds-truncate'>Name</td><td>Y</td><td>Name of the Job.</td></tr>
-    <tr><td>Stop Remaining Mappings When Failed?</td><td class='slds-truncate'>pushtopics__StopRemainingMappingsWhenFailed__c</td><td>N</td><td>If checked, when one of the Job's Mappings'  execution is completed and failed, the Job Execution stops without executing the remaining Mappings.</td></tr>
+    <tr><td>Notify Email Addresses</td><td class='slds-truncate'>pushtopics__NotifyEmailAddresses__c</td><td>N</td><td>Comma separated email addresses to be notified when the execution is completed if the Notify When Execution Completes? is checked.</td></tr>
+    <tr><td>Notify When Execution Completes?</td><td class='slds-truncate'>pushtopics__NotifyWhenExecutionCompletes__c</td><td>N</td><td>If checked, system will send a notification email to the email addressed defined in the Notify Email Addresses field.</td></tr>
+    <tr><td>Stop Remaining When An Executable Fails?</td><td class='slds-truncate'>pushtopics__StopRemainingWhenAnExecutableFails__c</td><td>N</td><td>If checked, when one of the Job's Executables completes and fails the execution, the Job Execution stops without executing the remaining Executables.</td></tr>
     <tr><td>Success Message</td><td class='slds-truncate'>pushtopics__SuccessMessage__c</td><td>N</td><td>If defined, the message will be shown in the notification when the Job Execution succeeds. If undefined, a system default message will be displayed.</td></tr>
     </tbody></table></div><div class='v-space'></div>
-
 <!--here-->
             
             </div>

@@ -15,26 +15,6 @@
         <div style="" class="container">
 
 
-            <div class='back-to-top-box'><a href='#title'>&#8679; Back to Top</a></div>
-
-            <h1 id="title">Field Mapping</h1>
-
-            <p>
-            A Field Mapping(pushtopics__FieldMapping__c) defines the field level metadata and mapping with the taget field, which has a master-detal relationship with the <a href="mapping.html">Mapping</a>. 
-
-            User should not be creating/editing the Field Mapping directly. Instead, use the <a href="mapping_fields_mapper.html">Fields Mapper</a>, 
-            where DSP auto-generates the Field Mapping records based on the configurations.
-
-            </p>
-
-            <div class='v-space'></div>
-            <div class="image-outer">
-                <img src="resource/img/field_mapping.png" onclick="window.open(this.src)"/>
-                <div class="image-title">Field Mapping</div>
-            </div>
-
-            <div class='v-space'></div>
-            
             <h2 id='title'>Fields</h2>
 
             <div class='v-space'></div><div>
@@ -44,6 +24,7 @@
             <tr><td>External Id Field List</td><td class='slds-truncate'>pushtopics__ExternalIdFieldList__c</td><td>N</td><td>The available External Id Fields of the "Reference To" object.</td></tr>
             <tr><td>Field Mapping API Name</td><td class='slds-truncate'>pushtopics__ApiName__c</td><td>Y</td><td>The unique API name of the Field Mapping record.</td></tr>
             <tr><td>Is Default Mapping Field?</td><td class='slds-truncate'>pushtopics__IsDefaultMappingField__c</td><td>N</td><td>Indicate whether this target field is a default mapping field.</td></tr>
+            <tr><td>Length</td><td class='slds-truncate'>pushtopics__Length__c</td><td>N</td><td>Max length of the target field.</td></tr>
             <tr><td>Mapping</td><td class='slds-truncate'>pushtopics__Mapping__c</td><td>Y</td><td>The transformation logic to generate the target field's value.</td></tr>
             <tr><td>Nillable</td><td class='slds-truncate'>pushtopics__Nillable__c</td><td>N</td><td>Indicate whether this target field can be set to null.</td></tr>
             <tr><td>Object Mapping</td><td class='slds-truncate'>pushtopics__ObjectMapping__c</td><td>Y</td><td>Master-Detail relationship with the Mapping object.</td></tr>

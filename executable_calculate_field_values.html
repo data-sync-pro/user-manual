@@ -23,6 +23,7 @@
         </div>
 
         <div style="margin-bottom: 5rem;" class="container">
+            
             <div class='back-to-top-box'><a href='#title'>&#8679; Back to Top</a></div>
 
             <h1 id='title'>Calculate Field Values</h1>
@@ -44,8 +45,14 @@
             <li><a href='#or_s'>|| (OR)</a></li>
             <li><a href='#concatenate'>& (Concatenate)</a></li>
             <li><a href='#adddays'>ADDDAYS</a></li>
-            </ul></div><div style='flex:1'><ul tyle='flex:1'>
             <li><a href='#addmonths'>ADDMONTHS</a></li>
+            <li><a href='#agg_avg'>AGG_AVG</a></li>
+            </ul></div><div style='flex:1'><ul tyle='flex:1'>
+            <li><a href='#agg_count'>AGG_COUNT</a></li>
+            <li><a href='#agg_count_distinct'>AGG_COUNT_DISTINCT</a></li>
+            <li><a href='#agg_max'>AGG_MAX</a></li>
+            <li><a href='#agg_min'>AGG_MIN</a></li>
+            <li><a href='#agg_sum'>AGG_SUM</a></li>
             <li><a href='#and'>AND</a></li>
             <li><a href='#begins'>BEGINS</a></li>
             <li><a href='#blankvalue'>BLANKVALUE</a></li>
@@ -58,9 +65,9 @@
             <li><a href='#isnumber'>ISNUMBER</a></li>
             <li><a href='#left'>LEFT</a></li>
             <li><a href='#len'>LEN</a></li>
+            </ul></div><div style='flex:1'><ul tyle='flex:1'>
             <li><a href='#lower'>LOWER</a></li>
             <li><a href='#max'>MAX</a></li>
-            </ul></div><div style='flex:1'><ul tyle='flex:1'>
             <li><a href='#min'>MIN</a></li>
             <li><a href='#not'>NOT</a></li>
             <li><a href='#now'>NOW</a></li>
@@ -77,7 +84,8 @@
             <li><a href='#value'>VALUE</a></li>
             <li><a href='#vlookup'>VLOOKUP</a></li>
             <li><a href='#apex_class'>APEX CLASS</a></li>
-            </ul></div></div>               
+            </ul></div></div>
+            
             
             
             <div class='v-space'></div><div id='add'><h2>+ (Add)</h2><table><tbody>
@@ -177,6 +185,49 @@
             <tr><td class='table-first-column'>Example:</td><td><span class='formula'>ADDMONTHS(StartDate, 5)</span><div class='v-space-s'></div>Adds 5 months to the start date. For example, if the start date is <b>September 20, 2017</b>, the resulting date is <b>February 20, 2018</b>, If the start date is <b>September 30, 2017</b>, the resulting date is <b>February 28, 2018</b>.</td></tr>
             </tbody></table></div>
             
+            <div class='v-space'></div><div id='agg_avg'><h2>AGG_AVG</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the average value of a numeric field matching the query criteria(optional) on the aggregate object from the Source with the group field filtered by the values retrieved from the Source Object. </td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>AGG_AVG(aggregate_object_name, aggregate_field, group_field, group_values_field_on_source_object, [additional_criteria]) </span></td></tr>
+            <tr><td class='table-first-column'>Example:</td><td>Assuming the Source Object Name on the Executable is set as "Account", <span class='formula'>AGG_AVG("Opportunity", "Amount", "AccountId", "Id", "StageName='Closed Win')</span>caculates the average Amount of the Opportunities grouped by the AccountId field whose Stage is "Closed Win" and the group field AccountId falls into Id values of the Account data retrieved from the Source.<div class='v-space-s'></div></td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td>Aggregate functions in DSP are bulkified, and multiple aggregate functions on the same Executalbe are combined before making SOQL calls to gain the best performance. Using aggregate functions in conjunction with the "Skip Record Update If No Changes?" field to efficiently avoid DMLs for large data calculations.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='agg_count'><h2>AGG_COUNT</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the number of rows matching the query criteria(optional) on the aggregate object from the Source with the group field filtered by the values retrieved from the Source Object. </td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>AGG_COUNT(aggregate_object_name, aggregate_field, group_field, group_values_field_on_source_object, [additional_criteria]) </span></td></tr>
+            <tr><td class='table-first-column'>Example:</td><td>Assuming the Source Object Name on the Executable is set as "Account", <span class='formula'>AGG_COUNT("Opportunity", "Id", "AccountId", "Id", "StageName='Closed Win')</span>caculates the number of the Opportunities grouped by the AccountId field whose Stage is "Closed Win" and the group field AccountId falls into Id values of the Account data retrieved from the Source.<div class='v-space-s'></div></td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td>Aggregate functions in DSP are bulkified, and multiple aggregate functions on the same Executalbe are combined before making SOQL calls to gain the best performance. Using aggregate functions in conjunction with the "Skip Record Update If No Changes?" field to efficiently avoid DMLs for large data calculations.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='agg_count_distinct'><h2>AGG_COUNT_DISTINCT</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the number of distinct non-null field values matching the query criteria(optional) on the aggregate object from the Source with the group field filtered by the values retrieved from the Source Object. </td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>AGG_COUNT_DISTINCT(aggregate_object_name, aggregate_field, group_field, group_values_field_on_source_object, [additional_criteria]) </span></td></tr>
+            <tr><td class='table-first-column'>Example:</td><td>Assuming the Source Object Name on the Executable is set as "Account", <span class='formula'>AGG_COUNT_DISTINCT("Opportunity", "Type", "AccountId", "Id", "StageName='Closed Win')</span>caculates the number of distinct non-null Type values on the Opportunities grouped by the AccountId field whose Stage is "Closed Win" and the group field AccountId falls into Id values of the Account data retrieved from the Source.<div class='v-space-s'></div></td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td>Aggregate functions in DSP are bulkified, and multiple aggregate functions on the same Executalbe are combined before making SOQL calls to gain the best performance. Using aggregate functions in conjunction with the "Skip Record Update If No Changes?" field to efficiently avoid DMLs for large data calculations.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='agg_max'><h2>AGG_MAX</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the maximum value of a field matching the query criteria(optional) on the aggregate object from the Source with the group field filtered by the values retrieved from the Source Object. </td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>AGG_MAX(aggregate_object_name, aggregate_field, group_field, group_values_field_on_source_object, [additional_criteria]) </span></td></tr>
+            <tr><td class='table-first-column'>Example:</td><td>Assuming the Source Object Name on the Executable is set as "Account", <span class='formula'>AGG_MAX("Opportunity", "Amount", "AccountId", "Id", "StageName='Closed Win')</span>caculates the max amount of Opportunities grouped by the AccountId field whose Stage is "Closed Win" and the group field AccountId falls into Id values of the Account data retrieved from the Source.<div class='v-space-s'></div></td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td>Aggregate functions in DSP are bulkified, and multiple aggregate functions on the same Executalbe are combined before making SOQL calls to gain the best performance. Using aggregate functions in conjunction with the "Skip Record Update If No Changes?" field to efficiently avoid DMLs for large data calculations.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='agg_min'><h2>AGG_MIN</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the minimum value of a field matching the query criteria(optional) on the aggregate object from the Source with the group field filtered by the values retrieved from the Source Object. </td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>AGG_MIN(aggregate_object_name, aggregate_field, group_field, group_values_field_on_source_object, [additional_criteria]) </span></td></tr>
+            <tr><td class='table-first-column'>Example:</td><td>Assuming the Source Object Name on the Executable is set as "Account", <span class='formula'>AGG_MIN("Opportunity", "Amount", "AccountId", "Id", "StageName='Closed Win')</span>caculates the minimum amount of Opportunities grouped by the AccountId field whose Stage is "Closed Win" and the group field AccountId falls into Id values of the Account data retrieved from the Source.<div class='v-space-s'></div></td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td>Aggregate functions in DSP are bulkified, and multiple aggregate functions on the same Executalbe are combined before making SOQL calls to gain the best performance. Using aggregate functions in conjunction with the "Skip Record Update If No Changes?" field to efficiently avoid DMLs for large data calculations.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='agg_sum'><h2>AGG_SUM</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the minimum value of a field matching the query criteria(optional) on the aggregate object from the Source with the group field filtered by the values retrieved from the Source Object. </td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>AGG_SUM(aggregate_object_name, aggregate_field, group_field, group_values_field_on_source_object, [additional_criteria]) </span></td></tr>
+            <tr><td class='table-first-column'>Example:</td><td>Assuming the Source Object Name on the Executable is set as "Account", <span class='formula'>AGG_SUM("Opportunity", "Amount", "AccountId", "Id", "StageName='Closed Win')</span>caculates the sum amount of Opportunities grouped by the AccountId field whose Stage is "Closed Win" and the group field AccountId falls into Id values of the Account data retrieved from the Source.<div class='v-space-s'></div></td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td>Aggregate functions in DSP are bulkified, and multiple aggregate functions on the same Executalbe are combined before making SOQL calls to gain the best performance. Using aggregate functions in conjunction with the "Skip Record Update If No Changes?" field to efficiently avoid DMLs for large data calculations.</td></tr>
+            </tbody></table></div>
+            
+            
             <div class='v-space'></div><div id='and'><h2>AND</h2><table><tbody>
             <tr><td class='table-first-column'>Description:</td><td>Determines if expressions are true or false. Returns TRUE if all expressions are true. Returns FALSE if any expression is false. Use this function as an alternative to the operator <span class='formula'>&& (AND)</span>.</td></tr>
             <tr><td class='table-first-column'>Use:</td><td><span class='formula'>AND(logical1, logical2...)</span> and replace any number of logical references with the expressions you want evaluated.</td></tr>
@@ -211,7 +262,7 @@
             <tr><td class='table-first-column'>Description:</td><td>Returns a date value for a date/time or text expression.</td></tr>
             <tr><td class='table-first-column'>Use:</td><td>DATEVALUE(text/datetime) and replace expression with a date/time or text value, merge field, or expression.</td></tr>
             <tr><td class='table-first-column'>Example:</td><td><b>Closed Date</b><div class='v-space-s'></div><span class='formula'>DATEVALUE(ClosedDate)</span> displays a date field based on the value of the Date/Time Closed field.<div class='v-space'></div><b>Date Value</b><div class='v-space-s'></div><span class='formula'>DATEVALUE("2005-11-15")</span> returns November 15, 2005 as a date value.</td></tr>
-            <tr><td class='table-first-column'>Tips:</td><td><ul><li>If the field referenced in the function isn't a valid text or date/time field, the formula field throws an exception.</li><li>When entering a date, surround the date with quotes and use the following format: YYYY-MM-DD, that is, a four-digit year, two-digit month, and two-digit day.</li><li>If the expression doesn't match valid date ranges, such as the MM isn't between 01 and 12, an exception will be thrown.</li><li>Dates and times are always calculated using the user’s time zone.</li></td></tr>
+            <tr><td class='table-first-column'>c</td><td><ul><li>If the field referenced in the function isn't a valid text or date/time field, the formula field throws an exception.</li><li>When entering a date, surround the date with quotes and use the following format: YYYY-MM-DD, that is, a four-digit year, two-digit month, and two-digit day.</li><li>If the expression doesn't match valid date ranges, such as the MM isn't between 01 and 12, an exception will be thrown.</li><li>Dates and times are always calculated using the user’s time zone.</li></td></tr>
             </tbody></table></div>
             
             <div class='v-space'></div><div id='daysbetween'><h2>DAYSBETWEEN</h2><table><tbody>
@@ -367,6 +418,17 @@
             </tbody></table></div>
             <div class='v-space'></div>
             <div class='v-space'></div>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             
             

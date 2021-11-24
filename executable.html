@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+            
+            
+            <div class='back-to-top-box'><a href='#title'>&#8679; Back to Top</a></div>
+<h1 id='title'>Executable</h1>
+<p>An Executable (pushtopics__Executable__c) defines a list of settings that will be used to execute a data synchronization job, including the Direction, Source Object Name, Target Object Name, Target Key Field, and Action etc. The following table lists the details of the fields.</p>
+
+<div class='v-space'></div>
+<h2 id='title'>Fields</h2>
+
+<div class='v-space'></div><div>
+<table><thead><th class='table-column-name'>Name</th><th class='table-column-wide'>Developer Name</th><th class='table-column-narrow'>Required</th><th>Description</th></thead><tbody>
+<tr><td>[View Source Data] Page Size</td><td class='slds-truncate'>pushtopics__ViewDataPageSize__c</td><td>N</td><td>The size of the page (number of rows) that displays the source data under the tab [View Source Data].</td></tr>
+<tr><td>Action</td><td class='slds-truncate'>pushtopics__Action__c</td><td>Y</td><td>The Action DSP executes against the Target. There are 3 options:<ul><li><b>Insert</b>: only performs the 'Insert' action against the Target. If the source data already exists in the Target, the existing data will be ignored for this Action. </li><li><b>Update</b>: only performs 'Update' action against the Target. Data that does not exist in the Target will be ignored and only 'Update' is performed. </li><li><b>Upsert</b>: default option. DSP performs the 'Insert' action against the Target for non-existant data, and the 'Update' action on existing data.</td></tr>
+<tr><td>All or Nothing?</td><td class='slds-truncate'>pushtopics__AllOrNothing__c</td><td>N</td><td>Default is "false". Any record failures will cause the entire transaction roll back. This can only be checked when "Batchable" is unchecked and the Target is an integration type of Connection.</td></tr>
+<tr><td>Batch Size</td><td class='slds-truncate'>pushtopics__BatchSize__c</td><td>N</td><td>Max value is 200. Once data is retrieved from Source, the data will be split into Action batches based on the value of this field. For example: It may be a quick process to retrieve 400 records from a Source, but when actioning against the Target, due to heavy triggers/workflows/process builders which can impact the DML time, it could be better to perform the actions 50 records a time. So the "Retrieve Size" can be set to 400, and "Action Batch Size" be 50. This option makes it flexible to adjust the size of the batches in execution separately.</td></tr>
+<tr><td>Batchable?</td><td class='slds-truncate'>pushtopics__Batchable__c</td><td>N</td><td>Default is "true". If checked, the Execution will run in batch mode, where each batch ends up with a Batch Execution record created, which holds the details of a batch execution, and the Execution record holds the summarized values. If unchecked, all the details are logged in the Execution record and no Batch Execution records will be created. The non-batch mode helps reduce the layer of logs, but is only supposed to be used when the dataset is small enough to be handled within a single APEX transaction, without hitting Salesforce governor limits. "Batchable?" and "All or Nothing?" cannot both be checked.</td></tr>
+<tr><td>Bypass Duplicate Rule Alerts?</td><td class='slds-truncate'>pushtopics__BypassDuplicateRuleAlerts__c</td><td>N</td><td>Default is "false".  If checked, and if the data actioned to the Target triggers the Duplicate Rule Alert, the alert will be bypassed. <div class="slds-box note-box_outer"><div class="note-box"><p class="title"> Note: </p><p>A System Administrator will bypass the alert regardlessly whether it is checked or not.</p></div></div></td></tr>
+<tr><td>Description</td><td class='slds-truncate'>pushtopics__Description__c</td><td>N</td><td>Description of the Executable.</td></tr>
+<tr><td>Direction</td><td class='slds-truncate'>pushtopics__Direction__c</td><td>N</td><td>The Direction of the Executable. If not defined, the Direction of the Job is used. At least one of the <b>Direction</b> and <b>Job</b> fields is required.</td></tr>
+<tr><td>Disable Feed Tracking?</td><td class='slds-truncate'>pushtopics__DisableFeedTracking__c</td><td>N</td><td>To disable Feed Tracking in the Target. It can only be checked when the Target is an integration type of Connection. Default is "false". </td></tr>
+<tr><td>Failure Message</td><td class='slds-truncate'>pushtopics__FailureMessage__c</td><td>N</td><td>If defined, the message will be shown in the notification when the Execution fails. If undefined, a system default message will be displayed.</td></tr>
+<tr><td>Include Failed Data in Results?</td><td class='slds-truncate'>pushtopics__IncludeFailedDataInResults__c</td><td>N</td><td>Default is "false". If unchecked, only the Ids of the data and the result from the Target will be logged in the Execution or Batch Execution records. If checked, the failed records against the Target will be added to the log in JSON format to help debug the issues. </td></tr>
+<tr><td>Job</td><td class='slds-truncate'>pushtopics__Job__c</td><td>N</td><td>The Job that the Executable is associated with. When multiple Executables are associated with a same Job, they can be executed in sequence based on the Seq No..</td></tr>
+<tr><td>Last Execution Time</td><td class='slds-truncate'>pushtopics__LastExecutionTime__c</td><td>N</td><td>Auto-populated to the last execution's start time. It can be used in conjunction with the Retrieve Modified Since Last Execution field to sync data incrementally, which if checked, DSP will retrieve source data only updated later than the Last Execution Time in addition to the criteria defined in the Retrieve Parameters during execution.</td></tr>
+<tr><td>Executable API Name</td><td class='slds-truncate'>pushtopics__ApiName__c</td><td>Y</td><td>The name that uniquely identifies the Executable.</td></tr>
+<tr><td>Executable Name</td><td class='slds-truncate'>Name</td><td>Y</td><td>The name of the Executable.</td></tr>
+<tr><td>Notify Email Addresses</td><td class='slds-truncate'>pushtopics__NotifyEmailAddresses__c</td><td>N</td><td>Comma separated email addresses to be notified when the execution is completed if the Notify When Execution Completes? is checked.</td></tr>
+<tr><td>Notify When Execution Completes?</td><td class='slds-truncate'>pushtopics__NotifyWhenExecutionCompletes__c</td><td>N</td><td>If checked, system will send a notification email to the email addressed defined in the Notify Email Addresses field.</td></tr>
+<tr><td>Retrieve Limit</td><td class='slds-truncate'>pushtopics__RetrieveLimit__c</td><td>N</td><td>If defined, it will be the maximum number of records that can be retrieved from the Source.</td></tr>
+<tr><td>Retrieve Modified Since Last Execution</td><td class='slds-truncate'>pushtopics__RetrieveModifiedSinceLastExecution__c</td><td>N</td><td>If checked,  DSP will retrieve source data only updated later than the Last Execution Time in addition to the criteria defined in the Retrieve Parameters during execution.</td></tr>
+<tr><td>Retrieve Order By</td><td class='slds-truncate'>pushtopics__RetrieveOrderBy__c</td><td>N</td><td>The order in which the source data is retrieved.</td></tr>
+<tr><td>Retrieve Parameters</td><td class='slds-truncate'>pushtopics__RetrieveParameters__c</td><td>N</td><td>The parameters used to retrieve the source data. There are 4 different types of parameters, which could be either a blank string, SOQL WHERE condition, a single Salesforce Id or a JSON array of Salesforce IDs of the Source Object.</td></tr>
+<tr><td>Retrieve Size</td><td class='slds-truncate'>pushtopics__RetrieveSize__c</td><td>N</td><td>This setting only applies when the Source is an integration type of Connection. If defined, DSP sets the limit based on this value in the HTTP Header before calling the Salesforce standard REST API.<div class="slds-box note-box_outer"><div class="note-box"><p class="title"> Note: </p><p>According to Salesforce: "There is no guarantee that the requested batch size is the actual batch size. Changes are made as necessary to maximize performance."</p></div></div></td></tr>
+<tr><td>Seq No.</td><td class='slds-truncate'>pushtopics__SeqNo__c</td><td>N</td><td>The sequence number for the current Executable that is part of the associated Job. When a Job is executed, the Executables will be executed in the ascending order defined in the Seq No. field.</td></tr>
+<tr><td>Seq No. Must Be Unique Across Job</td><td class='slds-truncate'>pushtopics__SeqNoMustBeUniqueAcrossJob__c</td><td>N</td><td>A helper field used to make sure all Executables associated with a same Job must have uniuqe Seq No.</td></tr>
+<tr><td>Skip Null Values?</td><td class='slds-truncate'>pushtopics__SkipNullValues__c</td><td>N</td><td>Default is "false". If checked and the calculated value is null, the target field will not be updated.</td></tr>
+<tr><td>Skip Record Update If No Changes?</td><td class='slds-truncate'>pushtopics__SkipRecordUpdateIfNoChanges__c</td><td>N</td><td>If checked, during updating existing data, if a record has no change in the Target, it will be excluded in the update operation, so that the DMLs and the associated automation will not fire.</td></tr>
+<tr><td>Source Connection Name</td><td class='slds-truncate'>pushtopics__SourceConnectionName__c</td><td>N</td><td>Formula field that shows the name of the source connection</td></tr>
+<tr><td>Source Object Name</td><td class='slds-truncate'>pushtopics__SourceObjectName__c</td><td>N</td><td>The Source Object's API name, where the source data will be retrieved from.</td></tr>
+<tr><td>Stop Execution When A Batch Fails?</td><td class='slds-truncate'>pushtopics__StopExecutionWhenABatchFails__c</td><td>N</td><td>Default false. If checked, execution will be stopped if there is a batch failed.</td></tr>
+<tr><td>Success Message</td><td class='slds-truncate'>pushtopics__SuccessMessage__c</td><td>N</td><td>If defined, the message will be shown in the notification when the Execution succeeds. If undefined, a system default message will be displayed.</td></tr>
+<tr><td>Target Connection Name</td><td class='slds-truncate'>pushtopics__TargetConnectionName__c</td><td>N</td><td>A formula field that shows the name of the target connection</td></tr>
+<tr><td>Target Key Field</td><td class='slds-truncate'>pushtopics__TargetKeyField__c</td><td>Y</td><td>The Target Key Field is the "Key" field's API name on the Target Object that is used to check the existence of the source data in the target, which will then inform which data requires an update, vs which requires an insert. It can be any type of Text type of field, but we recommend it is a unique field which is either an External Id field, or the Standard "Salesforce Id" field when the Source and Target share the same Salesforce Record Id. </td></tr>
+<tr><td>Target Object Name</td><td class='slds-truncate'>pushtopics__TargetObjectName__c</td><td>Y</td><td>The Object's API name in the Target where the data will be synced to.</td></tr>
+<tr><td>Use Default Assignment Rule?</td><td class='slds-truncate'>pushtopics__UseDefaultAssignmentRule__c</td><td>N</td><td>Default "false". If checked, the default assignment rule in the Target will be used.</td></tr>
+
+</tbody></table></div><div class='v-space'></div>
+
+
+
+
+
+        </div>
+    </div>
+</body>
+
+</html>
