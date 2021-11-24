@@ -14,7 +14,7 @@ var catalog = JSON.parse(
     ],"Executable":[
     
     {"Fields Mapper":[
-    "Formula"
+    "Elements of Mapping"
     ,"Calculate Field Values"
     ]}
     ,"View Source Data"
