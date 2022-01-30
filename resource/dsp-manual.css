@@ -37,6 +37,10 @@ h3 {
     color: rgb(1, 118, 211);
 }
 
+p{
+    font-size: 1.2rem;  
+}
+
 .container p {
     color: rgb(11, 11, 11);
     display:inline-block;
@@ -188,12 +192,12 @@ li{
 }
 .pli{
     list-style-type: decimal; 
-    font-size:1.2rem;
+    font-size:1.0rem;
 }
 
 .rli{
     list-style-type: disc; 
-    font-size:1.1rem;
+    font-size:1.0rem;
 }
 
 .table-column-name{
@@ -220,6 +224,7 @@ li{
     padding-right:30px;
     padding-left: 30px;
 }
+
 .p-space{
     margin-top: 1.5rem;
 }

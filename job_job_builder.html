@@ -24,55 +24,127 @@
             <div class='v-space'></div>
 
 
-            <p>The <b>Job Builder</b> is a component that can help with creating a comprehensive list of related
-                Mappings, while maintaining
-                relationships, determining execution order and inherited criteria, within just a few minutes.
+            <p>
+
+                <b>Job Builder</b> 
+                is a powerful tool that helps create a comprehensive list of sequential Executables to associate with a Job, with object relationships adequately maintained, 
+                a subset of source data defined, and execution order determined.
             </p>
+
 
             <div class='v-space'></div>
 
             <span style='display:block'>
                 <ul>
+                    <li class="rli"><a href='#logic'>Steps & Logic</a></li>
                     <li class="rli"><a href='#quick_example'>Quick Example</a></li>
-                    <li class="rli"><a href='#paths_identification'>Identify Paths</a></li>
-
-                    <li class="rli"><a href='#create_mappings'>Create Mappings</a></li>
+                    <li class="rli"><a href='#create_default_executables'>Create Default Executables</a></li>
                 </ul>
             </span>
 
 
+
             <div class='v-space'></div>
+
+
+            <div style="height: 20px;"></div>
+            <h2 id="logic">Steps &amp; Logics</h2>
+
+            <div>
+                
+                <p>The following are the brief steps required to create Executables for a Job.</p>
+                <ul>
+                    <li class="pli">
+                        Add root target Objects to the tree grid.
+                    </li>
+
+                    <li class="pli">
+                        Expand on each node which lists the child Objects and their reference field automatically,
+                        keep expanding until you find the Object lowest in the hierarchy.
+                    </li>
+
+                    <li class="pli">
+                        Select the leaf node, which opens up a modal populated with all objects in the path from the selected leaf node to the root object.
+                    </li>
+
+                    <li class="pli">
+                        Fill out the mappings - select a External ID Field(if any) as the Target Key Field for each target Object, confirm or update the Source Object, and 
+                        type the Source Key Field to map with the Target Key Field.
+                    </li>
+                    <li class="pli">
+                        Close the model to continue selecting other Objects in the tree grid and/or set retrieve criteria for particular nodes.
+                    </li>
+                    <li class="pli">
+                        Once all Objects required in the Job are selected and mapped out, and required criteria are configured, click the button "Create Default Executables".
+                    </li>
+                </ul>
+            </div>
+            <div style="height: 30px;"></div>
+
+            <p>
+                Understanding the logic that Job Builder performs after clicking "Create Default Executables" will help with knowing better on
+                the order the Objects should be added to the grid and what the default settings are after Executables are created.
+
+                The section <a href='./job_determine_sequence.html'>Determine Sequence</a> depicts the algorithmatic way of determing the object sequence, which might be a little too much for beginners.
+                But having a good prediction on what's going to happen here, it should be just as simple as following your gut feelings as long as your data model is not too complicated.
+            </p>
+
+
+            <div style="height: 30px;"></div>
+
 
             <div class='slds-box note-box_outer'>
                 <div class='note-box'>
-                    <p class='title'>Note: </p>
+                    <p class='title'>The Logic of Creating Default Execuables: </p>
 
                     <ul>
                         <li class="rli">
-                            This component can improve work efficiency of creating relational Mappings by 90%, 
-                            which is a great tool for senior level users who have good knowledge in their data model and understand the referential denpendency between objects. 
-                            But don't think you have to use it to build your object and field-level Mappings. 
-                            DSP is still the easiest tool to create individual Mappings mannually.
+                            The sequence of Executables is what you see from the top to the bottom in the tree grid.
+                        </li>
+
+                        <li class="rli">
+                            The settings on the generated Excutables are defaulted based on the default values defined in the Executable object, 
+                            for example, <b>Action</b> is "Upsert", <b>Batchable</b> is checked, and <b>Batch Size</b> is 200. The following fields are set based on the configurations in Job Builder:
+
+                            <ul style="font-size: smaller; ">
+                                <li style="padding-top:3px;list-style-type: square;"><b>Job</b> = [Current Job]</li>
+                                <li style="padding-top:3px;list-style-type: square;"><b>Name</b> = [Target Object Name]</li>
+                                <li style="padding-top:3px;list-style-type: square;"><b>Executable API Name</b> = [Job Name + "_" + Target Object Name + "_" + Random Number]</li>
+                                <li style="padding-top:3px;list-style-type: square;"><b>Target Object Name</b> = [Target Object Name]</li>
+                                <li style="padding-top:3px;list-style-type: square;"><b>Source Object Name</b> = [Source Object Name]</li>
+                                <li style="padding-top:3px;list-style-type: square;"><b>Target Key Field</b> = [Selected External ID Field]</li>
+                                <li style="padding-top:3px;list-style-type: square;"><b>Retrieve Parameters</b> = [Node Criteria + Criteria Inherited from the Hierarchy(if applicable)]</li>
+                            </ul>
+
                         </li>
 
 
                         <li class="rli">
-                            Job Builder generates the Mappings in the order of DFS(Deep-First-Search). Do not be frightened by the algorithm's name, 
-                            it is as simple as the ascending order from the top to the bottom for selected objects, as you see in the tree grid. </li>
+                            Default Field Mappings:
 
-                        <li class="rli">
-                            Only the objects in the preceding mappings 
-                            will be mapped on reference type fields in the subsequent mappings. 
+                            <ul>
+                                <li style="padding-top:3px;list-style-type: square;">The Target Key Field is mapped with the Source Key Field you provided.</li>
+
+                                <li style="padding-top:3px;list-style-type: square;">For non-reference type of fields, if the source and target have the same type and API name, 
+                                Job Builder creates an exact mapping for each field.</li>
+
+                                <li style="padding-top:3px;list-style-type: square;">For reference type of fields, if the source and target have the same API name and the reference-to Object
+                                     is selected in the tree grid preceeding the current Object, Job Builder generates the mapping using the <b>External Id Field</b> 
+                                    selected in the preceding Object</li>
+                                
+                                <li style="padding-top:3px;list-style-type: square;">The rest fields remain as unmapped.</li>
+                            </ul>
                         </li>
 
                         <li class="rli">
-                        With the above being said, you
-                            are free to modify the object-level settings and field-level mappings after the mappings are generated.</li>
+
+                            If the Criteria is defined for a node, it will be added to the "Retrieve Parameters" field on the created Executable. 
+                            If "Cascade Criteria to Child Objects in Hierarchy" is selected, the ancestor's Criteria is cascaded down to the child Objects' Executable along the hierarchical path(5 levels maximum).
+
+                        </li>
                     </ul>
                 </div>
             </div>
-
-
 
 
             <div style="height: 30px;"></div>
@@ -81,11 +153,10 @@
                 <h2 id="quick_example">Quick Example</h2>
                 <p>To see how easily this can be done, let us first take an example of migrating data for a list of
                     objects related to the Opportunity Management.
-                    In a nutshell, two major steps are required to create the relevant mappings.</p>
+                    In a nutshell, two major steps are required to create the relevant Executables.</p>
                 <ul>
                     <li class="pli">
-                        Identify the dependency Paths as described in the <a href='#paths_identification'>Identify
-                            Paths</a> section.
+                        Identify the dependency Paths as described in the <a href='./job_determine_sequence.html'>Determine Sequence</a> section.
 
 
                         <div class="image-outer">
@@ -97,8 +168,8 @@
                     <li class="pli">
                         Add the objects path by path to the tree grid, in the <b>reversed</b> order as the sequence
                         identified above, select the leaf nodes and fill out the required mapping details,
-                        then hit the "Create Mappings" button, see the demo video below and the instructions <a
-                            href='#create_mappings'>Create Mappings</a>.
+                        then hit the "Create Default Executables" button, see the demo video below and the instructions <a
+                            href='#create_default_executables'>Create Default Executables</a>.
                         <br>
                         <iframe src="https://youtube.com/embed/yBXyHrN21Ko" width="750px" height="450" frameborder="0"
                             allowfullscreen style="padding-left:1rem;padding-top:1rem;padding-bottom: 1rem;"></iframe>
@@ -107,97 +178,23 @@
                 </ul>
             </div>
 
+
+
+
             <div class='v-space'></div>
 
-            <p id="paths_identification">
-                <h2>Identify Paths</h2>
-            </p>
-
+            <h2 id="create_default_executables">Create Default Executables</h2>
             <ul>
-
-                <li class="pli">Have your Entity Relationship Diagram(ERD) of your target org in front of you. For
-                    example, the following diagram is a brief version of the Opportunity Management data model.
-                    <div class="image-outer">
-
-                        <img src="resource/img/job_builder_data_model.png" />
-
-                        <div class="image-title">Step 1</div>
-                    </div>
-                </li>
-                <li class="pli">Determine the root objects needed in the migration. Root objects are those which do
-                    not depend on
-                    any parent data to be migrated prior to their migration. In this example, we have <b>A</b>,
-                    <b>B</b>, <b>C</b> as the root objects.
-
-                    <div class="image-outer"><img src="resource/img/job_builder_roots.png" />
-                        <div class="image-title">Step 2</div>
-                    </div>
-                </li>
-                <li class="pli">
-
-                    Identify all the to-be-deployed-to objects from the roots along the paths in the ERD network till
-                    the leaf nodes. The leaf nodes are the lowest level objects which do not have descendents that are
-                    dependent on them in the migration. If a
-                    path is cyclic, try to break the cycle by removing asyclic path, for example <span class='formula'>X
-                        -> Y -> Z -> X</span> can be decycled to either
-                    <span class='formula'>X -> Y -> Z</span> or <span class='formula'>Y -> Z -> X</span>. (To update the
-                    relational fields that are removed from the cyle,
-                    you can always create a Mapping separately with just the relevant relational fields and execute it
-                    at the end.)
-
-                    <div class='v-space'></div>
-                    In our example, we assume all the objects in the diagram need to be migrated.
-
-                    <div class="image-outer"><img src="resource/img/job_builder_all_nodes.png" />
-                        <div class="image-title">Step 3</div>
-                    </div>
-                </li>
-
-                <li class="pli">Find the longest path between any root object and any unmarked node in the network and
-                    mark the path (<span class='formula'>path 1 in the below diagram</span>).
-                    <div class="image-outer">
-                        <img src="resource/img/job_builder_longest_path.png" />
-                        <div class="image-title">Step 4</div>
-                    </div>
-                </li>
-                <li class="pli">Then find the next longest paths maximumly along the previously marked path until all
-                    the
-                    descendent nodes for the root object in the path are identified, mark the paths in the order
-                    based on when the path is identified
-                    (<span class='formula'>path 2 and 3 in the diagrams</span>).
-
-                    <div class="image-outer"><img src="resource/img/job_builder_2nd_path.png" />
-                        <div class="image-title">Step 5</div>
-                    </div>
-                    <div class='v-space'></div>
-                    <div class="image-outer"><img src="resource/img/job_builder_3rd_path.png" />
-                        <div class="image-title">Step 6</div>
-                    </div>
-                </li>
-                <li class="pli">Keep doing this excise to find the next longest paths until all the root objects have
-                    their paths identified (Path 3, 4 in the diagram).
-
-                    <div class="image-outer"><img src="resource/img/job_builder_final.png" />
-                        <div class="image-title">Step 7</div>
-                    </div>
-                </li>
-            </ul>
-            <div class='v-space'></div>
-
-            <h2 id="create_mappings">Create Mappings</h2>
-            <ul>
-                <li class="pli">Go to the <b>Job</b> record where the new Mappings will be created and assiciated to it,
+                <li class="pli">Go to the <b>Job</b> record where the new Executables will be created and assiciated to it,
                     click the <b>Job Builder</b> tab.
                 </li>
-                <li class="pli">Add the root object of the next available path identifed above to the tree grid.
+                <li class="pli">Add the root object of the next available path to the tree grid.
 
                     <div class='slds-box note-box_outer'>
                         <div class='note-box'>
                             <p class='title'>Note: </p>
-                            <p>The order of the paths to be added is <b>reversed</b> as they were identified in the
-                                paths idendification steps.
-                                In other words, the last identified path should be added first to the tree grid, and the
-                                first identified path should be the last.
+                            <p>Check the process 
+                                <a href='./job_determine_sequence.html'>Determine Sequence</a> for the systematic approach.
                             </p>
                         </div>
                     </div>
@@ -217,7 +214,7 @@
                 </li>
 
                 <li class="pli">The <b>Set Mappings</b> modal pops up automatically. The order of the Mappings displayed
-                    is the same order when the Mappings are created successfully.
+                    is the same order when the Executables are created successfully.
 
                     Select the External Id Field for the target objects, map out the Source Objects and the Source Key
                     Fields. Click <b>Validate Mappings</b> to make sure the settings are valid.
@@ -233,7 +230,7 @@
                 </li>
                 <li class="pli">Repeat step 2 thru step 5 to add the next paths (in reversed order).</li>
                 <li class="pli">
-                    If there is a need to add criteria to a Mapping for retrieving the source data, click the edit icon
+                    If there is a need to add criteria to an Executable for retrieving the source data, click the edit icon
                     on the right of the node, fill out the criteria and
                     click <b>Validate Criteria</b> to check the validation, which if successful will show how many
                     records are there in the source object for the criteria defined.
@@ -243,13 +240,13 @@
                     </div>
                     <div class='v-space'></div>
                     <p>
-                        Check "Inherit Relationship's Criteria (Beta)" if you wish to have the child Mappings inherits
+                        Check "Cascade Criteria to Child Objects in Hierarchy" if you wish to have the child Objects inherits
                         the
                         criteria defined in their upper hierarchy along the same path, up to 5 levels.
-                        If there is a need for a Mapping to inherit criteria from multiple paths, make sure the same
+                        If there is a need for an Objects to inherit criteria from multiple paths, make sure the same
                         object
                         is selected in those paths, in which scenario, the <b>Job Builder</b>
-                        will only create one Mapping for that object, but combines criteria inherited from multiple
+                        will only create one Executable for that object, but combines criteria inherited from multiple
                         paths.
                     </p>
 
@@ -258,7 +255,7 @@
                         <div class='note-box'>
                             <p class='title'>Note: </p>
                             <p class="rli">
-                                During the creation of the Mappings, the field and object level mappings are being
+                                During the creation of the Executables, the field and object level mappings are being
                                 validated, but the criteria is not.
 
                                 Make sure you validate it while defining it on the screen.</p>
@@ -273,13 +270,15 @@
 
                 </li>
 
-                <li class="pli">Click “Create Mappings”, the Job Builder generates the Mappings along with the default
+                <li class="pli">Click “Create Default Executables”, the Job Builder generates the Executables along with the default
                     Field
-                    Mappings and the Criteria, then reloads the page after completion. </li>
+                    Mappings and the Criteria, then reloads the page. </li>
 
 
                 </li>
             </ul>
+
+
 
 
             <div class='v-space'></div>
@@ -289,36 +288,25 @@
                     <p class='title'>Note: </p>
 
                     <ul>
-                        <li class="rli">
-                            The Job Builder is a convenient tool for creating a comprehensive list of Mappings with just
-                            a few clicks.
-                            For the convenience, the generated Mappings are defaulted with the most generally used
-                            settings.
-                            Make sure you validate and tailor them before data execution.</li>
-
 
                         <li class="rli">
-                            Once the Mappings are created, the Job Builder will not restore them in the tree grid.
-                            New Mappings created via Job Builder will be brand new Mappings added to the related list of
-                            the Job.</li>
-                        <li class="rli">
-                            The sequence of the Mappings finnally generated is in DFS(Deep First Search) order.
-                            Only the preceeding Mappings will be mapped the relational fields in the later generaged
-                            Mappings if there is any.</li>
-                        <li class="rli">
-                            Default-created Field Mappings are either non-reference types of fields which have the same
-                            field type and developer name between the
-                            Source and Target objects, or the reference type of fields whose reference-to-object is
-                            mapped preceding the current
-                            object.
+
+                            Job Builder is the most efficient way of creating a list of related Executables, but it's not the only way. 
+                            For example, you may still want to create individual Executable records and set up their Field Mappings manually if the default settings here are not what you wanted(for instance, your Executable's Action should be "Delete" instead of "Upsert."), 
+                            or if you don't feel comfortable using the Job Builder. Manually creating Executables in DSP is still a very efficient process.
+                      
                         </li>
                         <li class="rli">
-                            You cannot select the same objects twice in the same path.
+                            The Job Builder only supports target Objects having External ID fields.
                         </li>
                         <li class="rli">
-                            The Job Builder only supports the Mappings creation where the Target Key Fields are External
-                            ID fields.
-                        </li>
+                            Make sure to validate and tailor with default generated Executables and Field Mappings before execution.</li>
+                        <li class="rli">
+                            After the Executables are created, Job Builder's tree grid is reset to scratch. 
+                            New Executables created via Job Builder will be brand new Executables added to the Job.</li>
+                        <li class="rli">
+                            Only the preceeding Executables will be mapped the relational fields in the later generaged
+                            Executables.</li>
                     </ul>
                 </div>
             </div>

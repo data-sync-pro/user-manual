@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+
+            <div class='back-to-top-box'><a href='#title'>&#8679; Back to Top</a></div>
+
+
+            <h1 id="title">
+                Identify Paths and Determine Object Sequence
+            </h1>
+
+            <p>
+    
+                This section describes the process of identifying paths based out of your data model, and ultimately derive the sequence of Objects for execution. 
+                The object sequence derived from the paths is meant to achieve the goal of enforcing referential integrity(resolving dependent data) during data migration. 
+                Here are the steps to follow:</p>
+                <div style="height: 20px;"></div>
+            <ul>
+
+                <li class="pli">Have your Entity Relationship Diagram(ERD) of your target org in front of you. 
+                    <div class="image-outer">
+
+                        <img src="resource/img/job_builder_data_model.png" />
+
+                        <div class="image-title">Step 1</div>
+                    </div>
+                </li>
+                <li class="pli">Determine the root objects needed in the migration. Root objects are those which do
+                    not depend on
+                    any parent data to be migrated prior to their migration. In this example, we have <b>A</b>,
+                    <b>B</b>, <b>C</b> as the root objects.
+
+                    <div class="image-outer"><img src="resource/img/job_builder_roots.png" />
+                        <div class="image-title">Step 2</div>
+                    </div>
+                </li>
+                <li class="pli">
+
+                    Identify all the to-be-deployed-to objects from the roots along the paths in the ERD network till
+                    the leaf nodes. The leaf nodes are the lowest level objects which do not have descendents that are
+                    dependent on them in the migration. If a
+                    path is cyclic, try to break the cycle by removing asyclic path, for example <span class='formula'>X
+                        -> Y -> Z -> X</span> can be decycled to either
+                    <span class='formula'>X -> Y -> Z</span> or <span class='formula'>Y -> Z -> X</span>. (To update the
+                    relational fields that are removed from the cyle,
+                    you can always create an Executable separately only mapping out the missing fields.)
+
+                    <div class='v-space'></div>
+                    In our example, we assume all the objects in the diagram need to be migrated, which is A, B, C, D, E, F, G, H, I.
+
+                    <div class="image-outer"><img src="resource/img/job_builder_all_nodes.png" />
+                        <div class="image-title">Step 3</div>
+                    </div>
+                </li>
+
+                <li class="pli">Find the longest path between any root object and any unmarked node in the network and
+                    mark the path (<span class='formula'>path 1 in the below diagram</span>).
+                    <div class="image-outer">
+                        <img src="resource/img/job_builder_longest_path.png" />
+                        <div class="image-title">Step 4</div>
+                    </div>
+                </li>
+                <li class="pli">Then greedily find the next longest paths along the previously marked path until all
+                    the
+                    descendent nodes for the same root object are identified, mark the paths in the order
+                    based on when the path is identified
+                    (<span class='formula'>path 2 and 3 in the diagrams</span>).
+
+                    <div class="image-outer"><img src="resource/img/job_builder_2nd_path.png" />
+                        <div class="image-title">Step 5 (I)</div>
+                    </div>
+                    <div class='v-space'></div>
+                    <div class="image-outer"><img src="resource/img/job_builder_3rd_path.png" />
+                        <div class="image-title">Step 5 (II)</div>
+                    </div>
+                </li>
+                <li class="pli">Keep doing this excise to find the next longest paths until all the root objects have
+                    their paths identified (path 4, 5 in the diagram).
+
+                    <div class="image-outer"><img src="resource/img/job_builder_final.png" />
+                        <div class="image-title">Step 6</div>
+                    </div>
+                </li>
+                <li class="pli">The object sequence should be from parent to the child in the reversed order of the identified paths, 
+                    in our example, it is <b>C</b>(path 5), <b>B -> F</b>(path 4), <b>A -> D</b>(path 3), <b>E -> H</b>(path 2), <b>G -> I</b>(path 1). 
+<p>
+                    In this example, <b>H</b> has 3 direct parents, <b>C, F, E</b>. 
+                    Because Objects in path 5 and path 4(where <b>C, F</b> belong to) are selected prior to path 2(where <b>E, H</b> belong to), so at the time <b>E, H</b> are migrated,
+                    the dependent data in Objects <b>C, F</b> should have already been migrated.
+                    And because in path 2, <b>E</b> is the parent of <b>H</b>, <b>E</b> is processed before <b>H</b>, hence the referential integrity for <b>H</b> is enforced.  </p>
+
+                    <div class="image-outer"><img src="resource/img/job_builder_final.png" />
+                        <div class="image-title">Step 7</div>
+                    </div>
+                </li>
+            </ul>
+
+            <div class='v-space' style="height: 50px;"></div>
+        </div>
+    </div>
+</body>
+
+</html>

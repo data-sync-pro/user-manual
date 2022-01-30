@@ -14,8 +14,9 @@
 
         <div style="" class="container">
             
-            
-            <div class='back-to-top-box'><a href='#title'>&#8679; Back to Top</a></div>
+<!--content-->            
+
+<div class='back-to-top-box'><a href='#title'>&#8679; Back to Top</a></div>
 <h1 id='title'>Executable</h1>
 <p>An Executable (pushtopics__Executable__c) defines a list of settings that will be used to execute a data synchronization job, including the Direction, Source Object Name, Target Object Name, Target Key Field, and Action etc. The following table lists the details of the fields.</p>
 
@@ -40,7 +41,7 @@
 <tr><td>Executable API Name</td><td class='slds-truncate'>pushtopics__ApiName__c</td><td>Y</td><td>The name that uniquely identifies the Executable.</td></tr>
 <tr><td>Executable Name</td><td class='slds-truncate'>Name</td><td>Y</td><td>The name of the Executable.</td></tr>
 <tr><td>Notify Email Addresses</td><td class='slds-truncate'>pushtopics__NotifyEmailAddresses__c</td><td>N</td><td>Comma separated email addresses to be notified when the execution is completed if the Notify When Execution Completes? is checked.</td></tr>
-<tr><td>Notify When Execution Completes?</td><td class='slds-truncate'>pushtopics__NotifyWhenExecutionCompletes__c</td><td>N</td><td>If checked, system will send a notification email to the email addressed defined in the Notify Email Addresses field.</td></tr>
+<tr><td>Notify When Execution Completes?</td><td class='slds-truncate'>pushtopics__NotifyWhenExecutionCompletes__c</td><td>N</td><td>If "Always" is selected, system will send a notification email to the email addressed defined in the <b>Notify Email Addresses</b> field once the execution is completed; If "Only If Failed" is selected, the email will be sent only if the execution failed.</td></tr>
 <tr><td>Retrieve Limit</td><td class='slds-truncate'>pushtopics__RetrieveLimit__c</td><td>N</td><td>If defined, it will be the maximum number of records that can be retrieved from the Source.</td></tr>
 <tr><td>Retrieve Modified Since Last Execution</td><td class='slds-truncate'>pushtopics__RetrieveModifiedSinceLastExecution__c</td><td>N</td><td>If checked,  DSP will retrieve source data only updated later than the Last Execution Time in addition to the criteria defined in the Retrieve Parameters during execution.</td></tr>
 <tr><td>Retrieve Order By</td><td class='slds-truncate'>pushtopics__RetrieveOrderBy__c</td><td>N</td><td>The order in which the source data is retrieved.</td></tr>
@@ -62,9 +63,7 @@
 </tbody></table></div><div class='v-space'></div>
 
 
-
-
-
+<!--content-->
         </div>
     </div>
 </body>

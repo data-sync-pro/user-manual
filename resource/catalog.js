@@ -8,6 +8,7 @@ var catalog = JSON.parse(
     ],"Job":[
     
     "Job Builder"
+    ,"Determine Sequence"
     ,"Quick Actions"
     
     
@@ -38,6 +39,7 @@ var catalog = JSON.parse(
     
     
     ]}
+        
 
     `
 );
