@@ -14,14 +14,29 @@
 
         <div style="" class="container">
             
-
-            <div class='back-to-top-box'><a href='#title'>&#8679; Back to Top</a></div>
+<!--here-->
+<div class='back-to-top-box'><a href='#title'>&#8679; Back to Top</a></div>
 <h1 id='title'>Execution</h1>
 
 <p>An Execution(pushtopics__Execution__c) carries over the settings from the Executable at the time when it was executed and tracks the status of the execution.</p>
 <div class='slds-box note-box_outer'><div class='note-box'><p class='title'>Note:</p><p>Most of the fields on the page layout are read-only, however, a super user with “Modify All Data” access will be able to edit the fields anyway. Do NOT manually update the Exectuion record except for the "Stopped" field when there is a need to stop an uncompleted execution.</p></div></div>
 
-<div class='v-space'></div><div><h2>Details</h2>
+<div class='v-space'></div><div><h2>Summary</h2>
+<table><thead><th class='table-column-name'>Name</th><th class='table-column-wide'>Developer Name</th><th>Description</th></thead><tbody>
+<tr><td>Start Time</td><td class='slds-truncate'>pushtopics__StartTime__c</td><td>The time when the Execution starts</td></tr>
+<tr><td>End Time</td><td class='slds-truncate'>pushtopics__EndTime__c</td><td>The time when the Execution ends</td></tr>
+<tr><td>Completed?</td><td class='slds-truncate'>pushtopics__Completed__c</td><td>Indicates whether the Execution was completed or not.</td></tr>
+<tr><td>Stopped?</td><td class='slds-truncate'>pushtopics__Stopped__c</td><td>Indicates whether the Execution was stopped or not.</td></tr>
+<tr><td>Succeeded?</td><td class='slds-truncate'>pushtopics__Succeeded__c</td><td>Indicates whether the Execution was successful or not.</td></tr>
+<tr><td>Total Retrieved</td><td class='slds-truncate'>pushtopics__TotalRetrieved__c</td><td>The total records count retrieved from the source that are passed to the execution. </td></tr>
+<tr><td>Total Retrived Data in Action</td><td class='slds-truncate'>pushtopics__TotalRetrievedDataInAction__c</td><td>The total count of retrieved records participated in the action. For example, if there were 2000 records retrieved, 500 of them were new, and the Action was "Insert" only, this value would be 500.</td></tr>
+<tr><td>Total Actioned</td><td class='slds-truncate'>pushtopics__TotalActioned__c</td><td>The total count of records actioned against the target. For example, if there were 1000 inert and 500 update records retrieved from the source, and each update record had 2 matches in the target, this value would be 1000 + 500*2 = 2000, instead of 1500.</td></tr>
+<tr><td>Total Succeeded</td><td class='slds-truncate'>pushtopics__Succeeded__c</td><td>The total count of records that were succeeded in the action against the target.</td></tr>
+<tr><td>Total Failed</td><td class='slds-truncate'>pushtopics__TotalFailed__c</td><td>The total count of records that were failed in the action against the target.</td></tr>
+<tr><td>Exceptions</td><td class='slds-truncate'>pushtopics__Exceptions__c</td><td>The execeptions occurred at the Execution level. Note: In the batch mode, if there are unexpected exceptions which failed the batches without being able to create Batch Execution records, the exceptional message will be logged in this field.</td></tr>
+</tbody></table></div>
+
+<div class='v-space'></div><div><h2>Information & Settings</h2>
 <table><thead><th class='table-column-name'>Name</th><th class='table-column-wide'>Developer Name</th><th>Description</th></thead><tbody>
 <tr><td style='width:25%'>Execution Name</td><td style='width:25%' class='slds-truncate'>Name</td><td>Auto-generated, using a concatenation of the Name of the Executable and the timestamp when the Execution was created (in the current user’s time zone).</td></tr>
 <tr><td>Executable</td><td class='slds-truncate'>pushtopics__Executable__c</td><td>Master-detail relationship field with the Executable object.</td></tr>
@@ -40,22 +55,8 @@
 <tr><td>Stop Execution When A Batch Fails?</td><td class='slds-truncate'>pushtopics__StopExecutionWhenABatchFails__c</td><td>Copied from the Executable at the time it was executed.</td></tr>
 <tr><td>Use Default Assignment Rule?</td><td class='slds-truncate'>pushtopics__UseDefaultAssignmentRule__c</td><td>Copied from the Executable at the time it was executed.</td></tr>
 <tr><td>Bypass Duplicate Rule Alerts?</td><td class='slds-truncate'>pushtopics__BypassDuplicateRuleAlerts__c</td><td>Copied from the Executable at the time it was executed.</td></tr>
+<tr><td>Delete Execution Logs After Completion?</td><td class='slds-truncate'>pushtopics__DeleteExecutionLogsAfterCompletion__c</td><td>Copied from the Executable at the time it was executed.</td></tr>
 <tr><td>Disable Feed Tracking (Integration Only)?</td><td class='slds-truncate'>pushtopics__DisableFeedTracking__c</td><td>Copied from the Executable at the time it was executed.</td></tr>
-</tbody></table></div>
-
-<div class='v-space'></div><div><h2>Results</h2>
-<table><thead><th class='table-column-name'>Name</th><th class='table-column-wide'>Developer Name</th><th>Description</th></thead><tbody>
-<tr><td>Start Time</td><td class='slds-truncate'>pushtopics__StartTime__c</td><td>The time when the Execution starts</td></tr>
-<tr><td>End Time</td><td class='slds-truncate'>pushtopics__EndTime__c</td><td>The time when the Execution ends</td></tr>
-<tr><td>Completed?</td><td class='slds-truncate'>pushtopics__Completed__c</td><td>Indicates whether the Execution was completed or not.</td></tr>
-<tr><td>Stopped?</td><td class='slds-truncate'>pushtopics__Stopped__c</td><td>Indicates whether the Execution was stopped or not.</td></tr>
-<tr><td>Succeeded?</td><td class='slds-truncate'>pushtopics__Succeeded__c</td><td>Indicates whether the Execution was successful or not.</td></tr>
-<tr><td>Total Retrieved</td><td class='slds-truncate'>pushtopics__TotalRetrieved__c</td><td>The total records count retrieved from the source that are passed to the execution. </td></tr>
-<tr><td>Total Retrived Data in Action</td><td class='slds-truncate'>pushtopics__TotalRetrievedDataInAction__c</td><td>The total count of retrieved records participated in the action. For example, if there were 2000 records retrieved, 500 of them were new, and the Action was "Insert" only, this value would be 500.</td></tr>
-<tr><td>Total Actioned</td><td class='slds-truncate'>pushtopics__TotalActioned__c</td><td>The total count of records actioned against the target. For example, if there were 1000 inert and 500 update records retrieved from the source, and each update record had 2 matches in the target, this value would be 1000 + 500*2 = 2000, instead of 1500.</td></tr>
-<tr><td>Total Succeeded</td><td class='slds-truncate'>pushtopics__Succeeded__c</td><td>The total count of records that were succeeded in the action against the target.</td></tr>
-<tr><td>Total Failed</td><td class='slds-truncate'>pushtopics__TotalFailed__c</td><td>The total count of records that were failed in the action against the target.</td></tr>
-<tr><td>Exceptions</td><td class='slds-truncate'>pushtopics__Exceptions__c</td><td>The execeptions occurred at the Execution level. Note: In the batch mode, if there are unexpected exceptions which failed the batches without being able to create Batch Execution records, the exceptional message will be logged in this field.</td></tr>
 </tbody></table></div>
 
 <div class='v-space'></div><div><h2>Execution Log</h2>
@@ -67,6 +68,8 @@
 <tr><td>Results</td><td class='slds-truncate'>pushtopics__Results__c</td><td>Stores a comprehensive view of the results in JSON. If "Include Failed Data in Results?" is checked, the failed target data in action will be included. The maximum number of characters can be included is 131072, the characters beyond that number will be truncacted.</td></tr>
 </tbody></table></div><div class='v-space'></div>
 
+
+<!--here-->
         </div>
     </div>
 </body>
