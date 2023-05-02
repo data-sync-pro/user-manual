@@ -1,0 +1,50 @@
+{
+  "Architecture": [
+    {
+      "Data Model": [
+        "Data Processing",
+        "Data Upload",
+        "Schedule Job Management"
+      ],
+      "Process Flow": [
+        "Insert",
+        "Update",
+        "Delete",
+        "Upsert"
+      ]
+    }
+  ],
+  "Post-Installation": [],
+  "Connection": [
+    "Auth. Options",
+    "Quick Actions"
+  ],
+  "Direction": [],
+  "Job": [
+    "Job Builder",
+    "Determine Sequence",
+    "Quick Actions"
+  ],
+  "Executable": [
+    {
+      "Fields Mapper": [
+        "Elements of Mapping",
+        "Calculate Field Values"
+      ]
+    },
+    "View Source Data",
+    "Quick Actions"
+  ],
+  "Field Mapping": [],
+  "Job Execution": [],
+  "Execution": [
+    "Quick Actions"
+  ],
+  "Batch Execution": [
+    "Quick Actions"
+  ],
+  "Schedule": [
+    "Executable Schedule",
+    "Job Schedule"
+  ]
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+
+            <h1>Delete</h1>
+            
+            <p>
+                A Delete Excutable can be used for deleting data existing in the target object. The <b>Target Key Field</b> and its mapping must be defined,
+                which will be used by Data Sync Pro to check the existentence against the target object. If the record already exists in the target object,
+                DSP will perform the <b>delete</b>; if the record is new in the target, DSP will ignore and perform no actions. 
+                
+            </p>
+            
+            <div class='slds-box note-box_outer'>
+                <div class='note-box'>
+                    <p class='title'>Note:</p>
+                           
+                    <p>
+                        For <span class='formula'>Directional</span> Executables, DSP retrieves data from the source connection or user can upload CSV files
+                        (fields in the mappings must have the exact same name as in the source object).
+                    </p>
+                    <p>
+                        For <span class='formula'>Single Connection</span> Executables,
+                        source data can be uploaded from CSV files.
+                    </p>
+                    <p>
+                        <span class='formula'>Directional</span> Executables can be scheduled by adding the Executable records to the related list of a Schedule record.
+                    </p>    
+                    <p>
+                        During execution, Salesforce limitations apply. For example, when the source connection is the current org,
+                        the maximum data can be retrieved is 50 million.
+                    </p> 
+                </div>
+            </div>
+
+            <p>
+                Below diagram depicts the high level process of 
+                how DSP handles the <b>delete</b> Executables during execution. 
+            </p>
+
+            <div class="image-outer">
+                <img src="resource/img/delete.png" style="width:70rem;max-width:150%"/>
+                <div class="image-title">Delete Executable</div>
+            </div>
+            
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+
+            <h1>Directional Data Processing</h1>
+            
+            <div class='v-space'>
+            </div>
+
+            <p>
+
+                <b>Direction</b> defines the Source and Target connection. 
+                A directional Executable is associated with a Direction, instead of a single Connection. 
+                Based on the Executable's settings, DSP will retrieve data from 
+                the Source Object in the Source connection via SOQL query, perform transformations, then action(Insert, Update, Upsert, Delete) against the Target object in the Target connection.
+            </p>
+
+            <p>
+                This type of Executables are essentially batch processing engines; 
+                Think them as if you were writing up batch apex classes - 
+                first retrieve the data via SOQL query from the Source object, then split the data into small batches, 
+                in each batch filter out not-needed data, perform transformations, then assembly target object records, and perform DML actions accordingly. 
+            </p>
+
+            <p>
+
+                With the ability of retrieving any object from any connected Salesforce org including the current org, and fully featured transformation power,
+                you can use directional Executables to perform the following tasks.
+                <ul>
+                    <li>Local Org Batch Data Processsing</li>
+                    <li>Sandbox Seeding</li>
+                    <li>Orgs Merge</li>
+                    <li>Data Backup &amp; Restore</li>
+                    <li>Deployment of Record based Configurations</li>
+                </ul>
+            </p>
+
+            <p>
+                Since DSP is a Salesforce native app built on top of the Salesforce core platform, 
+                you can execute the Executables mannually from the UI, in Apex and/or Triggers, and Schedule jobs.
+
+                DSP offers a record based Schedule Job Management where you can define your schedules by just creating a record, 
+                and schedule executions by adding the Executables, Jobs or Apex Classes to the related list of the Schedule. 
+
+                Using the DSP Schedule management, no need to worry anymore about generating cron expressions, querying schedule frequencies,
+                pausing or rescheduling from scatteered places. The schedule jobs can be easily managed in the single place under the Schedules tab without requiring dev skills.
+            </p>
+
+            <div class='v-space'></div>
+            
+            <h2 id='title'>Standalone Executable</h2>
+
+            <p class="double-indent">
+                A standalone Executable is not associated with a Job. 
+                Use it to retrieve data from the Source object via SOQL query, perform transformations, 
+                and action against the Target object.
+            </p>
+            <div class='v-space'></div>
+
+            <div class="image-outer">
+                <img src="resource/img/data_processing_executable.png" style="width:35rem;"/>
+                <div class="image-title" style="width:35rem;">Standalone Executable</div>
+            </div>
+
+            <div class='v-space' style="margin-top: 3rem;"></div>
+
+            <h2 id='title'>Job Executable</h2>
+
+
+            <p class="double-indent">
+                
+                A Job Executable has every capability of a standalone Executable; 
+                In addtion, multiple Executables can be grouped together and associated with a Job(lookup field) along with the Seq No.
+            </p>
+
+
+            <p class="double-indent">
+                A Job can be executed if all of its related Executables can be executed.
+                When executing a Job, DSP executes its related Executables in order based on the Seq No. 
+                
+            </p>
+
+
+
+            <p class="double-indent">
+                Use the Job to maintain dependencies between the Objects, such as Account executes first, then the Contact etc.
+            </p>
+
+
+            <div class='v-space'>
+            </div>
+            <div class='v-space'></div>
+
+            <div class="image-outer"><img src="resource/img/data_processing_job.png" style="width:35rem;"/>
+                <div class="image-title" style="width:35rem;">Job Executable</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

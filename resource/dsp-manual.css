@@ -39,6 +39,7 @@ h3 {
 
 p{
     font-size: 1.2rem;  
+    margin-bottom: 0.5rem;
 }
 
 .container p {
@@ -254,7 +255,8 @@ li{
 }
 
 .note-box_outer{
-    margin-top: 0.6rem;
+    margin-top: 0.8rem;
+    margin-bottom: 1rem;
     background-color: rgb(1, 118, 211); padding: 0; padding-left: 5px;
 }
 
@@ -346,7 +348,7 @@ td b{
 }
 
 .image-outer{
-
+    margin-top: 2rem;
     max-width: 720px;
 }
 

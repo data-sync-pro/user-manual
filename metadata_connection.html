@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+            
+            <h1 id='title'>Connection</h1>
+            <p>A Connection(pushtopics__Connection__c) defines authorization settings that can be used to connect to a Salesforce instance, which can be used either as a Source where the data is retrieved from, or as a Target where the data is synced to. </p>
+            
+            
+            <h2>Fields</h2>
+
+            <div class='v-space'></div><div>
+            <table><thead><th class='table-column-name'>Name</th><th class='table-column-wide'>Api Name</th><th class='table-column-narrow'>Required</th><th>Description</th></thead><tbody>
+            <tr><td>API Name</td><td class='slds-truncate'>pushtopics__ApiName__c</td><td>Y</td><td>The API Name of a Connection. It is a unique and external Id field, by default hidden from the page layout  and always defaulted to the Name field value.</td></tr>
+            <tr><td>Connection Name</td><td class='slds-truncate'>Name</td><td>N</td><td>The Name of a Connection.</td></tr>
+            <tr><td>Is Current Org?</td><td class='slds-truncate'>pushtopics__IsCurrentOrg__c</td><td>N</td><td>Indicates whether the specified Connection is the current org or not. If checked, no other credential is needed, the data execution will run as the current user via APEX, instead of web services.</td></tr>
+            <tr><td>Is Sandbox?</td><td class='slds-truncate'>pushtopics__IsSandbox__c</td><td>N</td><td>Used in conjunction with the field <span class='formula'>Username</span> and <span class='formula'>Password + Security Token</span>, this indicates whether the specified Connection is a sandbox or not.</td></tr>
+            <tr><td>Named Credential</td><td class='slds-truncate'>pushtopics__NamedCredential__c</td><td>N</td><td>The developer name (not the label) of the Named Credential that is used to connect with a Salesforce org. The required setting for the Named Credential:<br/><br/> Identity Type must be <span class='formula'>Named Principal</span>, Authentication Protocol must be <span class='formula'>OAuth 2.0</span> or <span class='formula'>Password Authentication</span>, Allow Merge Fields in HTTP Header and Allow Merge Fields in HTTP Body must be checked.Use <span class='formula'>https://login.salesforce.com</span> for production and <span class='formula'>https://test.salesforce.com</span> for sandbox as the URL when the protocol is <span class='formula'>Password Authentication</span>.</td></tr>
+            <tr><td>Password + Security Token</td><td class='slds-truncate'>pushtopics__SalesforcePassword__c</td><td>N</td><td>The Salesforce Password + Security Token used in conjunction with the <span class='formula'>Username</span> and <span class='formula'>Is Sandbox?</span> to authorize a Salesforce org.</td></tr>
+            <tr><td>Username</td><td class='slds-truncate'>pushtopics__Username__c</td><td>N</td><td>The Username to use to connect to the specified org.</td></tr>
+            </tbody></table></div><div class='v-space'></div>
+        </div>
+    </div>
+</body>
+
+</html>

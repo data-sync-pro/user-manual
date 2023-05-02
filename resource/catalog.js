@@ -1,46 +1,50 @@
 var catalog = JSON.parse(
     `
-    {"Post-Installation":[
-    ],"Connection":[
-    "Auth. Options"
-    ,"Quick Actions"
-    ],"Direction":[
-    ],"Job":[
-    
-    "Job Builder"
-    ,"Determine Sequence"
-    ,"Quick Actions"
-    
-    
-    ],"Executable":[
-    
-    {"Fields Mapper":[
-    "Elements of Mapping"
-    ,"Calculate Field Values"
-    ]}
-    ,"View Source Data"
-    ,"Quick Actions"
-    
-    ],"Field Mapping":[
-    
-    ],"Job Execution":[
-    
-    ],"Execution":[
-    
-    "Quick Actions"
-    
-    
-    ],"Batch Execution":[
-    "Quick Actions"
-    
-    ],"Schedule":[
-    "Executable Schedule"
-    ,"Job Schedule"
-    
-    
-    ]}
-        
+    {
+        "Post-Installation": [],
+        "Architecture": [
+          {
+            "Data Model": [
+              "Directional Data Processing",
+              "Single Connection Actions",
+              "Schedule Job Management"
+            ],
+            "Process Flow": [
+              "Insert",
+              "Update",
+              "Upsert",
+              "Delete"
+            ]
+          }
+        ],
+        "Metadata":[
+          {
+            "Connection": [
+              "Auth. Options",
+              "Connection Quick Actions"
+            ],
+            "Direction": [],
+            "Job": [
+              "Job Builder",
+              "Determine Sequence",
+              "Job Quick Actions"
+            ],
+            "Executable": [
+              "Executable Q",
+              "Executable Quick Actions"
+            ],
+            "Schedule": [
+              "Executable Schedule",
+              "Job Schedule"
+            ]
+          }
+        ],
 
+        "Transformation": [
+          "Elements of Mapping",
+          "Calculate Field Values"
+        ]
+      }
     `
 );
 
@@ -73,6 +77,7 @@ function getSectionHtml() {
 
         let fileNameSection = getHtmlFileName(section);
 
+
         let activeClassNameSection = currentFileName() == fileNameSection ? 'slds-is-active' : 'slds-is-inactive';
 
         ret += `<div class="slds-nav-vertical__section">
@@ -97,7 +102,7 @@ function getSectionHtml() {
                     let activeClassNameSubSection = currentFileName() == fileNameSubSection ? 'slds-is-active' : 'slds-is-inactive';
         
                     ret += `<li class="">
-                        <div class="slds-nav-vertical__item ${activeClassNameSubSection}">
+                        <div class="slds-nav-vertical__item ${activeClassNameSubSection}" style="font-size:15px;">
                         <a href="${fileNameSubSection}.html" class="slds-nav-vertical__action " >${keys[j]}</a></div>
                         `;
 
@@ -109,13 +114,16 @@ function getSectionHtml() {
 
                         for(let k in grandChildren){
 
-                            console.log('grandChildren[k]: ' + grandChildren[k]);
+                            //console.log('grandChildren[k]: ' + grandChildren[k]);
     
                             let fileNameGrandSection = getHtmlFileNameSubSection(section, grandChildren[k]);
+
+                            console.log("fileNameSection: " + fileNameGrandSection);
+                            console.log("currentFileName: " + currentFileName());
     
                             let activeClassNameSubSection = currentFileName() == fileNameGrandSection ? 'slds-is-active' : 'slds-is-inactive';
                 
-                            ret += `<li class="slds-nav-vertical__subitem ${activeClassNameSubSection}">
+                            ret += `<li class="slds-nav-vertical__item ${activeClassNameSubSection}">
                                 <a href="${fileNameGrandSection}.html" class="slds-nav-vertical__action" >${grandChildren[k]}</a>
                                 </li>`;
                         }

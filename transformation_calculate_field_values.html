@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCore.css" rel="stylesheet" type="text/css"></link> 
+    <link href="https://cdn.bootcdn.net/ajax/libs/SyntaxHighlighter/3.0.83/styles/shThemeDefault.css" rel="stylesheet" type="text/css"></link> 
+    <script src="https://cdn.bootcdn.net/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js" type="text/javascript"></script> 
+    <script src="https://cdn.bootcdn.net/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushJava.js" type="text/javascript"></script> 
+    <script src="https://cdn.bootcdn.net/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushJScript.js" type="text/javascript"></script> 
+    <script language="javascript"> 
+    SyntaxHighlighter.config.bloggerMode = true;
+    SyntaxHighlighter.config.clipboardSwf = 'http://alexgorbatchev.com/pub/sh/current/scripts/clipboard.swf';
+    SyntaxHighlighter.all();
+    </script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px;">
+        </div>
+
+        <div style="margin-bottom: 5rem;" class="container">
+
+
+            
+
+
+
+
+
+            <div class='back-to-top-box'><a href='#title'>&#8679; Back to Top</a></div>
+
+            <h1 id='title'>Calculate Field Values</h1>
+            
+            <div style='display: flex;'>
+            <div style='flex:1'><ul>
+            <li><a href='#add'>+ (Add)</a></li>
+            <li><a href='#substract'>- (Subtract)</a></li>
+            <li><a href='#multiply'>* (Multiply)</a></li>
+            <li><a href='#divide'>/ (Divide)</a></li>
+            <li><a href='#parenthesis'>() (Open and Close Parenthesis)</a></li>
+            <li><a href='#equal'>== (Equal)</a></li>
+            <li><a href='#not_equal'>!= (Not Equal)</a></li>
+            <li><a href='#less_than'>< (Less Than)</a></li>
+            <li><a href='#greater_than'>> (Greater Than)</a></li>
+            <li><a href='#less_than_or_equal'><= (Less Than or Equal)</a></li>
+            <li><a href='#greater_than_or_equal'>(Greater Than or Equal)</a></li>
+            <li><a href='#and_s'>&& (AND)</a></li>
+            <li><a href='#or_s'>|| (OR)</a></li>
+            <li><a href='#concatenate'>& (Concatenate)</a></li>
+            <li><a href='#add_days'>ADD_DAYS</a></li>
+            <li><a href='#add_months'>ADD_MONTHS</a></li>
+            <li><a href='#agg_avg'>AGG_AVG</a></li>
+            <li><a href='#agg_count'>AGG_COUNT</a></li>
+            </ul></div><div style='flex:1'><ul tyle='flex:1'>
+            
+            <li><a href='#agg_count_distinct'>AGG_COUNT_DISTINCT</a></li>
+            <li><a href='#agg_max'>AGG_MAX</a></li>
+            <li><a href='#agg_min'>AGG_MIN</a></li>
+            <li><a href='#agg_sum'>AGG_SUM</a></li>
+            <li><a href='#and'>AND</a></li>
+            <li><a href='#base64_encode'>BASE64_ENCODE</a></li>
+            <li><a href='#base64_decode'>BASE64_DECODE</a></li>
+            <li><a href='#blank_value'>BLANK_VALUE</a></li>
+            <li><a href='#contains'>CONTAINS</a></li>
+            <li><a href='#date'>DATE</a></li>
+            <li><a href='#daysbetween'>DAYSBETWEEN</a></li>
+            <li><a href='#ends_with'>ENDS_WITH</a></li>
+            <li><a href='#escape_html4'>ESCAPE_HTML4</a></li>
+            <li><a href='#escape_xml'>ESCAPE_XML</a></li>
+            <li><a href='#if'>IF</a></li>
+            <li><a href='#index_of'>INDEX_OF</a></li>
+            <li><a href='#index_of_ignore_case'>INDEX_OF_IGNORE_CASE</a></li>
+            <li><a href='#is_blank'>IS_BLANK</a></li>
+            </ul></div><div style='flex:1'><ul tyle='flex:1'>
+            
+            <li><a href='#is_first_in_batch'>IS_FIRST_IN_BATCH</a></li>
+            <li><a href='#is_number'>IS_NUMBER</a></li>
+            <li><a href='#last_index_of'>LAST_INDEX_OF</a></li>
+            <li><a href='#last_index_of_ignore_case'>LAST_INDEX_OF_IGNORE_CASE</a></li>
+            <li><a href='#left'>LEFT</a></li>
+            <li><a href='#len'>LEN</a></li>
+            <li><a href='#max'>MAX</a></li>
+            <li><a href='#min'>MIN</a></li>
+            <li><a href='#not'>NOT</a></li>
+            <li><a href='#now'>NOW</a></li>
+            <li><a href='#or'>OR</a></li>
+            <li><a href='#randomize'>RANDOMIZE</a></li>
+            <li><a href='#replace'>REPLACE</a></li>
+            <li><a href='#right'>RIGHT</a></li>
+            <li><a href='#round'>ROUND</a></li>
+            <li><a href='#scramble'>SCRAMBLE</a></li>
+            <li><a href='#starts_with'>STARTS_WITH</a></li>
+            <li><a href='#substring'>SUBSTRING</a></li>
+            </ul></div><div style='flex:1'><ul tyle='flex:1'>
+            
+            
+            <li><a href='#substring_after'>SUBSTRING_AFTER</a></li>
+            <li><a href='#substring_after_last'>SUBSTRING_AFTER_LAST</a></li>
+            <li><a href='#substring_before'>SUBSTRING_BEFORE</a></li>
+            <li><a href='#substring_before_last'>SUBSTRING_BEFORE_LAST</a></li>
+            <li><a href='#substring_between'>SUBSTRING_BETWEEN</a></li>
+            <li><a href='#today'>TODAY</a></li>
+            <li><a href='#to_blob'>TO_BLOB</a></li>
+            <li><a href='#to_boolean'>TO_BOOLEAN</a></li>
+            <li><a href='#to_date'>TO_DATE</a></li>
+            <li><a href='#to_datetime'>TO_DATETIME</a></li>
+            <li><a href='#to_integer'>TO_INTEGER</a></li>
+            <li><a href='#to_lower_case'>TO_LOWER_CASE</a></li>
+            <li><a href='#to_string'>TO_STRING</a></li>
+            <li><a href='#to_upper_case'>TO_UPPER_CASE</a></li>
+            <li><a href='#trim'>TRIM</a></li>
+            <li><a href='#vlookup'>VLOOKUP</a></li>
+            <li><a href='#apex_class'>APEX CLASS</a></li>
+            </ul></div></div>
+            
+            
+            
+            <div class='v-space'></div><div id='add'><h2>+ (Add)</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Calculates the sum of two numeric values(NULL values are treated as 0s).</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>value1 + value2</span> and replace each value with merge fields, expressions, or other numeric values.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>Amount + Maint_Amount__c + Services_Amount__c + 10.0</span><div class='v-space-s'></div>This formula calculates the sum of the product Amount, maintenance amount, and services fees. Maint amount and Service Fees are custom currency fields.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='substract'><h2>- (Subtract)</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Calculates the difference of two values(NULL values are treated as 0s).</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>value1 - value2</span> and replace each value with merge fields, expressions, or other numeric values.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>Amount - Discount_Amount__c – 200</span><div class='v-space-s'></div>This formula calculates the difference of the product Amount less the Discount Amount. Discount Amount is a custom currency field.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='multiply'><h2>* (Multiply)</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Multiplies its values(NULL values are treated as 0s).</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>value1 * value2</span> and replace each value with merge fields, expressions, or other numeric values.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>Consulting_Days__c * 1200</span><div class='v-space-s'></div>This formula calculates the number of consulting days times 1200 given that this formula field is a currency data type and consulting charges a rate of $1200 per day. Consulting Days is a custom field.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='divide'><h2>/ (Divide)</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Divides its values(If the numerator is NULL, it is treated as 0) .</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>value1 / value2</span> and replace each value with merge fields, expressions, or other numeric values.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>AnnualRevenue/ NumberOfEmployees</span><div class='v-space-s'></div>This formula calculates the revenue amount per employee using a currency field.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='parenthesis'><h2>() (Open Parenthesis and Close Parenthesis)</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Specifies that the expressions within the open parenthesis and close parenthesis are evaluated first. All other expressions are evaluated using standard operator precedence.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>(expression1) expression2…</span> and replace each expression with merge fields, expressions, or other numeric values.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>(Unit_Value__c - Old_Value__c) / New_Value__c</span> calculates the difference between the old value and new value divided by the new value.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='equal'><h2>== (Equal)</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Evaluates if two values are equivalent. </td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>expression1 == expression2</span>, and replace each expression with merge fields, expressions, or other values.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><b>Commission Amount</b><div class='v-space-s'></div><span class='formula'>IF(Probability == 1, Amount*0.02, 0)</span><div class='v-space-s'></div>This formula calculates the 2% commission amount of an opportunity that has a probability of 100%. All other opportunities have a commission value of 0.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='not_equal'><h2>!= (Not Equal)</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Evaluates if two values aren’t equivalent.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>expression1 != expression2</span>, and replace each <span class='formula'>expression</span> with merge fields, expressions, or other values.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>IF(Maint_Amount__c + Services_Amount__c != Amount,  "DISCOUNTED", "FULL PRICE")</span><div class='v-space-s'></div>This formula displays DISCOUNTED on product if its maintenance amount and services amount don’t equal the product amount. Otherwise, displays FULL PRICE. Note that this example uses two custom currency fields for Maint Amount and Services Amount.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='less_than'><h2>< (Less Than)</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Evaluates if a value is less than the value that follows this symbol.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>value1 < value2</span> and replace each <span class='formula'>value</span> with merge fields, expressions, or other numeric, text, date, datetime values.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>IF(AnnualRevenue < 1000000, 1, 2)</span> assigns the value 1 with revenues less than one million and the value 2 to revenues greater than one million.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='greater_than'><h2>> (Greater Than)</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Evaluates if a value is greater than the value that follows this symbol.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>value1 > value2</span> and replace each value with merge fields, expressions, or other numeric, text, date, datetime values.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>IF(commission__c > 1000000, "High Net Worth", "General")</span> assigns the High Net Worth value to a commission greater than one million. Note, this is a text formula field that uses a commission custom field.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='less_than_or_equal'><h2><= (Less Than or Equal)</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Evaluates if a value is less than or equal to the value that follows this symbol.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>value1 <= value2</span> and replace each <span class='formula'>value</span> with merge fields, expressions, or other numeric, text, date, datetime values.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>IF(AnnualRevenue <= 1000000, 1, 2)</span> assigns the value 1 with revenues less than or equal to one million and the value 2 with revenues greater than one million.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='greater_than_or_equal'><h2>>= (Greater Than or Equal)</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Evaluates if a value is greater than or equal to the value that follows this symbol.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>value1 >= value2</span> and replace each <span class='formula'>value</span> with merge fields, expressions, or other numeric, text, date, datetime values.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>IF(Commission__c >= 1000000, "YES", "NO")</span> assigns the YES value with a commission greater than or equal to one million. Note, this is a text formula field that uses a custom currency field called Commission.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='and_s'><h2>&& (AND)</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Evaluates if two values or expressions are both true. Use this operator as an alternative to the logical function AND.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>(logical1) && (logical2)</span> and replace <span class='formula'>logical1</span> and <span class='formula'>logical2</span> with the values or expressions that you want evaluated.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>IF((Price<100 && Quantity<5),"Small", null)</span><div class='v-space-s'></div>This formula displays Small if the price is less than 100 and quantity is less than five. Otherwise, this field is blank.</td></tr>
+            </tbody></table></div>
+            
+            
+            <div class='v-space'></div><div id='or_s'><h2>|| (OR)</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Evaluates if at least one of multiple values or expressions is true. Use this operator as an alternative to the logical function OR.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>(logical1) || (logical2)</span> and replace any number of logical references with the values or expressions you want evaluated.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>IF((Color__c == "Red" || Size__c < 5),"Beautifual", "Normal")</span><div class='v-space-s'></div>This formula returns the category of a particular type of stone. If the color of the stone is Red or the size is less than 5, it is a “Beautiful” stone.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='concatenate'><h2>& (Concatenate)</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Connects two or more strings.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>string1 & string2</span> and replace each string with merge fields, expressions, or other values.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>"Expense-" & Trip_Name__c & "-" & ExpenseNum__c</span> <div class='v-space-s'></div>This formula displays the text Expense- followed by trip name and the expense number. This is a text formula field that uses an expense number custom field.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='add_days'><h2>ADD_DAYS</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the date that is the indicated number of days before or after a specified date. </td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>ADD_DAYS (date/datetime, num)</span> and replace date with the start date and num with the number of days to be added.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>ADD_DAYS(StartDate, 5)</span><div class='v-space-s'></div>Adds 5 days to the start date. For example, if the start date is <b>September 20, 2017</b>, the resulting date is <b>September 25, 2017</b>.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='add_months'><h2>ADD_MONTHS</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the date that is the indicated number of months before or after a specified date. If the specified date is the last day of the month, the resulting date is the last day of the resulting month. Otherwise, the result has the same date component as the specified date.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>ADD_MONTHS (date/datetime, num) </span>and replace <span class='formula'>date</span> with the start date and <span class='formula'>num</span> with the number of months to be added.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>ADD_MONTHS(StartDate, 5)</span><div class='v-space-s'></div>Adds 5 months to the start date. For example, if the start date is <b>September 20, 2017</b>, the resulting date is <b>February 20, 2018</b>, If the start date is <b>September 30, 2017</b>, the resulting date is <b>February 28, 2018</b>.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='agg_avg'><h2>AGG_AVG</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the average value of a numeric field matching the query criteria(optional) on the aggregate object from the Source with the group field filtered by the values retrieved from the Source Object. </td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>AGG_AVG(aggregate_object_name, aggregate_field, group_field, group_values_field_on_source_object, [additional_criteria]) </span></td></tr>
+            <tr><td class='table-first-column'>Example:</td><td>Assuming the Source Object Name on the Executable is set as "Account", <span class='formula'>AGG_AVG("Opportunity", "Amount", "AccountId", "Id", "StageName='Closed Win')</span>caculates the average Amount of the Opportunities grouped by the AccountId field whose Stage is "Closed Win" and the group field AccountId falls into Id values of the Account data retrieved from the Source.<div class='v-space-s'></div></td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td>Aggregate functions in DSP are bulkified, and multiple aggregate functions on the same Executalbe are combined before making SOQL calls to gain the best performance. Using aggregate functions in conjunction with the "Skip Record Update If No Changes?" field to efficiently avoid DMLs for large data calculations.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='agg_count'><h2>AGG_COUNT</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the number of rows matching the query criteria(optional) on the aggregate object from the Source with the group field filtered by the values retrieved from the Source Object. </td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>AGG_COUNT(aggregate_object_name, aggregate_field, group_field, group_values_field_on_source_object, [additional_criteria]) </span></td></tr>
+            <tr><td class='table-first-column'>Example:</td><td>Assuming the Source Object Name on the Executable is set as "Account", <span class='formula'>AGG_COUNT("Opportunity", "Id", "AccountId", "Id", "StageName='Closed Win')</span>caculates the number of the Opportunities grouped by the AccountId field whose Stage is "Closed Win" and the group field AccountId falls into Id values of the Account data retrieved from the Source.<div class='v-space-s'></div></td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td>Aggregate functions in DSP are bulkified, and multiple aggregate functions on the same Executalbe are combined before making SOQL calls to gain the best performance. Using aggregate functions in conjunction with the "Skip Record Update If No Changes?" field to efficiently avoid DMLs for large data calculations.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='agg_count_distinct'><h2>AGG_COUNT_DISTINCT</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the number of distinct non-null field values matching the query criteria(optional) on the aggregate object from the Source with the group field filtered by the values retrieved from the Source Object. </td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>AGG_COUNT_DISTINCT(aggregate_object_name, aggregate_field, group_field, group_values_field_on_source_object, [additional_criteria]) </span></td></tr>
+            <tr><td class='table-first-column'>Example:</td><td>Assuming the Source Object Name on the Executable is set as "Account", <span class='formula'>AGG_COUNT_DISTINCT("Opportunity", "Type", "AccountId", "Id", "StageName='Closed Win')</span>caculates the number of distinct non-null Type values on the Opportunities grouped by the AccountId field whose Stage is "Closed Win" and the group field AccountId falls into Id values of the Account data retrieved from the Source.<div class='v-space-s'></div></td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td>Aggregate functions in DSP are bulkified, and multiple aggregate functions on the same Executalbe are combined before making SOQL calls to gain the best performance. Using aggregate functions in conjunction with the "Skip Record Update If No Changes?" field to efficiently avoid DMLs for large data calculations.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='agg_max'><h2>AGG_MAX</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the maximum value of a field matching the query criteria(optional) on the aggregate object from the Source with the group field filtered by the values retrieved from the Source Object. </td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>AGG_MAX(aggregate_object_name, aggregate_field, group_field, group_values_field_on_source_object, [additional_criteria]) </span></td></tr>
+            <tr><td class='table-first-column'>Example:</td><td>Assuming the Source Object Name on the Executable is set as "Account", <span class='formula'>AGG_MAX("Opportunity", "Amount", "AccountId", "Id", "StageName='Closed Win')</span>caculates the max amount of Opportunities grouped by the AccountId field whose Stage is "Closed Win" and the group field AccountId falls into Id values of the Account data retrieved from the Source.<div class='v-space-s'></div></td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td>Aggregate functions in DSP are bulkified, and multiple aggregate functions on the same Executalbe are combined before making SOQL calls to gain the best performance. Using aggregate functions in conjunction with the "Skip Record Update If No Changes?" field to efficiently avoid DMLs for large data calculations.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='agg_min'><h2>AGG_MIN</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the minimum value of a field matching the query criteria(optional) on the aggregate object from the Source with the group field filtered by the values retrieved from the Source Object. </td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>AGG_MIN(aggregate_object_name, aggregate_field, group_field, group_values_field_on_source_object, [additional_criteria]) </span></td></tr>
+            <tr><td class='table-first-column'>Example:</td><td>Assuming the Source Object Name on the Executable is set as "Account", <span class='formula'>AGG_MIN("Opportunity", "Amount", "AccountId", "Id", "StageName='Closed Win')</span>caculates the minimum amount of Opportunities grouped by the AccountId field whose Stage is "Closed Win" and the group field AccountId falls into Id values of the Account data retrieved from the Source.<div class='v-space-s'></div></td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td>Aggregate functions in DSP are bulkified, and multiple aggregate functions on the same Executalbe are combined before making SOQL calls to gain the best performance. Using aggregate functions in conjunction with the "Skip Record Update If No Changes?" field to efficiently avoid DMLs for large data calculations.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='agg_sum'><h2>AGG_SUM</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the minimum value of a field matching the query criteria(optional) on the aggregate object from the Source with the group field filtered by the values retrieved from the Source Object. </td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>AGG_SUM(aggregate_object_name, aggregate_field, group_field, group_values_field_on_source_object, [additional_criteria]) </span></td></tr>
+            <tr><td class='table-first-column'>Example:</td><td>Assuming the Source Object Name on the Executable is set as "Account", <span class='formula'>AGG_SUM("Opportunity", "Amount", "AccountId", "Id", "StageName='Closed Win')</span>caculates the sum amount of Opportunities grouped by the AccountId field whose Stage is "Closed Win" and the group field AccountId falls into Id values of the Account data retrieved from the Source.<div class='v-space-s'></div></td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td>Aggregate functions in DSP are bulkified, and multiple aggregate functions on the same Executalbe are combined before making SOQL calls to gain the best performance. Using aggregate functions in conjunction with the "Skip Record Update If No Changes?" field to efficiently avoid DMLs for large data calculations.</td></tr>
+            </tbody></table></div>
+            
+            
+            <div class='v-space'></div><div id='and'><h2>AND</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Determines if expressions are true or false. Returns TRUE if all expressions are true. Returns FALSE if any expression is false. Use this function as an alternative to the operator <span class='formula'>&& (AND)</span>.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>AND(logical1, logical2...)</span> and replace any number of logical references with the expressions you want evaluated.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='base64_encode'><h2>BASE64_ENCODE</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Encode a String value to BASE64 format.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>BASE64_ENCODE(string)</span></td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='base64_decode'><h2>BASE64_DECODE</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Decode a BASE64 format to the original string.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>BASE64_DECODE(encoding)</span></td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='blank_value'><h2>BLANK_VALUE</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Determines if an expression has a value and returns a substitute expression if it doesn’t. If the expression has a value, returns the value of the expression.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>BLANK_VALUE(expression, substitute_expression)</span> and replace expression with the expression you want evaluated; replace substitute_expression with the value you want to replace any blank values.</td></tr>
+            <tr><td class='table-first-column'>Example</td><td><b>Example 1</b><div class='v-space-s'></div><span class='formula'>BLANK_VALUE(Department, “Undesignated”)</span><div class='v-space-s'></div>This formula returns the value of the Department field if the Department field contains a value. If the Department field is empty, this formula returns the word Undesignated.<div class='v-space'></div><b>Example 2</b><div class='v-space-s'></div><span class='formula'>BLANK_VALUE(Payment_Due_Date__c, StartDate)</span><div class='v-space-s'></div>This formula returns the contract start date whenever Payment Due Date is blank. Payment Due Date is a custom date field.</td></tr>
+            </tbody></table></div>
+            
+            
+            <div class='v-space'></div><div id='contains'><h2>CONTAINS</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Compares two arguments of text and returns TRUE if the first argument contains the second argument. If not, returns FALSE.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>CONTAINS(text, compare_text)</span> and replace <span class='formula'>text</span> with the text that contains the value of <span class='formula'>compare_text</span>.</td></tr>
+            <tr><td class='table-first-column'></td><td><span class='formula'>IF(CONTAINS(Product_Type__c, "part"), "Parts", "Service")</span><div class='v-space-s'></div>This formula checks the content of a custom text field named Product_Type__c and returns Parts for any product with the word “part” in it. Otherwise, it returns Service. Note that the values are case-sensitive, so if a Product_Type__c field contains the text “Part” or “PART,” this formula returns Services.</td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td>This function is case-sensitive so be sure your compare_text value has the correct capitalization.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='date'><h2>DATE</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns a date value from year, month, and day values you enter. </td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>DATE(year,month,day)</span> and use year with a four-digit year, month with a two-digit month, and day with a two-digit day.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>DATE(2005, 01, 02)</span> creates a date field of January 2, 2005.</td></tr>
+            </tbody></table></div>
+            
+            
+            <div class='v-space'></div><div id='daysbetween'><h2>DAYSBETWEEN</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns a integer value that is the difference between two dates. </td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>DAYSBETWEEN(date1, date2) </span></td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>DAYSBETWEEN(Birthdate__c, TODAY()) calculates days since the Birthdate__c.</span></td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='escape_html4'><h2>ESCAPE_HTML4</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Escapes the characters in a String using HTML 4.0 entities. It is equal to Apex String class's <span class='formula'>escapeHtml4()</span method.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>ESCAPE_HTML4(text)</span> and replace expression with a text value, merge field, or expression.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='escape_xml'><h2>ESCAPE_XML</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Escapes the characters in a String using XML entities. It is equal to Apex String class's <span class='formula'>escapeXml()</span method.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>ESCAPE_XML(text)</span> and replace expression with a text value, merge field, or expression.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='ends_with'><h2>ENDS_WITH</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Determines if string ends with specific characters and returns TRUE if it does. Returns FALSE if it doesn't.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>ENDS_WITH(string, compare_string)</span> and replace text, compare_text with the characters or fields you want to compare.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>IF(ENDS_WITH (Product_type__c, "ICU"), "Medical", "Technical")</span><div class='v-space-s'></div>This example returns the text <b>Medical</b> if the text in any Product Type custom text field ends with <b>ICU</b>. For all other products, it displays <b>Technical</b>.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='index_of'><h2>INDEX_OF</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:​​</td><td>Returns the first index of substring in the full string, case sensitive.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>INDEX_OF(string, substring, [index])</span>.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>INDEX_OF("abcdbcdefg", "bcd")</span> returns 1.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='index_of_ignore_case'><h2>INDEX_OF_IGNORE_CASE</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:​​</td><td>Returns the first index of substring in the full string, case insensitive.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>INDEX_OF_IGNORE_CASE(string, substring, [index])</span>.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>INDEX_OF_IGNORE_CASE("abcdbcdefg", "BcD")</span> returns 1.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='is_blank'><h2>IS_BLANK</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:​​</td><td>Determines if an expression has a value and returns TRUE if it does not. If it contains a value, this function returns FALSE.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>IS_BLANK(expression)</span> and replace expression with the expression you want evaluated.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>IF(IS_BLANK(Maint_Amount__c), 0, 1)</span></td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='is_first_in_batch'><h2>IS_FIRST_IN_BATCH</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:​​</td><td>Determines if a field's value first appears in the batch. Typically this function can be used in the "In Scope Filter" to filter in the scoped source records in a batch, or in the field mappings to conditionally evaluate values.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>IS_FIRST_IN_BATCH(field_name)</span> and replace <span class='formula'>field_name</span> with the field name of the source object.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>IS_FIRST_IN_BATCH("Name") returns true if the current source record's Name first appears in the batch.</span></td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='is_number'><h2>IS_NUMBER</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Determines if a text value is a number and returns TRUE if it is. Otherwise, it returns FALSE.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>IS_NUMBER(text)</span> and replace text with the merge field name for the text field.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>OR(LEN(Bank_Account_Number__c) <> 10, NOT(IS_NUMBER(Bank_Account_Number__c)))</span></td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td><ul><li>This function returns FALSE for blank values.<div class='v-space-s'></div>The IS_NUMBER function is not aware of your locale. For example, <span class='formula'>IS_NUMBER("123,12")</span> and <span class='formula'>IS_NUMBER("1 000")</span> return FALSE even if the user's locale is “French.”</li><li>Chinese, Japanese, Korean, and special characters including a space return FALSE.</li><li>The IS_NUMBER function returns TRUE for scientific formatting such as “2E2” or “123.123.”</li></ul></td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='last_index_of'><h2>LAST_INDEX_OF</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:​​</td><td>Returns the last index of substring in the full string, case sensitive.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>LAST_INDEX_OF(string, substring, [index])</span>.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>LAST_INDEX_OF("abcdbcdefg", "bcd")</span> returns 4.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='last_index_of_ignore_case'><h2>LAST_INDEX_OF_IGNORE_CASE</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:​​</td><td>Returns the last index of substring in the full string, case insensitive.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>LAST_INDEX_OF_IGNORE_CASE(string, substring, [index])</span>.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>LAST_INDEX_OF_IGNORE_CASE("abcdbcdefg", "BcD")</span> returns 4.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='left'><h2>LEFT</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the specified number of characters from the beginning of a text string.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>LEFT(text, num_chars)</span> and replace text with the field or expression you want returned; replace <span class='formula'>num_chars</span> with the number of characters from the left you want returned.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>TRIM(LEFT(LastName, 5)) & "-" & TRIM(RIGHT(SSN__c, 4))</span><div class='v-space-s'></div>This formula displays the first five characters of a name and the last four characters of a social security number separated by a dash. Note that this example uses a text custom field called SSN.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='len'><h2>LEN</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the number of characters in a specified text string.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>LEN(text)</span> and replace text with the field or expression whose length you want returned.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>LEN(PartNumber__c)</span><div class='v-space-s'></div>This formula returns the number of characters in a Product Code field.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='max'><h2>MAX</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the highest number from a list of numbers.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>MAX(num1, num2,…)</span> and replace number with the fields or expressions from which you want to retrieve the highest number.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><b>Service Charge</b><div class='v-space'></div><span class='formula'>MAX(0.06 * Total_Cost__c, Min_Service_Charge__c)</span><div class='v-space'></div>In this example, the formula field calculates a service charge of 6% of the total cost or a minimum service charge, whichever is greater. Note that Min Service Charge is a custom currency field with a default value of $15. However, you could make it a formula field if your minimum service charge is always the same amount.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='min'><h2>MIN</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the lowest number from a list of numbers.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>MIN(num1, num2,…)</span>  and replace number with the fields or expressions from which you want to retrieve the lowest number.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><b>401K Matching</b><div class='v-space'></div><span class='formula'>MIN(250, Contribution__c /2)</span><div class='v-space'></div> This example formula determines which amount to provide in employee 401K matching based on a matching program of half of the employee's contribution or $250, whichever is less. It assumes you have custom currency field for Contribution.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='not'><h2>NOT</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns FALSE for TRUE and TRUE for FALSE.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>NOT(logical)</span> and replace <span class='formula'>logical</span> with the expression that you want evaluated.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>IF(NOT(Status == "Open"), ClosedDate, ADD_DAYS(CreatedDate, 3))</span>, checks to see if the Status is NOT Open and if so, return the ClosedDate, otherwise return the CreatedDate plus 3 days, as the Expected Close Date.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='now'><h2>NOW</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns a date/time representing the current moment.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>NOW()</span></td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>IF(Status == "Open", ADD_DAYS(CreatedDate, 3)), ClosedDate)</span><div class='v-space'></div>This formula checks to see if the Status is open and if so, return CreatedDate plus 3 days, otherwise return the ClosedDate, as the Expected Close Date.</td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td><ul><li>Do not remove the parentheses.</li><li>Keep the parentheses empty. They do not need to contain a value.</li><li>Use a date/time field in a NOW function instead of a date field. </li><li>Use TODAY if you prefer to use a date field.</li><li>Dates and times are always calculated using the user’s time zone.</li><li>Use ADD_DAYS to add days to a datetime field.</li></ul></td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='or'><h2>OR</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Determines if expressions are true or false. Returns TRUE if any expression is true. Returns FALSE if all expressions are false. Use this function as an alternative to the operator <span class='formula'>|| (OR)</span>.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>OR(logical1, logical2...)</span> and replace any number of logical references with the expressions you want evaluated.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='randomize'><h2>RANDOMIZE</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Masks the input value randomly based on the data types.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>RANDOMIZE(text/number/date/boolean)</span> and replace the value of the expression randomly.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>RANDOMIZE(Classified__c)</span> checks the Classified__c characters one by one and replace a number char with a random number char and an English char with a random English char. For example, if the value is “abcd1200”, the result could be “jadj8374”.<div class='v-space-s'></div><span class='formula'>RANDOMIZE(SSN__c)</span> checks the SSN__c in characters one by one and replace a number character with a random number. For example, if the SSN__c is 873-98-0000, the result could be “292-77-7312”.<div class='v-space-s'></div><span class='formula'>RANDOMIZE(Revenue)</span> checks the Revenue value and replace a random numeric that is less than the Revenue.<div class='v-space-s'></div><span class='formula'>RANDOMIZE(Birthdate)</span> checks the Birthdate value and replace a random date that is less than 1000 days prior to the Birthdate. For example, if the Birthdate is 2001-02-01, the result could be 1999-03-25.<div class='v-space-s'></div><span class='formula'>RANDOMIZE(Is_From_CA__c)</span> generate a random Boolean value for the Is_From_CA__c.<div class='v-space-s'></div></td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td>Both <span class='formula'>SCRAMBLE</span> and <span class='formula'>RANDOMIZE</span> functions cannot be set in the mapping if the target connection is a production. An exception will be thrown if that happens when saving the mappings on the Fields Mapper or during the Mapping’s execution.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='replace'><h2>REPLACE</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Substitutes new text for old text in a text string.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>REPLACE(text, old_text, new_text)</span> and replace <span class='formula'>text</span> with the field or value for which you want to substitute values, <span class='formula'>old_text</span> with the text you want replaced, and <span class='formula'>new_text</span> with the text you want to replace the <span class='formula'>old_text</span>.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>REPLACE(Name, "Coupon", "Discount")</span> returns the name of an opportunity that contains the term “Coupon” with the opportunity name plus “Discount” wherever the term “Coupon” existed.<div class='v-space-s'></div><span class='formula'>REPLACE(Email, LEFT(Email, FIND("@", Email)), "www.") </span>finds the location of the @ sign in a person's email address to determine the length of text to replace with a “www.” as a means of deriving their website address.</td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td><ul><li>Each term provided in quotes is case-sensitive.</li><li>If the <span class='formula'>old_text</span> appears more than once, each occurrence is replaced with the <span class='formula'>new_text</span> value provided, even when that results in duplicates.</li></ul></td></tr>
+            </tbody></table></div>
+            
+            
+            
+            
+            <div class='v-space'></div><div id='right'><h2>RIGHT</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the specified number of characters from the end of a text string.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>RIGHT(text, num_chars)</span> and replace <span class='formula'>text</span> with the field or expression you want returned; replace <span class='formula'>num_chars</span> with the number of characters from the right you want returned.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>TRIM(LEFT(LastName, 5))&"-"&TRIM(RIGHT(SSN__c, 4))</span> displays the first five characters of a name and the last four characters of a social security number separated by a dash. Note that this assumes you have a text custom field called SSN.</td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td><ul><li>Reference auto-number fields as text fields in formulas.</li><li>If the <span class='formula'>num_chars</span> value is less than zero, DSP replaces the value with zero.</li></ul></td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='round'><h2>ROUND</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the nearest number to a number you specify, constraining the new number by a specified number of digits.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>ROUND(number, num_digits)</span> and replace number with the field or expression you want rounded; replace num_digits with the number of decimal places you want to consider when rounding.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>ROUND (1.5, 0) = 2</span><div class='v-space-s'></div><span class='formula'>ROUND (1.2345, 0) = 1</span><div class='v-space-s'></div><span class='formula'>ROUND (-1.5, 0) = -2</span><div class='v-space-s'></div><span class='formula'>ROUND (225.49823, 2) = 225.50</span><div class='v-space-s'></div><b>Simple Discounting</b><span class='formula'>ROUND(Amount-Amount* Discount_Percent__c,2)</span><div class='v-space-s'></div>Use this formula to calculate the discounted amount of an opportunity rounded off to two digits. This example is a number formula field on opportunities that uses a custom percent field called Discount Percent.</td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td><ul><li>Enter zero for num_digits to round a number to the nearest integer.</li><li>DSP automatically rounds numbers based on the decimal places you specify. For example, a custom number field with two decimal places stores 1.50 when you enter 1.49999.</li><li>DSP uses the round half-up rounding algorithm. Half-way values are always rounded up. For example, 1.45 is rounded to 1.5. –1.45 is rounded to –1.5.</li><li>The decimal numbers displayed depend on the decimal places you selected when defining the field in the custom field wizard. The <span class='formula'>num_digits</span> represents the number of digits considered when rounding.</li></ul></td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='scramble'><h2>SCRAMBLE</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the field value from a random record within the retrieved source data.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>SCRAMBLE(srcField)</span> and replace <span class='formula'>fieldName</span> with the field you want to extract the value from a random source record within the execution.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>SCRAMBLE(firstName)</span>returns one of the source records’ firstName randomly. </td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td><ul><li>Both <span class='formula'>Scramble</span> and <span class='formula'>Mask</span> functions cannot be set in the mapping if the target connection is a production. An exception will be thrown if that happens when saving the mappings on the Fields Mapper or during the Mapping’s execution.</li><li>Use this function to scramble fields when populating a sandbox’s data from a production environment.</li></ul></td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='starts_with'><h2>STARTS_WITH</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Determines if text begins with specific characters and returns TRUE if it does. Returns FALSE if it doesn't.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>STARTS_WITH(string, compare_string)</span> and replace text, compare_text with the characters or fields you want to compare.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>IF(STARTS_WITH (Product_type__c, "ICU"), "Medical", "Technical")</span><div class='v-space-s'></div>This example returns the text <b>Medical</b> if the text in any Product Type custom text field begins with <b>ICU</b>. For all other products, it displays <b>Technical</b>.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='substring'><h2>SUBSTRING</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns a new String that begins with the character at the specified zero-based startIndex and extends to the character at endIndex - 1. It is equal to the Apex: <span class='formula'>String.substring(startIndex, endIndex)</span></td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>SUBSTRING(string, start_index, end_index)</span></td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='substring_after'><h2>SUBSTRING_AFTER</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the substring that occurs after the first occurrence of the specified separator. It is equal to the Apex: <span class='formula'>String.substringAfter(separator)</span></td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>SUBSTRING_AFTER(string, seprator)</span></td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='substring_after_last'><h2>SUBSTRING_AFTER_LAST</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the substring that occurs after the last occurrence of the specified separator. It is equal to the Apex: <span class='formula'>String.substringAfterLast(separator)</span></td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>SUBSTRING_AFTER_LAST(string, seprator)</span></td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='substring_before'><h2>SUBSTRING_BEFORE</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the substring that occurs before the first occurrence of the specified separator. It is equal to the Apex: <span class='formula'>String.substringBefore(separator)</span></td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>SUBSTRING_BEFORE(string, seprator)</span></td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='substring_before_last'><h2>SUBSTRING_BEFORE_LAST</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the substring that occurs before the last occurrence of the specified separator. It is equal to the Apex: <span class='formula'>String.substringBeforeLast(separator)</span></td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>SUBSTRING_BEFORE_LAST(string, seprator)</span></td></tr>
+            </tbody></table></div>
+            
+            
+            <div class='v-space'></div><div id='substring_between'><h2>SUBSTRING_BETWEEN</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the substring that occurs between the two specified Strings. It is equal to the Apex: <span class='formula'>String.substringBetween(open, close)</span></td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>SUBSTRING_BETWEEN(string, open, close)</span></td></tr>
+            </tbody></table></div>
+            
+            
+            <div class='v-space'></div><div id='to_blob'><h2>TO_BLOB</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Convert a String value to the Apex Blob type. It is equal to the Apex: <span class='formula'>Blob.valueOf()</span></td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>TO_BLOB(string)</span></td></tr>
+            </tbody></table></div>
+            
+            
+            <div class='v-space'></div><div id='to_boolean'><h2>TO_BOOLEAN</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Converts a string value into boolean anywhere formulas are used. </td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>TO_BOOLEAN(string)</span> and replace <span class='formula'>string</span> with the field or expression you want to convert to boolean format.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><b>Expected Boolean</b><div class='v-space-s'></div><span class='formula'>TO_BOOLEAN("true")</span> returns the expected a boolean value TRUE where the input type is a string.</td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td><ul><li>If the input value is NULL, the function will return a NULL value instead of FALSE</li></ul></td></tr>
+            </tbody></table></div>
+            
+            
+            <div class='v-space'></div><div id='to_date'><h2>TO_DATE</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns a date value for a date/time or text expression.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>TO_DATE(string/datetime)</span> and replace expression with a date/time or string value, merge field, or expression.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><b>Closed Date</b><div class='v-space-s'></div><span class='formula'>TO_DATE(ClosedDate)</span> displays a date field based on the value of the Date/Time Closed field.<div class='v-space'></div><b>Date Value</b><div class='v-space-s'></div><span class='formula'>TO_DATE("2005-11-15")</span> returns November 15, 2005 as a date value.</td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td><ul><li>If the field referenced in the function isn't a valid text or date/time field, the formula field throws an exception.</li><li>When entering a date, surround the date with quotes and use the following format: YYYY-MM-DD, that is, a four-digit year, two-digit month, and two-digit day.</li><li>If the expression doesn't match valid date ranges, such as the MM isn't between 01 and 12, an exception will be thrown.</li><li>Dates and times are always calculated using the user’s time zone.</li></td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='to_datetime'><h2>TO_DATETIME</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns a datetime value for a text expression.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>TO_DATETIME(string)</span> and replace expression with a string value, merge field, or expression.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><div class='v-space-s'></div><span class='formula'>TO_DATETIME("yyyy-MM-ddTHH:mm:ss.SSSZ")</span> converts a string value in the format to a Datetime type.An input value example: "2002-10-09T19:00:00Z"</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='is_number'><h2>IS_NUMBER</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Converts a text string to a decimal number.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>IS_NUMBER(string)</span> and replace <span class='formula'>string</span> with the field or expression you want converted into a decimal.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><div class='v-space-s'></div><span class='formula'>IS_NUMBER("25.33")</span> converts the string value to the decimal type.</td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td>Make sure the text in a IS_NUMBER function doesn’t include special characters other than a decimal point (period) or minus sign (dash). If the text in a VALUE function is a non-numerical/invalid format, the formula isn’t calculated and resolves to a blank value. For example, the formula <span class='formula'>1 + IS_NUMBER(Text_field__c)</span> produces these results:<div class='v-space-s'></div><ul><li>If Text field is 123, the result is 124.</li><li>If Text field is blank, the result is blank.</li><li>If Text field is $123, the result is blank.</li><li>If Text field is EUR123, the result is blank.</li></ul></td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='to_integer'><h2>TO_INTEGER</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Converts a text string to a integer number.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>TO_INTEGER(string/decimal/double/float/integer)</span> and replace parameter with the field or expression you want converted into a Integer.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><div class='v-space-s'></div><span class='formula'>TO_INTEGER("25")</span> converts the string value to the integer type.</td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td><ul><li>If the input is a string value, the string value must represent an integer.</li><li>If the input is a decimal, double, float or integer, the result will be the integer part of the input value.</li></ul></td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='to_lower_case'><h2>TO_LOWER_CASE</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Converts all letters in the specified text string to lowercase. Any characters that are not letters are unaffected by this function. Locale rules are applied if a locale is provided.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>TO_LOWER_CASE(text, [locale])</span> and replace text with the field or text you wish to convert to lowercase, and locale with the optional two-character ISO language code or five-character locale code, if available.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><b>MYCOMPANY.COM</b><div class='v-space-s'></div><span class='formula'>TO_LOWER_CASE("MYCOMPANY.COM")</span> returns “mycompany.com.”<div class='v-space'></div><b>Applying Turkish Language Locale Rules</b><div class='v-space-s'></div>The Turkish language has two versions of the letter “i”: one dotted and one dotless. The locale rules for Turkish require the ability to capitalize the dotted i, and allow the dotless I to be lowercase. To correctly use the <span class='formula'>TO_LOWER_CASE()</span> function with the Turkish language locale, use the Turkish locale code <span class='formula'>tr</span> in the <span class='formula'>TO_LOWER_CASE()</span> function as follows:<div class='v-space-s'></div><span class='formula'>TO_LOWER_CASE(text, "tr")</span></td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='to_string'><h2>TO_STRING</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Converts a percent, number, date, date/time, or currency type of value into text anywhere formulas are used. Also, converts picklist values to text in approval rules, approval step rules, workflow rules, escalation rules, assignment rules, auto-response rules, validation rules, formula fields, field updates, and custom buttons and links.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>TO_STRING(value)</span> and replace <span class='formula'>value</span> with the field or expression you want to convert to text format. Avoid using any special characters besides a decimal point (period) or minus sign (dash) in this function.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><b>Expected Revenue in Text</b><div class='v-space-s'></div><span class='formula'>TO_STRING(ExpectedRevenue)</span> returns the expected revenue amount of an opportunity in text format without a dollar sign. For example, if the Expected Revenue of a campaign is "$200,000," this formula calculates  “200000.”</td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td><ul><li>The returned text is not formatted with any currency, percent symbols, or commas.</li><li>Values are not sensitive to locale. For example, 24.42 EUR is converted into the number 24.42.</li><li>Percents are returned in the form of a decimal.</li><li>Dates are returned in the form of YYYY-MM-DD, that is, a four-digit year and two-digit month and day.</li><li>Date/time values are returned in the form of YYYY-MM-DD HH:MM:SSZ where YYYY is a four-digit year, MM is a two-digit month, DD is a two-digit day, HH is the two-digit hour, MM are the minutes, SS are the seconds, and Z represents the zero meridian indicating the time is returned in UTC time zone.</li></ul></td></tr>
+            </tbody></table></div>
+            
+            
+            <div class='v-space'></div><div id='today'><h2>TODAY</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns the current date as a date data type.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>TODAY()</span></td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>DAYSBETWEEN(TODAY(), Sample_date_c)</span> calculates how many days in the sample are left.</td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td><ul><li>Do not remove the parentheses.</li><li>Keep the parentheses empty. They do not need to contain a value.</li><li>Use a date field with a <span class='formula'>TODAY</span> function instead of a date/time field. Last Activity Date is a date field whereas Created Date and Last Modified Date are date/time fields.</li><li>See NOW if you prefer to use a date/time field.</li><li>Dates and times are always calculated using the user’s time zone.</li></ul></td></tr>
+            </tbody></table></div>
+            
+            
+            <div class='v-space'></div><div id='trim'><h2>TRIM</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Removes the spaces and tabs from the beginning and end of a text string.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>TRIM(text)</span> and replace text with the field or expression you want to trim.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>TRIM(LEFT(LastName,5))& "-" & RIGHT(FirstName, 1)</span> returns a network ID for users that contains the first five characters of their last name and first character of their first name separated by a dash.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='to_upper_case'><h2>TO_UPPER_CASE</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Converts all letters in the specified text string to uppercase. Any characters that are not letters are unaffected by this function. Locale rules are applied if a locale is provided.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>TO_UPPER_CASE(text, [locale])</span> and replace <span class='formula'>text</span> with the field or expression you wish to convert to uppercase, and <span class='formula'>locale</span> with the optional two-character ISO language code or five-character locale code, if available.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><b>MYCOMPANY.COM</b><div class='v-space-s'></div><span class='formula'>TO_UPPER_CASE("mycompany.com")</span> returns “MYCOMPANY.COM.”<div class='v-space'></div><b>Applying Turkish Language Locale Rules</b><div class='v-space-s'></div>The Turkish language has two versions of the letter i: one dotted and one dotless. The locale rules for Turkish require the ability to capitalize the dotted i, and allow the dotless I to be lowercase. To correctly use the <span class='formula'>TO_UPPER_CASE()</span> function with the Turkish language locale, use the Turkish locale code <span class='formula'>tr</span> in the <span class='formula'>TO_UPPER_CASE()</span> function as follows:<div class='v-space-s'></div><span class='formula'>TO_UPPER_CASE(text, "tr")</span><div class='v-space-s'></div>This ensures that any dotted i in the text does not transform to a dotless I.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='vlookup'><h2>VLOOKUP</h2><table><tbody>
+            <tr><td class='table-first-column'>Description:</td><td>Returns a value by looking up a related value on a custom object similar to the <span class='formula'>VLOOKUP()</span> Excel function.</td></tr>
+            <tr><td class='table-first-column'>Use:</td><td><span class='formula'>VLOOKUP(lookup_object_name, field_name_to_return, field_name_on_lookup_object, lookup_field_value, [connection_name])</span> <div class='v-space-s'></div>Replace <span class='formula'>field_name_to_return</span> with the field that contains the value you want returned, <span class='formula'>field_name_on_lookup_object</span> with the field name on the related object that contains the value you want to match, and <span class='formula'>lookup_field_value</span> defines the field’s value that is extracted from the retrieved source data you want to match. <span class='formula'>connection_name</span> is optional, if provided, DSP checks against the Connection indicated by the <span class='formula'>connection_name</span> to lookup the values. If not provided, the default Connection is the target on the Mapping.</td></tr>
+            <tr><td class='table-first-column'>Example:</td><td><span class='formula'>VLOOKUP("RecordType", "Id", "DeveloperName","PersonAccount")</span> tries to return the RecordType Id whose DeveloperName is "PersonAccount" in the target connection.<div class='v-space-s'></div><span class='formula'>VLOOKUP("Account", "Name", "Source_System_Id__c", AccountId)</span> tries to lookup the Name value of the matched Account by checking the AccountId value on Contact in the source connection against the Source_System_Id__c field in the target connection.</td></tr>
+            <tr><td class='table-first-column'>Tips:</td><td><ul><li>If a parameter passed to the function has double quotes “”, it means String literals (constant values) are passed; without double quotes “”, DSP will treat it as a dynamic attribute whose value will be retrieved via srcRecord.attribute. In the examples above, on the lookup_field_value parameter, the first example uses a dynamic attribute AccountId, while the second example uses a static string literal “PersonAccount”. </li><li>DSP supports matching RecordType with DeveloperName directly. Either a VLOOKUP function or a DeveloperName in the mapping works.</li><li>The VLOOKUP performs a SOQL query against the connection’s database, DSP combines and caches the query result if the <span class='formula'>connection, lookup_object_name</span>, <span class='formula'>field_name_on_lookup_object</span> are the same on the same Mapping, in which case only 1 query will be issued.</li><li>To maintain relationships for reference type of fields, use External Id or native Salesforce Id whenever possible for the best performance gain.</li><li>The field indicated by the <span class='formula'>field_name_on_lookup_object</span>  must be a Text type of field.</li><li>If more than one record matches, the value from the first record is returned.</li></ul></td></tr>
+            </tbody></table></div>
+            <div class='v-space'></div>
+            <div class='v-space'></div>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+</body>
+
+</html>
