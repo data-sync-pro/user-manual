@@ -7,7 +7,7 @@ h1 {
 }
 
 h2{
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-family: "ITC Avant Garde", system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     margin: 0.2em 0;
     margin-top: 0.5em;
@@ -33,7 +33,7 @@ h2{
 
 h3 {
     padding-top: 1rem;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: rgb(1, 118, 211);
 }
 
@@ -202,7 +202,7 @@ li{
 }
 
 .table-column-name{
-    width: 20%;
+    width: 25%;
 }
 
 .table-column-check{
@@ -251,7 +251,7 @@ li{
 }
 
 .container{
-    flex:1; padding-left:50px; padding-top:30px; padding-right:12%; background-color:white;
+    flex:1; padding-left:50px; padding-top:30px; padding-right:2rem; background-color:white;
 }
 
 .note-box_outer{
@@ -334,7 +334,7 @@ td b{
     background:rgb(243, 243, 243);
     position:fixed;
     bottom:30px;
-    right: 60px;
+    right: 10px;
     text-align: center;
     vertical-align: middle;
     font-size: 1.2rem;
