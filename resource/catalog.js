@@ -30,7 +30,6 @@ var catalog = JSON.parse(
               "Job Quick Actions"
             ],
             "Executable": [
-              "Executable Q",
               "Executable Quick Actions"
             ],
             "Schedule": [

@@ -202,7 +202,7 @@ li{
 }
 
 .table-column-name{
-    width: 25%;
+    width: 20%;
 }
 
 .table-column-check{
@@ -210,7 +210,7 @@ li{
 }
 
 .table-column-wide{
-    width: 30%;
+    width: 25%;
     min-width: 380px;
 }
 
@@ -356,4 +356,8 @@ td b{
     margin-top: 1rem;
     text-align: center;
     font-weight: 500;
+}
+
+#nav{
+    margin-bottom: 3rem;
 }
