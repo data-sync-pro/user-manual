@@ -24,17 +24,17 @@ var catalog = JSON.parse(
               "Connection Quick Actions"
             ],
             "Direction": [],
-            "Job": [
-              "Job Builder",
+            "Pipeline": [
+              "Pipeline Builder",
               "Determine Sequence",
-              "Job Quick Actions"
+              "Pipeline Quick Actions"
             ],
             "Executable": [
               "Executable Quick Actions"
             ],
             "Schedule": [
               "Executable Schedule",
-              "Job Schedule"
+              "Pipeline Schedule"
             ]
           }
         ],

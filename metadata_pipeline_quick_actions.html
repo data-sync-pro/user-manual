@@ -23,7 +23,7 @@
                     with the latest status. Click the hyperlink of any <b>Execution</b> to check the details.
                 </p>
                 <p>
-                    In the back end, DSP creates a Job Execution record, along with the Execution records for the associated Mappings.
+                    In the back end, DSP creates a Pipeline Execution record, along with the Execution records for the associated Mappings.
                 </p>
 
 
@@ -33,7 +33,7 @@
                 <h3>Close</h3>
                 <p class="double-indent">
                     Click <b>Close</b> button to close the Status Tracker modal, but note that after the modal is closed, the
-                    Job Execution still continues in the back. 
+                    Pipeline Execution still continues in the back. 
                 </p>
                 <p>
                     <h3>Stop Execution</h3>
@@ -44,8 +44,8 @@
                                 <p class='title'>Note: </p>
                                 <p>
                                     If you wish to stop the remaining Executions, you
-                                    may either click the <span class='formula'>Stop Execution</span> button, or check the <span class='formula'>Stopped</span> field and save the Job Execution
-                                    record if it is not completed, or call the <span class='formula'>stopJobExecution</span> method on the
+                                    may either click the <span class='formula'>Stop Execution</span> button, or check the <span class='formula'>Stopped</span> field and save the Pipeline Execution
+                                    record if it is not completed, or call the <span class='formula'>stopPipelineExecution</span> method on the
                                     <span class='formula'>pushtopics.ExecutionService</span> class using Apex.
                                 </p>
                             </div>
@@ -58,7 +58,7 @@
             <h2 id='title'>Validate</h2>
             <div class="double-indent">
                 <p>
-                    Validates the settings of Job and its related Executables and their Field Mappings. Errors will be toasted if the validation fails. 
+                    Validates the settings of Pipeline and its related Executables and their Field Mappings. Errors will be toasted if the validation fails. 
                 </p>
             </div>
 
@@ -66,7 +66,7 @@
             <h2 id='title'>Check Source Counts</h2>
             <div class="double-indent">
                 <p>
-                    Opens the modal that shows the source record counts based on the Retrieve Parameters configured on the Mappings associated with the Job. 
+                    Opens the modal that shows the source record counts based on the Retrieve Parameters configured on the Mappings associated with the Pipeline. 
                     
                     <div class='slds-box note-box_outer'>
                         <div class='note-box'>
@@ -84,11 +84,11 @@
 
 
             <div class='v-space'></div>
-            <h2 id='title'>Clone Job</h2>
+            <h2 id='title'>Clone Pipeline</h2>
             <div class="double-indent">
                 <p>
-                    Opens the modal to fill in a few basic fields based on the current Job's settings and 
-                    clone the Job along with all its associated Mappings and their Field Mappings upon clicking the "Clone Job" button.
+                    Opens the modal to fill in a few basic fields based on the current Pipeline's settings and 
+                    clone the Pipeline along with all its associated Mappings and their Field Mappings upon clicking the "Clone Pipeline" button.
                 </p>
             </div>
 
@@ -98,7 +98,7 @@
             <h2 id='title'>Delete Executions</h2>
             <div class="double-indent">
                 <p>
-                    Delete all the associated Job Executions and their Executions, Batch Executions.
+                    Delete all the associated Pipeline Executions and their Executions, Batch Executions.
                 </p>
             </div>
 

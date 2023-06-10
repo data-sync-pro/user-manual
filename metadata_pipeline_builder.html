@@ -18,7 +18,7 @@
 
 
             <h1 id="title">
-                Job Builder
+                Pipeline Builder
             </h1>
 
             <div class='v-space'></div>
@@ -26,8 +26,8 @@
 
             <p>
 
-                <b>Job Builder</b> 
-                is a powerful tool that helps create a comprehensive list of sequential Executables to associate with a Job, with object relationships adequately maintained, 
+                <b>Pipeline Builder</b> 
+                is a powerful tool that helps create a comprehensive list of sequential Executables to associate with a Pipeline, with object relationships adequately maintained, 
                 a subset of source data defined, and execution order determined.
             </p>
 
@@ -52,7 +52,7 @@
 
             <div>
                 
-                <p>The following are the brief steps required to create Executables for a Job.</p>
+                <p>The following are the brief steps required to create Executables for a Pipeline.</p>
                 <ul>
                     <li class="pli">
                         Add root target Objects to the tree grid.
@@ -75,17 +75,17 @@
                         Close the model to continue selecting other Objects in the tree grid and/or set retrieve criteria for particular nodes.
                     </li>
                     <li class="pli">
-                        Once all Objects required in the Job are selected and mapped out, and required criteria are configured, click the button "Create Default Executables".
+                        Once all Objects required in the Pipeline are selected and mapped out, and required criteria are configured, click the button "Create Default Executables".
                     </li>
                 </ul>
             </div>
             <div style="height: 30px;"></div>
 
             <p>
-                Understanding the logic that Job Builder performs after clicking "Create Default Executables" will help with knowing better on
+                Understanding the logic that Pipeline Builder performs after clicking "Create Default Executables" will help with knowing better on
                 the order the Objects should be added to the grid and what the default settings are after Executables are created.
 
-                The section <a href='./job_determine_sequence.html'>Determine Sequence</a> depicts the algorithmatic way of determing the object sequence, which might be a little too much for beginners.
+                The section <a href='./pipeline_determine_sequence.html'>Determine Sequence</a> depicts the algorithmatic way of determing the object sequence, which might be a little too much for beginners.
                 But having a good prediction on what's going to happen here, it should be just as simple as following your gut feelings as long as your data model is not too complicated.
             </p>
 
@@ -104,12 +104,12 @@
 
                         <li class="rli">
                             The settings on the generated Excutables are defaulted based on the default values defined in the Executable object, 
-                            for example, <b>Action</b> is "Upsert", <b>Batchable</b> is checked, and <b>Batch Size</b> is 200. The following fields are set based on the configurations in Job Builder:
+                            for example, <b>Action</b> is "Upsert", <b>Batchable</b> is checked, and <b>Batch Size</b> is 200. The following fields are set based on the configurations in Pipeline Builder:
 
                             <ul style="font-size: smaller; ">
-                                <li style="padding-top:3px;list-style-type: square;"><b>Job</b> = [Current Job]</li>
+                                <li style="padding-top:3px;list-style-type: square;"><b>Pipeline</b> = [Current Pipeline]</li>
                                 <li style="padding-top:3px;list-style-type: square;"><b>Name</b> = [Target Object Name]</li>
-                                <li style="padding-top:3px;list-style-type: square;"><b>Executable API Name</b> = [Job Name + "_" + Target Object Name + "_" + Random Number]</li>
+                                <li style="padding-top:3px;list-style-type: square;"><b>Executable API Name</b> = [Pipeline Name + "_" + Target Object Name + "_" + Random Number]</li>
                                 <li style="padding-top:3px;list-style-type: square;"><b>Target Object Name</b> = [Target Object Name]</li>
                                 <li style="padding-top:3px;list-style-type: square;"><b>Source Object Name</b> = [Source Object Name]</li>
                                 <li style="padding-top:3px;list-style-type: square;"><b>Target Key Field</b> = [Selected External ID Field]</li>
@@ -126,10 +126,10 @@
                                 <li style="padding-top:3px;list-style-type: square;">The Target Key Field is mapped with the Source Key Field you provided.</li>
 
                                 <li style="padding-top:3px;list-style-type: square;">For non-reference type of fields, if the source and target have the same type and API name, 
-                                Job Builder creates an exact mapping for each field.</li>
+                                Pipeline Builder creates an exact mapping for each field.</li>
 
                                 <li style="padding-top:3px;list-style-type: square;">For reference type of fields, if the source and target have the same API name and the reference-to Object
-                                     is selected in the tree grid preceeding the current Object, Job Builder generates the mapping using the <b>External Id Field</b> 
+                                     is selected in the tree grid preceeding the current Object, Pipeline Builder generates the mapping using the <b>External Id Field</b> 
                                     selected in the preceding Object</li>
                                 
                                 <li style="padding-top:3px;list-style-type: square;">The rest fields remain as unmapped.</li>
@@ -156,7 +156,7 @@
                     In a nutshell, two major steps are required to create the relevant Executables.</p>
                 <ul>
                     <li class="pli">
-                        Identify the dependency Paths as described in the <a href='./job_determine_sequence.html'>Determine Sequence</a> section.
+                        Identify the dependency Paths as described in the <a href='./pipeline_determine_sequence.html'>Determine Sequence</a> section.
 
 
                         <div class="image-outer">
@@ -185,8 +185,8 @@
 
             <h2 id="create_default_executables">Create Default Executables</h2>
             <ul>
-                <li class="pli">Go to the <b>Job</b> record where the new Executables will be created and assiciated to it,
-                    click the <b>Job Builder</b> tab.
+                <li class="pli">Go to the <b>Pipeline</b> record where the new Executables will be created and assiciated to it,
+                    click the <b>Pipeline Builder</b> tab.
                 </li>
                 <li class="pli">Add the root object of the next available path to the tree grid.
 
@@ -194,7 +194,7 @@
                         <div class='note-box'>
                             <p class='title'>Note: </p>
                             <p>Check the process 
-                                <a href='./job_determine_sequence.html'>Determine Sequence</a> for the systematic approach.
+                                <a href='./pipeline_determine_sequence.html'>Determine Sequence</a> for the systematic approach.
                             </p>
                         </div>
                     </div>
@@ -206,7 +206,7 @@
 
                     <div class='v-space'></div>
 
-                    <div class="image-outer"><img src="resource/img/job_builder_tree_grid.png"
+                    <div class="image-outer"><img src="resource/img/pipeline_builder_tree_grid.png"
                             onclick="window.open(this.src)" />
                     </div>
 
@@ -222,7 +222,7 @@
 
 
                     <div class='v-space'></div>
-                    <div class="image-outer"><img src="resource/img/job_builder_set_mappings.png"
+                    <div class="image-outer"><img src="resource/img/pipeline_builder_set_mappings.png"
                             onclick="window.open(this.src)" />
                     </div>
 
@@ -235,7 +235,7 @@
                     click <b>Validate Criteria</b> to check the validation, which if successful will show how many
                     records are there in the source object for the criteria defined.
                     <div class='v-space'></div>
-                    <div class="image-outer"><img src="resource/img/job_builder_criteria.png"
+                    <div class="image-outer"><img src="resource/img/pipeline_builder_criteria.png"
                             onclick="window.open(this.src)" />
                     </div>
                     <div class='v-space'></div>
@@ -245,7 +245,7 @@
                         criteria defined in their upper hierarchy along the same path, up to 5 levels.
                         If there is a need for an Objects to inherit criteria from multiple paths, make sure the same
                         object
-                        is selected in those paths, in which scenario, the <b>Job Builder</b>
+                        is selected in those paths, in which scenario, the <b>Pipeline Builder</b>
                         will only create one Executable for that object, but combines criteria inherited from multiple
                         paths.
                     </p>
@@ -263,14 +263,14 @@
 
                     </div>
                     <div class='v-space'></div>
-                    <div class="image-outer"><img src="resource/img/job_builder_inherit_criteria.png"
+                    <div class="image-outer"><img src="resource/img/pipeline_builder_inherit_criteria.png"
                             onclick="window.open(this.src)" />
                     </div>
                     <div class='v-space'></div>
 
                 </li>
 
-                <li class="pli">Click “Create Default Executables”, the Job Builder generates the Executables along with the default
+                <li class="pli">Click “Create Default Executables”, the Pipeline Builder generates the Executables along with the default
                     Field
                     Mappings and the Criteria, then reloads the page. </li>
 
@@ -291,19 +291,19 @@
 
                         <li class="rli">
 
-                            Job Builder is the most efficient way of creating a list of related Executables, but it's not the only way. 
+                            Pipeline Builder is the most efficient way of creating a list of related Executables, but it's not the only way. 
                             For example, you may still want to create individual Executable records and set up their Field Mappings manually if the default settings here are not what you wanted(for instance, your Executable's Action should be "Delete" instead of "Upsert."), 
-                            or if you don't feel comfortable using the Job Builder. Manually creating Executables in DSP is still a very efficient process.
+                            or if you don't feel comfortable using the Pipeline Builder. Manually creating Executables in DSP is still a very efficient process.
                       
                         </li>
                         <li class="rli">
-                            The Job Builder only supports target Objects having External ID fields.
+                            The Pipeline Builder only supports target Objects having External ID fields.
                         </li>
                         <li class="rli">
                             Make sure to validate and tailor with default generated Executables and Field Mappings before execution.</li>
                         <li class="rli">
-                            After the Executables are created, Job Builder's tree grid is reset to scratch. 
-                            New Executables created via Job Builder will be brand new Executables added to the Job.</li>
+                            After the Executables are created, Pipeline Builder's tree grid is reset to scratch. 
+                            New Executables created via Pipeline Builder will be brand new Executables added to the Pipeline.</li>
                         <li class="rli">
                             Only the preceeding Executables will be mapped the relational fields in the later generaged
                             Executables.</li>

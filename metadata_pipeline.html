@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+
+            <h1 id='title'>Pipeline</h1>
+            <p>
+                A Pipeline (designated as pushtopics__Pipeline__c) is a collection of Executables that run in a sequence. This order of execution guarantees that parent data migrates before child data, thus preserving referential integrity (relationships).
+            </p>
+            <p>
+
+                The system provides the option to halt execution upon encountering a failed Executable. 
+                Following the completion of execution, it can be configured to send out email notifications. 
+                There are multiple avenues for Pipeline execution: it can be manually operated from the user interface, automatically triggered by adding to Schedule records for preset timings, or invoked via Apex classes.
+
+            </p>
+            <p>
+                The <a href="metadata_pipeline_builder.html">Pipeline Builder</a>, a utility tool, aids in the rapid and efficient creation of a list of Executables. 
+                Selections made from the objects' tree view determine the automatic population of relational fields, simplifying the process of creating Pipeline Executables. 
+                Additional details regarding this process can be found in the reference materials for the <a href="metadata_pipeline_builder.html">Pipeline Builder</a>. 
+            </p>
+
+            <p>For a detailed explanation of the related fields, refer to the table provided below:</p>
+            
+
+            <div class='v-space'></div>
+<!--here-->
+<h2>Fields</h2>
+
+<div class='v-space'></div><div>
+<table><thead><th class='table-column-name'>Name</th><th class='table-column-wide'>Developer Name</th><th class='table-column-narrow'>Required</th><th>Description</th></thead><tbody>
+<tr><td>Delete Execution Logs After Completion?</td><td class='slds-truncate'>pushtopics__DeleteExecutionLogsAfterCompletion__c</td><td>N</td><td>Defines what succeeded logs need to be deleted after the execution is completed.</td></tr>
+<tr><td>Description</td><td class='slds-truncate'>pushtopics__Description__c</td><td>N</td><td>Description of the Pipeline.</td></tr>
+<tr><td>Direction</td><td class='slds-truncate'>pushtopics__Direction__c</td><td>Y</td><td>Direction of the job.</td></tr>
+<tr><td>Failure Message</td><td class='slds-truncate'>pushtopics__FailureMessage__c</td><td>N</td><td>If defined, the message will be shown in the notification when the Pipeline Execution fails. If undefined, a system default message will be displayed.</td></tr>
+<tr><td>Pipeline API Name</td><td class='slds-truncate'>pushtopics__ApiName__c</td><td>Y</td><td>The API Name of a Pipeline. It is a unique and external Id field, by default hidden from the page layout  and always defaulted to the Name field value.</td></tr>
+<tr><td>Pipeline Name</td><td class='slds-truncate'>Name</td><td>Y</td><td>Name of the Pipeline.</td></tr>
+<tr><td>Notify Email Addresses</td><td class='slds-truncate'>pushtopics__NotifyEmailAddresses__c</td><td>N</td><td>Comma separated email addresses to be notified when the execution is completed if the Notify When Execution Completes? is checked.</td></tr>
+<tr><td>Notify When Execution Completes?</td><td class='slds-truncate'>pushtopics__NotifyWhenExecutionCompletes__c</td><td>N</td><td>If "Always" is selected, system will send a notification email to the email addressed defined in the <b>Notify Email Addresses</b> field once the execution is completed; If "Only If Failed" is selected, the email will be sent only if the execution failed.</td></tr>
+<tr><td>Stop Remaining When An Executable Fails?</td><td class='slds-truncate'>pushtopics__StopRemainingWhenAnExecutableFails__c</td><td>N</td><td>If checked, when one of the Pipeline's Executables completes and fails the execution, the Pipeline Execution stops without executing the remaining Executables.</td></tr>
+<tr><td>Success Message</td><td class='slds-truncate'>pushtopics__SuccessMessage__c</td><td>N</td><td>If defined, the message will be shown in the notification when the Pipeline Execution succeeds. If undefined, a system default message will be displayed.</td></tr>
+</tbody></table></div><div class='v-space'></div>
+<!--here-->
+            
+            </div>
+        </div>
+</body>
+
+</html>

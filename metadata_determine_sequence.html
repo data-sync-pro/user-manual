@@ -47,7 +47,7 @@
                 <li class="pli">Have your Entity Relationship Diagram(ERD) of your target org in front of you. 
                     <div class="image-outer">
 
-                        <img src="resource/img/job_builder_data_model.png" />
+                        <img src="resource/img/pipeline_builder_data_model.png" />
 
                         <div class="image-title">Step 1</div>
                     </div>
@@ -57,7 +57,7 @@
                     any parent data to be migrated prior to their migration. In this example, we have <b>A</b>,
                     <b>B</b>, <b>C</b> as the root objects.
 
-                    <div class="image-outer"><img src="resource/img/job_builder_roots.png" />
+                    <div class="image-outer"><img src="resource/img/pipeline_builder_roots.png" />
                         <div class="image-title">Step 2</div>
                     </div>
                 </li>
@@ -75,7 +75,7 @@
                     <div class='v-space'></div>
                     In our example, we assume all the objects in the diagram need to be migrated, which is A, B, C, D, E, F, G, H, I.
 
-                    <div class="image-outer"><img src="resource/img/job_builder_all_nodes.png" />
+                    <div class="image-outer"><img src="resource/img/pipeline_builder_all_nodes.png" />
                         <div class="image-title">Step 3</div>
                     </div>
                 </li>
@@ -83,7 +83,7 @@
                 <li class="pli">Find the longest path between any root object and any unmarked node in the network and
                     mark the path (<span class='formula'>path 1 in the below diagram</span>).
                     <div class="image-outer">
-                        <img src="resource/img/job_builder_longest_path.png" />
+                        <img src="resource/img/pipeline_builder_longest_path.png" />
                         <div class="image-title">Step 4</div>
                     </div>
                 </li>
@@ -93,18 +93,18 @@
                     based on when the path is identified
                     (<span class='formula'>path 2 and 3 in the diagrams</span>).
 
-                    <div class="image-outer"><img src="resource/img/job_builder_2nd_path.png" />
+                    <div class="image-outer"><img src="resource/img/pipeline_builder_2nd_path.png" />
                         <div class="image-title">Step 5 (I)</div>
                     </div>
                     <div class='v-space'></div>
-                    <div class="image-outer"><img src="resource/img/job_builder_3rd_path.png" />
+                    <div class="image-outer"><img src="resource/img/pipeline_builder_3rd_path.png" />
                         <div class="image-title">Step 5 (II)</div>
                     </div>
                 </li>
                 <li class="pli">Keep doing this excise to find the next longest paths until all the root objects have
                     their paths identified (path 4, 5 in the diagram).
 
-                    <div class="image-outer"><img src="resource/img/job_builder_final.png" />
+                    <div class="image-outer"><img src="resource/img/pipeline_builder_final.png" />
                         <div class="image-title">Step 6</div>
                     </div>
                 </li>
@@ -116,7 +116,7 @@
                     the dependent data in Objects <b>C, F</b> should have already been migrated.
                     And because in path 2, <b>E</b> is the parent of <b>H</b>, <b>E</b> is processed before <b>H</b>, hence the referential integrity for <b>H</b> is enforced.  </p>
 
-                    <div class="image-outer"><img src="resource/img/job_builder_final.png" />
+                    <div class="image-outer"><img src="resource/img/pipeline_builder_final.png" />
                         <div class="image-title">Step 7</div>
                     </div>
                 </li>

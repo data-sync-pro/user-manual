@@ -20,10 +20,10 @@
         <h1>Schedule</h1>
 
         <p>A Schedule(pushtopics__Schedule__c) record defines the time and frequency 
-            and when it's associated with a Job or Executable, the Job or Executable will be scheduled to run at the times defined in the Schedule record.
+            and when it's associated with a Pipeline or Executable, the Pipeline or Executable will be scheduled to run at the times defined in the Schedule record.
         
         If there is any update to the Schedule causing changes to the scheduled time and frequency, 
-        DSP will remove the related Job Schedules and Executable Schedules, create new replicas to delete the old scheduled Apex Jobs and create new ones.
+        DSP will remove the related Pipeline Schedules and Executable Schedules, create new replicas to delete the old scheduled Apex Jobs and create new ones.
         </p>
 
 
@@ -37,7 +37,7 @@
             <tr><td>API Name</td><td class='slds-truncate'>pushtopics__ApiName__c</td><td>Y</td><td>Unique name of the schedule.</td></tr>
             <tr><td>Day of Month</td><td class='slds-truncate'>pushtopics__DayOfMonth__c</td><td>N</td><td>The Nth day of the month. Used when the Frequency is "Monthly".</td></tr>
             <tr><td>Cron Expression</td><td class='slds-truncate'>pushtopics__CronExpression__c</td><td>N</td><td>Read only. The cron expression will be generated automatically upon save.</td></tr>
-            <tr><td>Deployable?</td><td class='slds-truncate'>pushtopics__Deployable__c</td><td>N</td><td>Indicates whether the current Schedule is deployable, and can be used in filters while migrating DSP Schedules and their related Apex Schedules, Executable Schedules, and Job Schedules from one environment to another.</td></tr>
+            <tr><td>Deployable?</td><td class='slds-truncate'>pushtopics__Deployable__c</td><td>N</td><td>Indicates whether the current Schedule is deployable, and can be used in filters while migrating DSP Schedules and their related Apex Schedules, Executable Schedules, and Pipeline Schedules from one environment to another.</td></tr>
             <tr><td>End Year</td><td class='slds-truncate'>pushtopics__EndYear__c</td><td>N</td><td>Defines which year the schdule job ends.</td></tr>
             <tr><td>Frequency</td><td class='slds-truncate'>pushtopics__Frequency__c</td><td>Y</td><td>There are 4 options - One Day: only runs in a specific day defined in the Scheduled Date field; Daily: runs every day; Weekly: runs on specific week days on a weekly basis; Monthly: runs in a particular day on a monthly basis.</td></tr>
             <tr><td>Friday</td><td class='slds-truncate'>pushtopics__Friday__c</td><td>N</td><td>Runs on Fridays if the Frequency is "Weekly".</td></tr>

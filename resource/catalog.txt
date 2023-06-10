@@ -20,8 +20,8 @@
     "Quick Actions"
   ],
   "Direction": [],
-  "Job": [
-    "Job Builder",
+  "Pipeline": [
+    "Pipeline Builder",
     "Determine Sequence",
     "Quick Actions"
   ],
@@ -36,7 +36,7 @@
     "Quick Actions"
   ],
   "Field Mapping": [],
-  "Job Execution": [],
+  "Pipeline Execution": [],
   "Execution": [
     "Quick Actions"
   ],
@@ -45,6 +45,6 @@
   ],
   "Schedule": [
     "Executable Schedule",
-    "Job Schedule"
+    "Pipeline Schedule"
   ]
 }

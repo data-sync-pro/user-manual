@@ -17,10 +17,10 @@
 
         <div style="" class="container">
             
-        <h1>Job Schedule</h1>
+        <h1>Pipeline Schedule</h1>
 
-        <p>An Job Schedule(pushtopics__JobSchedule__c) is a junction object that connects with a Schedule and a Job.
-            When the record is created, the Job is scheduled to run at the times defined in the Schedule record. 
+        <p>An Pipeline Schedule(pushtopics__PipelineSchedule__c) is a junction object that connects with a Schedule and a Pipeline.
+            When the record is created, the Pipeline is scheduled to run at the times defined in the Schedule record. 
             When the record is deleted, the schedule job will be removed from the Salesforce Apex queue.
         </p>
 
@@ -30,9 +30,9 @@
 
 <div class='v-space'></div><div>
 <table><thead><th class='table-column-name'>Name</th><th class='table-column-wide'>Developer Name</th><th class='table-column-narrow'>Required</th><th>Description</th></thead><tbody>
-<tr><td>Job</td><td class='slds-truncate'>pushtopics__Job__c</td><td>N</td><td>Master-detail relationship to the Job object.</td></tr>
-<tr><td>Job Plus Schedule Must Be Unique</td><td class='slds-truncate'>pushtopics__JobPlusScheduleMustBeUnique__c</td><td>N</td><td>A helper field that makes sure a Schedule can only be assigned with the Job once.</td></tr>
-<tr><td>Job Schedule Number</td><td class='slds-truncate'>Name</td><td>N</td><td>Auto-number.</td></tr>
+<tr><td>Pipeline</td><td class='slds-truncate'>pushtopics__Pipeline__c</td><td>N</td><td>Master-detail relationship to the Pipeline object.</td></tr>
+<tr><td>Pipeline Plus Schedule Must Be Unique</td><td class='slds-truncate'>pushtopics__PipelinePlusScheduleMustBeUnique__c</td><td>N</td><td>A helper field that makes sure a Schedule can only be assigned with the Pipeline once.</td></tr>
+<tr><td>Pipeline Schedule Number</td><td class='slds-truncate'>Name</td><td>N</td><td>Auto-number.</td></tr>
 <tr><td>Next Run Time</td><td class='slds-truncate'>pushtopics__NextRunTime__c</td><td>N</td><td>Next run time of the scheduled job.</td></tr>
 <tr><td>Previous Run Time</td><td class='slds-truncate'>pushtopics__PreviousRunTime__c</td><td>Y</td><td>Previous run time of the schedule job.</td></tr>
 <tr><td>Schedule</td><td class='slds-truncate'>pushtopics__Schedule__c</td><td>N</td><td>Master-detail relationship to the Schedule object.</td></tr>
