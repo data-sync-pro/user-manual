@@ -6,8 +6,7 @@ var catalog = JSON.parse(
           {
             "Data Model": [
               "Directional Data Processing",
-              "Single Connection Actions",
-              "Schedule Job Management"
+              "Single Connection Actions"
             ],
             "Process Flow": [
               "Insert",

@@ -21,17 +21,17 @@
 
             <p>
 
-                <b>Direction</b> defines the Source and Target connection. 
-                A directional Executable is associated with a Direction, instead of a single Connection. 
-                Based on the Executable's settings, DSP will retrieve data from 
-                the Source Object in the Source connection via SOQL query, perform transformations, then action(Insert, Update, Upsert, Delete) against the Target object in the Target connection.
+                A Directional Executable, integral to managed Salesforce data management, operates within a predefined Direction, establishing source and target connections for data synchronization. Upon creation, users select specific source and target objects, setting the stage for a wide range of Data Manipulation Language (DML) operations—insert, update, upsert, delete, undelete, and merge—toward the target object. Designed for versatility, this Executable functions as a batch job, adept at fetching data from the source, conducting matching and transformation processes, and executing actions on the target object, with the capability to run both on-demand and as scheduled, asynchronous batch jobs.
+            </p>
+            <p>
+            Incorporating a dynamic Q (query builder) component, the Executable enhances user interaction by facilitating the construction of SOQL queries for data retrieval, directly through a user-friendly interface. This allows for selective record execution based on predetermined transformations and actions, offering synchronous operations. The Q component, notable for features like inline and mass editing, downloading, and sorting, integrates smoothly into the Salesforce Lightning Experience via the Lightning App Builder.
+            </p>
+            <p>
+            Furthermore, when utilized within the current org as the source connection, the Directional Executable transcends its primary function, acting as a streamlined rules engine for trigger automations. By simplifying and bulkifying complex transformations and actions into user-configurable formulas, it presents a potent alternative to traditional triggers or flows, minimizing the need for extensive coding. Additionally, its adaptability extends to quick actions, enabling users to perform predefined operations with the simple click of a button, further demonstrating its utility and efficiency within the Salesforce platform.
             </p>
 
-            <p>
-                This type of Executables are essentially batch processing engines; 
-                Think them as if you were writing up batch apex classes - 
-                first retrieve the data via SOQL query from the Source object, then split the data into small batches, 
-                in each batch filter out not-needed data, perform transformations, then assembly target object records, and perform DML actions accordingly. 
+
+
             </p>
 
             <p>
