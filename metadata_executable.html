@@ -30,7 +30,7 @@
                 Key configurations encapsulated by the Executable are:
                 <ul>
                     <li class="rli">Source Data Retrieval: Utilizes Salesforce SOQL to dictate data extraction methods.</li>
-                    <li class="rli">Target Data Existence Check:  Includes checks for target existence via the Target Key Field.</li>
+                    <li class="rli">Target Data Existence Check:  Includes checks for target existence via the Target Matching Field.</li>
                     <li class="rli">Target Data Action: Enables actions like Insert, Update, Upsert, Delete with detailed control.</li>
                     <li class="rli">Association with Field Mappings: Facilitates advanced field-level transformations through associated Field Mapping records.</li>
                     <li class="rli">Scope Filter: Includes in-memory checks to verify if a source record is within the defined execution scope.</li>
@@ -143,7 +143,7 @@
             <tr><td>Stop Execution When A Batch Fails?</td><td class='slds-truncate'>pushtopics__StopExecutionWhenABatchFails__c</td><td>Default false. If checked, execution will be stopped if there is a batch failed.</td></tr>
             <tr><td>Success Message</td><td class='slds-truncate'>pushtopics__SuccessMessage__c</td><td>If defined, the message will be shown in the notification when the Execution succeeds. If undefined, a system default message will be displayed.</td></tr>
             <tr><td>Target Connection Name</td><td class='slds-truncate'>pushtopics__TargetConnectionName__c</td><td>A formula field that shows the name of the target connection</td></tr>
-            <tr><td>Target Key Field</td><td class='slds-truncate'>pushtopics__TargetKeyField__c</td><td>Case Sensitive. Used to check the target existence of the source data. For the data already exists in the target, DSP treats it as [Update], otherwise as [Insert].</td></tr>
+            <tr><td>Target Matching Field</td><td class='slds-truncate'>pushtopics__TargetKeyField__c</td><td>Case Sensitive. Used to check the target existence of the source data. For the data already exists in the target, DSP treats it as [Update], otherwise as [Insert].</td></tr>
             <tr><td>Target Object Name</td><td class='slds-truncate'>pushtopics__TargetObjectName__c</td><td>If there are multiple matches, all matched data will be updated as long as the transaction does not exceed any Salesforce limitations.</td></tr>
             <tr><td>Target Query String</td><td class='slds-truncate'>pushtopics__TargetQueryString__c</td><td>Used to store the SOQL saved in the target tab of the Q component.</td></tr>
             <tr><td>Transform in Before Triggers?</td><td class='slds-truncate'>pushtopics__TransformInBeforeTriggers__c</td><td>If checked, when the current object records are inserted or updated, DSP will evaluate the field values in the before trigger based on the field mappings. Any related data change such as aggregated child data is inserted/updated/deleted/undeleted, will cause the before trigger of the current Object to run and re-evaluate the fields. Add TriggerServices.execute() to the relevant objects triggers.</td></tr>

@@ -5,14 +5,16 @@ var catalog = JSON.parse(
         "Architecture": [
           {
             "Data Model": [
-              "Directional Data Processing",
-              "Single Connection Actions"
+              "Directional Executable",
+              "Single Connection Executable"
             ],
             "Process Flow": [
               "Insert",
               "Update",
               "Upsert",
-              "Delete"
+              "Delete",
+              "Undelete",
+              "Merge"
             ]
           }
         ],
