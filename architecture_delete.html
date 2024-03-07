@@ -15,14 +15,19 @@
         <div style="" class="container">
 
             <h1>Delete</h1>
-            
+
             <p>
-                A Delete Excutable can be used for deleting data existing in the target object. The <b>Target Matching Field</b> and its mapping must be defined,
-                which will be used by Data Sync Pro to check the existentence against the target object. If the record already exists in the target object,
-                DSP will perform the <b>delete</b>; if the record is new in the target, DSP will ignore and perform no actions. 
-                
+                A Delete Executable enables the removal of data from the target object. It requires the specification of
+                a <b>Target Matching Field</b> and its mapping, which Data Sync Pro employs to ascertain the presence of the
+                record within the target object. When a record is identified as existing in the target object, DSP will
+                proceed with its deletion. Conversely, if the record does not exist in the target—indicating it is a new
+                or non-existent entry—DSP will take no action. This ensures that deletion is conducted only on records
+                that are verified to exist within the target object, maintaining precise control over data management
+                operations.
+
             </p>
-            
+
+            <!--
             <div class='slds-box note-box_outer'>
                 <div class='note-box'>
                     <p class='title'>Note:</p>
@@ -44,17 +49,14 @@
                     </p> 
                 </div>
             </div>
+-->
 
-            <p>
-                Below diagram depicts the high level process of 
-                how DSP handles the <b>delete</b> Executables during execution. 
-            </p>
 
             <div class="image-outer">
-                <img src="resource/img/delete.png" style="width:70rem;max-width:150%"/>
+                <img src="resource/img/delete.png" style="width:70rem;max-width:150%" />
                 <div class="image-title"></div>
             </div>
-            
+
         </div>
     </div>
 </body>

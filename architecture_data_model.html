@@ -15,25 +15,70 @@
         <div style="" class="container">
 
             <h1>Data Model</h1>
-            
+
             <div class='v-space'></div>
             <p>
-                Data Sync Pro uses custom objects to store the metadata
-                <span class='formula'>(Connection, Direction, Pipeline, Executable, Field Mapping, Schedule, Pipeline Schedule, Executable Schedule, Apex Schedule)</span>
-                which is used to run the app, and to log the details<span class='formula'>(Pipeline Execution, Execution, Batch Execution)</span> during execution. 
-                This section explains the data models in the context of different usages at a high level.
-            </p>
+                Data Sync Pro employs a sophisticated set of custom objects designed to support its core functionalities
+                and log activities throughout the data management process. This structured approach facilitates the
+                app's operation by segregating metadata and logging information into distinct categories for enhanced
+                clarity and efficiency. The metadata that governs the operational aspects of Data Sync Pro includes
 
             <ul>
-
-                <li class="rli">
-                    <a href="architecture_directional_executable.html">Directional Executable</a>
+                <li class="rli"><span class='formula'>Connections</span>, establishing links to data sources and
+                    targets; </li>
+                <li class="rli"><span class='formula'>Directions</span>, defining the pathways for data flow;</li>
+                <li class="rli"><span class='formula'>Pipelines</span>, organizing multiple Executables in a sequence;
                 </li>
-                <li class="rli">
-                    <a href="architecture_single_connection_executable.html">Single Connection Executable</a>
-                </li>
+                <li class="rli"><span class='formula'>Executables</span>, representing individual data manipulation
+                    tasks; </li>
+                <li class="rli"><span class='formula'>Field Mappings</span>, specifying how fields from source to target
+                    are aligned;</li>
+                <li class="rli"><span class='formula'>Schedules</span>, managing when and how often these tasks are
+                    executed.</li>
             </ul>
-            
+            </p>
+
+            <p>
+                On the logging side, Data Sync Pro maintains detailed records of its operations through objects like
+                <span class='formula'>Pipeline Execution, Execution, and Batch Execution</span>. These logs are crucial
+                for monitoring the app’s
+                performance, debugging issues, and understanding the data flow's effectiveness and efficiency during
+                execution. By carefully organizing this information, Data Sync Pro ensures a high level of data
+                integrity, operational transparency, and the ability to fine-tune processes for optimal performance in
+                the complex Salesforce data management landscape.
+
+            </p>
+            <div class="v-space"></div>
+
+            <p>
+                Data Sync Pro offers two primary types of Executables, tailored to address diverse data management needs
+                within the Salesforce ecosystem: Directional Executables and Single Connection Executables.
+            </p>
+
+            <h2><a href="architecture_directional_executable.html">Directional Executable</a></h2>
+
+            <p class="double-indent">
+                Directional Executables are structured for operations that involve data flow between two different
+                connections, typically a source and a target. These Executables are adept at handling complex data
+                synchronization tasks, including data retrieval from the source, applying necessary transformations and
+                mappings, and performing various Data Manipulation Language (DML) operations such as insert, update,
+                upsert, delete, undelete, and merge on the target connection.
+            </p>
+
+
+            <h2><a href="architecture_single_connection_executable.html">Single Connection Executable</a></h2>
+            <p class="double-indent">
+                Single Connection Executables, while focused on actions within a singular connection, complement the
+                functionality provided by Directional Executables by offering precise control over data queries and DML
+                operations such as insert, update, upsert, and delete within the same system. These Executables are
+                adept at handling specific, targeted data management tasks, providing advanced capabilities for
+                filtering, matching, and transforming data. Additionally, they enable the creation of sophisticated
+                query-based data lists, further enhancing data access and manipulation directly within Salesforce
+                Lightning pages.
+
+            </p>
+            <div class="v-space"></div>
+            <div class="v-space"></div>
         </div>
     </div>
 </body>

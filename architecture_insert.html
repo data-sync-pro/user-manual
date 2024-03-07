@@ -15,13 +15,21 @@
         <div style="" class="container">
 
             <h1>Insert</h1>
-            
+
             <p>
-                An Insert Excutable can be used for inserting data into the target object. If the <b>Target Matching Field</b> and its mapping is defined,
-                Data Sync Pro will check the existentence against the target object. If the record already exists in the target object,
-                DSP will ignore the action, and only insert the data if the record is new in the target.
+                An Insert Executable is designed to streamline the process of adding new data into a specified target
+                object. This functionality is enhanced by the provision to define a <b>Target Matching Field</b> along with its
+                associated mapping, which Data Sync Pro utilizes to conduct a pre-insertion check against the target
+                object's existing records. This preemptive verification step is crucial; if Data Sync Pro discovers that
+                a record with the matching criteria already exists within the target object, it will automatically skip
+                the insertion action for that specific record. This ensures that duplicates are avoided, and only
+                records that are genuinely new and do not already exist in the target object are inserted. This method
+                not only maintains the integrity and cleanliness of the data within the target object but also optimizes
+                the data insertion process by preventing unnecessary duplication.
+
             </p>
 
+            <!--
             <div class='slds-box note-box_outer'>
                 <div class='note-box'>
                     <p class='title'>Note:</p>
@@ -42,18 +50,14 @@
                         the maximum data can be retrieved is 50 million.
                     </p> 
                 </div>
-            </div>
+            </div>-->
 
-            <p>
-                Below diagram depicts the high level process of 
-                how DSP handles the <b>insert</b> Executables during execution. 
-            </p>
 
             <div class="image-outer">
-                <img src="resource/img/insert.png" style="width:70rem;max-width:150%"/>
+                <img src="resource/img/insert.png" style="width:70rem;max-width:150%" />
                 <div class="image-title"></div>
             </div>
-            
+
         </div>
     </div>
 </body>

@@ -15,21 +15,23 @@
         <div style="" class="container">
 
             <h1>Upsert</h1>
-            
-            <p>
-                An Upsert Excutable can be used for both inserting and updating data in the target object. The <b>Target Matching Field</b> and its mapping must be defined.
-            </p>
-            <p>
-                
-                If the "Use Salesforce Upsert API" is unchecked, DSP will check the existentence against the target object, where if the record already exists in the target object,
-                DSP will perform the <b>update</b>, and if the record is new in the target, DSP will perform the <b>insert</b>. 
-            </p>
-            <p>
-                If the "Use Salesforce Upsert API" is checked, DSP will skip checking existence against the target, instead, use the native <b>upsert</b> API via the Target Matching Field(must be an External Id field).
 
+            <p>
+                An Upsert Executable in Data Sync Pro facilitates both the insertion of new records and the updating of
+                existing records within the target object, requiring the specification of a <b>Target Matching Field</b> and
+                its mapping. If the option "Use Salesforce Upsert API" is not selected, DSP conducts a preliminary check
+                to determine the presence of the record within the target object. In cases where the record is already
+                present, DSP executes an update operation based on the existing mappings. Conversely, if the record is
+                identified as new to the target object, DSP proceeds with an insertion. Alternatively, when the "Use
+                Salesforce Upsert API" option is activated, DSP bypasses the initial existence check and directly
+                employs Salesforce's native upsert functionality, which necessitates that the <b>Target Matching Field</b> is
+                designated as an External ID field. This approach leverages Salesforce's built-in capabilities to
+                streamline the upsert process, efficiently managing data insertion or update without manual checks for
+                record existence.
             </p>
-            
 
+
+            <!--
             <div class='slds-box note-box_outer'>
                 <div class='note-box'>
                     <p class='title'>Note:</p>
@@ -50,19 +52,13 @@
                         the maximum data can be retrieved is 50 million.
                     </p> 
                 </div>
-            </div>
-
-            <p>
-
-                Below diagram depicts the high level process of 
-                how DSP handles the <b>upsert</b> Executables during execution. 
-            </p>
+            </div>-->
 
             <div class="image-outer">
-                <img src="resource/img/upsert.png" style="width:70rem;max-width:150%"/>
+                <img src="resource/img/upsert.png" style="width:70rem;max-width:150%" />
                 <div class="image-title"></div>
             </div>
-            
+
         </div>
     </div>
 </body>

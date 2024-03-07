@@ -15,25 +15,23 @@
         <div style="" class="container">
 
             <h1>Undelete</h1>
-            
-            <p>
-                An Undelete Excutable can be used for undeleting data from the recycle bin. The <b>Target Matching Field</b> and its mapping must be defined,
-                which will be used by Data Sync Pro to check the existentence against the target object. If the record already exists in the target object,
-                DSP will perform the <b>undelete</b>; if the record is new in the target, DSP will ignore and perform no actions. 
-                
-            </p>
-            
 
             <p>
-                Below diagram depicts the high level process of 
-                how DSP handles the <b>undelete</b> Executables during execution. 
+                An Undelete Executable is crafted for restoring data previously deleted to the recycle bin. It
+                necessitates the definition of a <b>Target Matching Field</b> and its corresponding mapping, enabling Data Sync
+                Pro to verify whether the record exists within the target object. Should the record be found in the
+                target object, DSP will carry out the restoration. If, however, the record is not present in the target,
+                indicating it is either new or was not previously deleted, DSP will refrain from any action. It's
+                crucial to include "IsDeleted = TRUE" in the SOQL query for retrieving source data to ensure only
+                records marked as deleted are considered for restoration.
             </p>
+
 
             <div class="image-outer">
-                <img src="resource/img/undelete.png" style="width:70rem;max-width:150%"/>
+                <img src="resource/img/undelete.png" style="width:70rem;max-width:150%" />
                 <div class="image-title"></div>
             </div>
-            
+
         </div>
     </div>
 </body>
