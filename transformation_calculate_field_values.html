@@ -27,8 +27,6 @@
 
             
             
-            
-            
             <div class='back-to-top-box'><a href='#title'>&#8679; Back to Top</a></div>
 
 <h1 id='title'>Calculate Field Values</h1>
@@ -49,6 +47,10 @@
 <li><a href='#and_s'>&& (AND)</a></li>
 <li><a href='#or_s'>|| (OR)</a></li>
 <li><a href='#concatenate'>& (Concatenate)</a></li>
+<li><a href='#user_id'>$User.Id</a></li>
+<li><a href='#user_user_name'>$User.UserName</a></li>
+<li><a href='#user_email'>$User.Email</a></li>
+<li><a href='#user_profile_id'>$User.ProfileId</a></li>
 <li><a href='#add_days'>ADD_DAYS</a></li>
 <li><a href='#add_months'>ADD_MONTHS</a></li>
 <li><a href='#agg_avg'>AGG_AVG</a></li>
@@ -56,11 +58,11 @@
 <li><a href='#agg_count_distinct'>AGG_COUNT_DISTINCT</a></li>
 <li><a href='#agg_max'>AGG_MAX</a></li>
 <li><a href='#agg_min'>AGG_MIN</a></li>
+</ul></div><div style='flex:1'><ul tyle='flex:1'>
+
 <li><a href='#agg_sum'>AGG_SUM</a></li>
 <li><a href='#and'>AND</a></li>
 <li><a href='#base64_encode'>BASE64_ENCODE</a></li>
-</ul></div><div style='flex:1'><ul tyle='flex:1'>
-
 <li><a href='#base64_decode'>BASE64_DECODE</a></li>
 <li><a href='#blank_value'>BLANK_VALUE</a></li>
 <li><a href='#contains'>CONTAINS</a></li>
@@ -83,10 +85,10 @@
 <li><a href='#last_index_of_ignore_case'>LAST_INDEX_OF_IGNORE_CASE</a></li>
 <li><a href='#left'>LEFT</a></li>
 <li><a href='#len'>LEN</a></li>
-<li><a href='#map_value_contains'>MAP_VALUE_CONTAINS</a></li>
-<li><a href='#map_value_contains_ignore_case'>MAP_VALUE_CONTAINS_IGNORE_CASE</a></li>
 </ul></div><div style='flex:1'><ul tyle='flex:1'>
 
+<li><a href='#map_value_contains'>MAP_VALUE_CONTAINS</a></li>
+<li><a href='#map_value_contains_ignore_case'>MAP_VALUE_CONTAINS_IGNORE_CASE</a></li>
 <li><a href='#map_value_equals'>MAP_VALUE_EQUALS</a></li>
 <li><a href='#map_value_starts_with'>MAP_VALUE_STARTS_WITH</a></li>
 <li><a href='#map_value_starts_with_ignore_case'>MAP_VALUE_STARTS_WITH_IGNORE_CASE</a></li>
@@ -110,9 +112,9 @@
 <li><a href='#substring_after'>SUBSTRING_AFTER</a></li>
 <li><a href='#substring_after_last'>SUBSTRING_AFTER_LAST</a></li>
 <li><a href='#substring_before'>SUBSTRING_BEFORE</a></li>
-<li><a href='#substring_before_last'>SUBSTRING_BEFORE_LAST</a></li>
 </ul></div><div style='flex:1'><ul tyle='flex:1'>
 
+<li><a href='#substring_before_last'>SUBSTRING_BEFORE_LAST</a></li>
 <li><a href='#substring_between'>SUBSTRING_BETWEEN</a></li>
 <li><a href='#today'>TODAY</a></li>
 <li><a href='#to_blob'>TO_BLOB</a></li>
@@ -220,9 +222,35 @@
 </tbody></table></div>
 
 <div class='v-space'></div><div id='concatenate'><h2>& (Concatenate)</h2><table><tbody>
-<tr><td class='table-first-column'>Description:</td><td>Connects two or more strings.</td></tr>
+<tr><td class='table-first-column'>Description:</td><td>Connects two or more objects into a string.</td></tr>
 <tr><td class='table-first-column'>Use:</td><td><span class='formula'>string1 & string2</span> and replace each string with merge fields, expressions, or other values.</td></tr>
 <tr><td class='table-first-column'>Example:</td><td><span class='formula'>"Expense-" & Trip_Name__c & "-" & ExpenseNum__c</span> <div class='v-space-s'></div>This formula displays the text Expense- followed by trip name and the expense number. This is a text formula field that uses an expense number custom field.</td></tr>
+</tbody></table></div>
+
+<div class='v-space'></div><div id='user_id'><h2>$User.Id</h2><table><tbody>
+<tr><td class='table-first-column'>Description:</td><td>Returns the Id of the currently running user in the current org.</td></tr>
+<tr><td class='table-first-column'>Use:</td><td><span class='formula'>$User.Id</span></td></tr>
+</tbody></table></div>
+
+<div class='v-space'></div><div id='user_user_name'><h2>$User.UserName</h2><table><tbody>
+<tr><td class='table-first-column'>Description:</td><td>Returns the UserName of the currently running user in the current org.</td></tr>
+<tr><td class='table-first-column'>Use:</td><td><span class='formula'>$User.UserName</span></td></tr>
+</tbody></table></div>
+
+<div class='v-space'></div><div id='user_email'><h2>$User.Email</h2><table><tbody>
+<tr><td class='table-first-column'>Description:</td><td>Returns the Email of the currently running user in the current org.</td></tr>
+<tr><td class='table-first-column'>Use:</td><td><span class='formula'>$User.Email</span></td></tr>
+</tbody></table></div>
+
+<div class='v-space'></div><div id='user_profile_id'><h2>$User.ProfileId</h2><table><tbody>
+<tr><td class='table-first-column'>Description:</td><td>Returns the ProfileId of the currently running user in the current org.</td></tr>
+<tr><td class='table-first-column'>Use:</td><td><span class='formula'>$User.ProfileId</span></td></tr>
+</tbody></table></div>
+
+<div class='v-space'></div><div id='add_days'><h2>ADD_DAYS</h2><table><tbody>
+<tr><td class='table-first-column'>Description:</td><td>Returns the date that is the indicated number of days before or after a specified date. </td></tr>
+<tr><td class='table-first-column'>Use:</td><td><span class='formula'>ADD_DAYS (date/datetime, num)</span> and replace date with the start date and num with the number of days to be added.</td></tr>
+<tr><td class='table-first-column'>Example:</td><td><span class='formula'>ADD_DAYS(StartDate, 5)</span><div class='v-space-s'></div>Adds 5 days to the start date. For example, if the start date is <b>September 20, 2017</b>, the resulting date is <b>September 25, 2017</b>.</td></tr>
 </tbody></table></div>
 
 <div class='v-space'></div><div id='add_days'><h2>ADD_DAYS</h2><table><tbody>
@@ -325,6 +353,12 @@
 <tr><td class='table-first-column'>Description:</td><td>Returns a date value from year, month, and day values you enter. </td></tr>
 <tr><td class='table-first-column'>Use:</td><td><span class='formula'>DATE(year,month,day)</span> and use year with a four-digit year, month with a two-digit month, and day with a two-digit day.</td></tr>
 <tr><td class='table-first-column'>Example:</td><td><span class='formula'>DATE(2005, 01, 02)</span> creates a date field of January 2, 2005.</td></tr>
+</tbody></table></div>
+
+<div class='v-space'></div><div id='day'><h2>DAY</h2><table><tbody>
+<tr><td class='table-first-column'>Description:</td><td>Returns the day-of-month component of a Date.</td></tr>
+<tr><td class='table-first-column'>Use:</td><td><span class='formula'>DAY(date/datetime)</span></td></tr>
+<tr><td class='table-first-column'>Example:</td><td><span class='formula'>DAY(DATE(2024,1,25)</span> returns 25.</td></tr>
 </tbody></table></div>
 
 
@@ -497,6 +531,12 @@
 <tr><td class='table-first-column'>Tips:</td><td>Both <span class='formula'>SCRAMBLE</span> and <span class='formula'>RANDOMIZE</span> functions cannot be set in the mapping if the target connection is a production. An exception will be thrown if that happens when saving the mappings or during the execution.</td></tr>
 </tbody></table></div>
 
+<div class='v-space'></div><div id='random_item'><h2>RANDOM_ITEM</h2><table><tbody>
+<tr><td class='table-first-column'>Description:</td><td>Return a random item from the provided values in the parameters.</td></tr>
+<tr><td class='table-first-column'>Use:</td><td><span class='formula'>RANDOM_ITEM(item1, item2, item3….)</span></td></tr>
+<tr><td class='table-first-column'>Example:</td><td><span class='formula'>RANDOM_ITEM("a", "b", "c", "x", "y", "z")</span> returns either "a", "b", "c", "x", "y", "z" randomly.</td></tr>
+</tbody></table></div>
+
 <div class='v-space'></div><div id='replace'><h2>REPLACE</h2><table><tbody>
 <tr><td class='table-first-column'>Description:</td><td>Substitutes new text for old text in a text string.</td></tr>
 <tr><td class='table-first-column'>Use:</td><td><span class='formula'>REPLACE(string, old_string, new_string)</span></td></tr>
@@ -658,10 +698,10 @@
 <tr><td class='table-first-column'>Use:</td><td><span class='formula'>TO_UPPER_CASE(string, [locale])</span> and replace string with the field or text you wish to convert to uppercase, and locale with the optional two-character ISO language code or five-character locale code, if available.</td></tr>
 </tbody></table></div>
 
-<div class='v-space'></div><div id='trigger_flip'><h2>TRIGGER_FLIP</h2><table><tbody>
-<tr><td class='table-first-column'>Description:</td><td>Flip the assigned boolean field to a default value in a before insert/update trigger.</td></tr>
-<tr><td class='table-first-column'>Use:</td><td><span class='formula'>TRIGGER_FLIP(default_value)</span> flips the assigned boolean field to a default value and tracks the flipness in the memory; this makes sure the field is always set to a default value during save, and the TRIGGER_IS_FLIPPED can be used to determine whether the field was flipped or not later.</td></tr>
-<tr><td class='table-first-column'>Example:</td><td><span class='formula'>TRIGGER_FLIP(false)</span> returns false(default_value) and if the value was  the opposite - true before the flip, DSP will know it via the method <span class='formula'>TRIGGER_IS_FLIPPED(field_name)</span>. These two functions are particularly useful when designing capability oriented automations, where having a boolean field such as "Create_Task__c", when it is checked, flip it back to false so that after every save, it is always set to false as default value; but if it was checked for whatever reasons, fire the Create Task automation after checking <span class='formula'>TRIGGER_IS_FLIPPED("Create_Task__c")</span> returns true.</td></tr>
+<div class='v-space'></div><div id='trigger_flipper'><h2>TRIGGER_FLIPPER</h2><table><tbody>
+<tr><td class='table-first-column'>Description:</td><td>Flip the assigned boolean field to a default value in a before insert/update trigger and track it in memory, if the default_value is different than the field's current value or evaluated_value if provided.</td></tr>
+<tr><td class='table-first-column'>Use:</td><td><span class='formula'>TRIGGER_FLIPPER(default_value, [evaluated_value])</span> flips the assigned boolean field to a default value and tracks the flipness in the memory; this makes sure the field is always set to a default value during save, and the TRIGGER_IS_FLIPPED can be used to determine whether the field was flipped or not later.</td></tr>
+<tr><td class='table-first-column'>Example:</td><td><span class='formula'>TRIGGER_FLIPPER(false, Priority == "Urgent" && RecordType.DeveloperName == "Gold_Customer_Case")</span> returns false(default_value) and if the assigned field's value was  the opposite - true or the record meets the criteria - Priority is "Urgent" and the RecordType's DeveloperName is "Gold_Customer_Case", DSP will track it in memory, and the method <span class='formula'>TRIGGER_IS_FLIPPED(field_name)</span> will be able to tell whether the field was flipped or not. These two functions are particularly useful when designing capability oriented automations, where having a boolean field such as "Create_Task__c", when it is checked, flip it back to false so that after every save, it is always set to false as default value; but if it was checked for whatever reasons, fire the Create Task automation after checking <span class='formula'>TRIGGER_IS_FLIPPED("Create_Task__c")</span> returns true.</td></tr>
 </tbody></table></div>
 
 
@@ -686,7 +726,7 @@
 </tbody></table></div>
 
 <div class='v-space'></div><div id='trigger_is_flipped'><h2>TRIGGER_IS_FLIPPED</h2><table><tbody>
-<tr><td class='table-first-column'>Description:</td><td>Checks if the provided field_name was flipped by the <span class='formula'>TRIGGER_FLIP</span> function in a before insert/update trigger Executable prior to this evaluation.</td></tr>
+<tr><td class='table-first-column'>Description:</td><td>Checks if the provided field_name was flipped by the <span class='formula'>TRIGGER_FLIPPER</span> function in a before insert/update trigger Executable prior to this evaluation.</td></tr>
 <tr><td class='table-first-column'>Use:</td><td><span class='formula'>TRIGGER_IS_FLIPPED(field_name)</span></td></tr>
 <tr><td class='table-first-column'>Example:</td><td><span class='formula'>TRIGGER_IS_FLIPPED("IsActive__c")</span> returns true if the IsActive__c field was flipped to a default_value in a before trigger prior to the current evaluation.</td></tr>
 </tbody></table></div>
@@ -723,6 +763,11 @@
 
 <div class='v-space'></div>
 <div class='v-space'></div>
+
+
+
+
+
 
 
 

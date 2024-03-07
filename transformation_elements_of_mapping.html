@@ -15,24 +15,33 @@
         <div style="margin-bottom: 5rem;" class="container">
 
 
+            
+            
+
             <div class='back-to-top-box'><a href='#title'>&#8679; Back to Top</a></div>
             <h1 id='title'>Formula</h1>
             
             
             
-            <div><ul>
+            <div style='display: flex;'><div style='flex:1'><ul>
             <li><a href='#elements_of_a_formula'>Elements of a Formula</a></li>
             <li><a href='#math_operators'>Math Operators</a></li>
             <li><a href='#logical_operators'>Logical Operators</a></li>
             <li><a href='#text_operators'>Text Operators</a></li>
+            <li><a href='#global_variables'>Global Variables</a></li>
+            </ul></div><div style='flex:1'><ul tyle='flex:1'>
             <li><a href='#date_and_time_functions'>Date and Time Functions</a></li>
             <li><a href='#logical_functions'>Logical Functions</a></li>
             <li><a href='#math_functions'>Math Functions</a></li>
             <li><a href='#text_functions'>Text Functions</a></li>
+            <li><a href='#type_functions'>Type Functions</a></li>
+            </ul></div><div style='flex:1'><ul tyle='flex:1'>
             <li><a href='#aggregate_functions'>Aggregate Functions</a></li>
+            <li><a href='#masking_functions'>Masking Functions</a></li>
+            <li><a href='#trigger_functions'>Trigger Functions</a></li>
             <li><a href='#advanced_functions'>Advanced Functions</a></li>
             
-            </ul></div>
+            </ul></div></div>
             
             
             
@@ -41,6 +50,7 @@
             <table><thead><th class='table-column-name'>Element</th><th>Description</th></thead><tbody>
             <tr><td>Literal Value</td><td><p>A text string or number you enter that is not calculated or changed. For example, if you have a value that’s always multiplied by 2% of an amount, your formula would contain the literal value of 2% of that amount: <span class='formula'>ROUND((Amount*0.02), 2)</span><p>This example contains every possible part of a formula:</p><ul><li>A function called <span class='formula'>ROUND</span> used to return a number rounded to a specified number of decimal places.</li><li>A field reference called <span class='formula'>Amount</span>.</li><li>An operator, <span class='formula'>*</span>, that tells the formula builder to multiply the contents of the Amount field by the literal value, <span class='formula'>0.02</span>.</li><li>A literal number, <span class='formula'>0.02</span>. Use the decimal value for all percents. To include actual text in your formula, enclose it in quotes.</li><li>The last number <span class='formula'>2</span> in this formula is the input required for the <span class='formula'>ROUND</span> function that determines the number of decimal places to return.</li></ul></td></tr>
             <tr><td>Field Reference</td><td>Reference the value of another custom or standard field using a merge field. The syntax for a merge field is <span class='formula'>field_name</span> for a standard field or <span class='formula'>field_name__c</span> for a custom field. The syntax for a merge field on a related object is <span class='formula'>object_name__r.field_name</span>. <div class='slds-box note-box_outer'><div class='note-box'><p class='title'>Note:</p><p>The <span class='formula'>Field Reference</span> is case sensitive.</p></div></div></td></tr>
+            <tr><td>Global Variable</td><td>Currently the following global variables are supported in the field mappings - $User.Id, $User.UserName, $User.Email, $User.ProfileId.</td></tr>
             <tr><td>Function</td><td>A system-defined formula that can require input from you and returns a value or values. For example, <span class='formula'>TODAY()</span> does not require input but returns the current date. The <span class='formula'>TEXT(value)</span> function requires your percent, number, or currency input and returns text.</td></tr>
             <tr><td>Operator</td><td>A symbol that specifies the type of calculation to perform or the order in which to do it. For example, the <span class='formula'>+</span> symbol specifies two values should be added. The open and close parentheses specify which expressions you want evaluated first.</td></tr>
             <tr><td>Apex Class</td><td>A custom Apex class name that implements the package Apex interface <span class='formula'>pushtopics.TargetValueMapper</span> to handle complex transformation logic. The format to be defined in the mapping is  <span class='formula'>{!apexClassName}</span>.</td></tr>
@@ -72,33 +82,44 @@
             </tbody></table></div>
             
             
-            
             <div class='v-space'></div><div id='text_operators'><h2>Text Operators</h2>
             <table><thead><th class='table-column-name'>Operator</th><th>Description</th></thead><tbody>
             <tr><td>&amp; (Concatenate)</td><td>Connects two or more strings.</td></tr>
             </tbody></table></div>
+            
+            
+            <div class='v-space'></div><div id='global_variables'><h2>Global Variables</h2>
+            <table><thead><th class='table-column-name'>Operator</th><th>Description</th></thead><tbody>
+            <tr><td><a href='transformation_calculate_field_values.html#user_id'>$User.Id</A></td><td>Returns the Id of the currently running user in the current org.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#user_user_name'>$User.UserName</A></td><td>Returns the UserName of the currently running user in the current org.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#user_email'>$User.Email</A></td><td>Returns the Email of the currently running user in the current org.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#user_profile_id'>$User.ProfileId</A></td><td>Returns the ProfileId of the currently running user in the current org.</td></tr>
+            </tbody></table></div>
+            
             
             <div class='v-space'></div><div id='date_and_time_functions'><h2>Date and Time Functions</h2>
             <table><thead><th class='table-column-name'>Function</th><th>Description</th></thead><tbody>
             <tr><td><a href='transformation_calculate_field_values.html#add_days'>ADD_DAYS</A></td><td>Returns the date that is the indicated number of days before or after a specified date/datetime. </td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#add_months'>ADD_MONTHS</A></td><td>Returns the date that is the indicated number of months before or after a specified date/datetime. If the specified date is the last day of the month, the resulting date is the last day of the resulting month. Otherwise, the result has the same date component as the specified date.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#date'>DATE</A></td><td>Returns a date value from year, month, and day values you enter.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#day'>DAY</A></td><td>Returns the day-of-month component of a Date/Datetime.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#daysbetween'>DAYSBETWEEN</A></td><td>Returns the date difference between the two days.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#month'>MONTH</A></td><td>Returns the month-of-year component of a Date/Datetime.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#now'>NOW</A></td><td>Returns a datetime representing the current moment.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#today'>TODAY</A></td><td>Returns the current date as a date data type.</td></tr>
-            <tr><td><a href='transformation_calculate_field_values.html#to_date'>TO_DATE</A></td><td>Returns a date value for a datetime or text expression.</td></tr>
-            <tr><td><a href='transformation_calculate_field_values.html#to_datetime'>TO_DATETIME</A></td><td>Returns a datetime value for a text expression in the ISO 8601 format.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#year'>YEAR</A></td><td>Returns the year component of a Date.</td></tr>
             </tbody></table></div>
             
             <div class='v-space'></div><div id='logical_functions'><h2>Logical Functions</h2>
             <table><thead><th class='table-column-name'>Function</th><th>Description</th></thead><tbody>
             <tr><td><a href='transformation_calculate_field_values.html#and'>AND</A></td><td>Returns a TRUE response if all values are true; returns a FALSE response if one or more values are false.</td></tr>
-            <tr><td><a href='transformation_calculate_field_values.html#blank_value'>BLANK_VALUE</A></td><td>Determines if an expression has a value and returns a substitute expression if it doesn’t. If the expression has a value, returns the value of the expression.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#if'>IF</A></td><td>Determines if expressions are true or false. Returns a given value if true and another value if false.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#is_blank'>IS_BLANK</A></td><td>Determines if an expression has a value and returns TRUE if it does not. If it contains a value, this function returns FALSE.</td></tr>
+            
             <tr><td><a href='transformation_calculate_field_values.html#is_number'>IS_NUMBER</A></td><td>Determines if a text value is a number and returns TRUE if it is. Otherwise, it returns FALSE.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#not'>NOT</A></td><td>Returns FALSE for TRUE and TRUE for FALSE.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#or'>OR</A></td><td>Determines if expressions are true or false. Returns TRUE if any expression is true. Returns FALSE if all expressions are false.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#value_in'>VALUE_IN</A></td><td>Checks if a value is equal to any of the compare_values.</td></tr>
             </tbody></table></div>
             
             
@@ -113,29 +134,41 @@
             <div class='v-space'></div><div id='text_functions'><h2>Text Functions</h2>
             <table><thead><th class='table-column-name'>Function</th><th>Description</th></thead><tbody>
             <tr><td><a href='transformation_calculate_field_values.html#contains'>CONTAINS</A></td><td>Compares two arguments of text and returns TRUE if the first argument contains the second argument. If not, returns FALSE.</td></tr>
-            <tr><td><a href='transformation_calculate_field_values.html#index_of'>INDEX_OF</A></td><td>Returns the zero-based index of the first occurrence of the specified substring from the point of the given index.</td></tr>
-            <tr><td><a href='transformation_calculate_field_values.html#index_of_ignore_case'>INDEX_OF_IGNORE_CASE</A></td><td>Returns the zero-based index of the first occurrence of the specified substring without regard to case. </td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#contains_ignore_case'>CONTAINS_IGNORE_CASE</A></td><td>Compares two arguments of text and returns TRUE if the first argument contains the second argument ignoring case. If not, returns FALSE.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#ends_with'>ENDS_WITH</A></td><td>Determines if string ends with specific characters and returns TRUE if it does, case sensitive.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#ends_with_ignore_case'>ENDS_WITH_IGNORE_CASE</A></td><td>Determines if string ends with specific characters and returns TRUE if it does, case insensitive.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#ends_with'>ENDS_WITH</A></td><td>Determines if string ends with specific characters and returns TRUE if it does, case sensitive.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#ends_with_ignore_case'>ENDS_WITH_IGNORE_CASE</A></td><td>Determines if string ends with specific characters and returns TRUE if it does, case insensitive.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#escape_html4'>ESCAPE_HTML4</A></td><td>Escapes the characters in a String using HTML 4.0 entities. </td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#escape_xml'>ESCAPE_XML</A></td><td>Escapes the characters in a String using XML entities. </td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#last_index_of'>LAST_INDEX_OF</A></td><td>Returns the index of the last occurrence of the specified substring, starting from the character at index 0 and ending at the specified index.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#last_index_of_ignore_case'>LAST_INDEX_OF_IGNORE_CASE</A></td><td>Returns the index of the last occurrence of the specified substring regardless of case, starting from the character at index 0 and ending at the specified index.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#left'>LEFT</A></td><td>Returns the specified number of characters from the beginning of a text string.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#len'>LEN</A></td><td>Returns the number of characters in a specified text string.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#replace'>REPLACE</A></td><td>Substitutes new text for old text in a text string.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#right'>RIGHT</A></td><td>Returns the specified number of characters from the end of a text string.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#starts_with'>STARTS_WITH</A></td><td>Determines if text begins with specific characters and returns TRUE if it does. Returns FALSE if it doesn't.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#starts_with_ignore_case'>STARTS_WITH_IGNORE_CASE</A></td><td>Determines if text begins with specific characters and returns TRUE if it does, ignoring case. Returns FALSE if it doesn't.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#substring'>SUBSTRING</A></td><td>Returns a new String that begins with the character at the specified zero-based startIndex and extends to the character at endIndex - 1.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#substring_after'>SUBSTRING_AFTER</A></td><td>Returns the substring that occurs after the first occurrence of the specified separator.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#substring_after_last'>SUBSTRING_AFTER_LAST</A></td><td>Returns the substring that occurs after the last occurrence of the specified separator.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#substring_before'>SUBSTRING_BEFORE</A></td><td>Returns the substring that occurs before the first occurrence of the specified separator.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#substring_before_last'>SUBSTRING_BEFORE_LAST</A></td><td>Returns the substring that occurs before the last occurrence of the specified separator.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#substring_between'>SUBSTRING_BETWEEN</A></td><td>Returns the substring that occurs between the two specified Strings.</td></tr>
-            <tr><td><a href='transformation_calculate_field_values.html#replace'>REPLACE</A></td><td>Substitutes new text for old text in a text string.</td></tr>
-            <tr><td><a href='transformation_calculate_field_values.html#right'>RIGHT</A></td><td>Returns the specified number of characters from the end of a text string.</td></tr>
-            <tr><td><a href='transformation_calculate_field_values.html#to_boolean'>TO_BOOLEAN</A></td><td>Converts a string to a boolean.</td></tr>
-            <tr><td><a href='transformation_calculate_field_values.html#to_blob'>TO_BLOB</A></td><td>Converts a text string to a blob.</td></tr>
-            <tr><td><a href='transformation_calculate_field_values.html#to_decimal'>TO_DECIMAL</A></td><td>Converts a text string to a decimal.</td></tr>
-            <tr><td><a href='transformation_calculate_field_values.html#to_integer'>TO_INTEGER</A></td><td>Converts a string/decimal/double/float/integer value to an integer.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#to_lower_case'>TO_LOWER_CASE</A></td><td>Converts all letters in the specified text string to uppercase. Any characters that are not letters are unaffected by this function. </td></tr>
-            <tr><td><a href='transformation_calculate_field_values.html#to_string'>TO_STRING</A></td><td>Converts a percent, number, date, date/time, or currency type field into text anywhere formulas are used, equals to String.valueOf in APEX. </td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#to_upper_case'>TO_UPPER_CASE</A></td><td>Converts all letters in the specified text string to uppercase. Any characters that are not letters are unaffected by this function. </td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#trim'>TRIM</A></td><td>Removes the spaces and tabs from the beginning and end of a text string.</td></tr>
+            </tbody></table></div>
+            
+            <div class='v-space'></div><div id='type_functions'><h2>Type Functions</h2>
+            <table><thead><th class='table-column-name'>Function</th><th>Description</th></thead><tbody>
+            <tr><td><a href='transformation_calculate_field_values.html#to_boolean'>TO_BOOLEAN</A></td><td>Converts a string to a boolean.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#to_blob'>TO_BLOB</A></td><td>Converts a text string to a blob.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#to_date'>TO_DATE</A></td><td>Returns a date value for a datetime or text expression.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#to_datetime'>TO_DATETIME</A></td><td>Returns a datetime value for a text expression in the ISO 8601 format.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#to_decimal'>TO_DECIMAL</A></td><td>Converts a text string to a decimal.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#to_integer'>TO_INTEGER</A></td><td>Converts a string/decimal/double/float/integer value to an integer.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#to_string'>TO_STRING</A></td><td>Converts a percent, number, date, date/time, or currency type field into text anywhere formulas are used, equals to String.valueOf in APEX. </td></tr>
             </tbody></table></div>
             
             <div class='v-space'></div><div id='aggregate_functions'><h2>Aggregate Functions</h2>
@@ -148,18 +181,45 @@
             <tr><td><a href='transformation_calculate_field_values.html#agg_sum'>AGG_SUM</A></td><td>Returns the total sum of a numeric field matching the query criteria(optional) on the aggregate object.</td></tr>
             </tbody></table></div>
             
+            <div class='v-space'></div><div id='masking_functions'><h2>Masking Functions</h2>
+            <table><thead><th class='table-column-name'>Function</th><th>Description</th></thead><tbody>
+            <tr><td><a href='transformation_calculate_field_values.html#scramble'>SCRAMBLE</A></td><td>Returns the field value on a random record within the retrieved source data. </td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#randomize'>RANDOMIZE</A></td><td>Masks the input value randomly based on the data types.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#random_item'>RANDOM_ITEM</A></td><td>Return a random item from the provided values in the parameters.</td></tr>
+            </tbody></table></div>
+            <div class='v-space'></div>
+            
+            
+            <div class='v-space'></div><div id='trigger_functions'><h2>Trigger Functions</h2>
+            <table><thead><th class='table-column-name'>Function</th><th>Description</th></thead><tbody>
+            <tr><td><a href='transformation_calculate_field_values.html#trigger_flipper'>TRIGGER_FLIPPER</A></td><td>Flip the assigned boolean field to a default value in a before insert/update trigger and track it in memory, if the default_value is different than the field's current value or evaluated_value if provided.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#trigger_is_changed'>TRIGGER_IS_CHANGED</A></td><td>Checks the provided field_names, if any field is changed in the update DML operation, returns true.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#trigger_is_changed_from'>TRIGGER_IS_CHANGED_FROM</A></td><td>Checks the provided field_name, if the field is changed in the update DML operation, and the old value is among one of the provided old_value, returns true.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#trigger_is_changed_to'>TRIGGER_IS_CHANGED_TO</A></td><td>Checks the provided field_name, if the field is changed in the update DML operation, and the old value is among one of the provided old_value, returns true.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#trigger_is_flipped'>TRIGGER_IS_FLIPPED</A></td><td>Checks if the provided field_name was flipped by the <span class='formula'>TRIGGER_FLIPPER</span> function in a before insert/update trigger Executable prior to this evaluation.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#trigger_old_value'>TRIGGER_OLD_VALUE</A></td><td>Returns the old value of the specified field in an update trigger.</td></tr>
+            </tbody></table></div>
+            
             
             <div class='v-space'></div><div id='advanced_functions'><h2>Advanced Functions</h2>
             <table><thead><th class='table-column-name'>Function</th><th>Description</th></thead><tbody>
-            
-            <tr><td><a href='transformation_calculate_field_values.html#scramble'>SCRAMBLE</A></td><td>Returns the field value on a random record within the retrieved source data. </td></tr>
-            <tr><td><a href='transformation_calculate_field_values.html#randomize'>RANDOMIZE</A></td><td>Masks the input value randomly based on the data types.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#blank_value'>BLANK_VALUE</A></td><td>Determines if an expression has a value and returns a substitute expression if it doesn’t. If the expression has a value, returns the value of the expression.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#has_permission'>HAS_PERMISSION</A></td><td>Determines if the current running user has a custom permission in the current org.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#map_value_contains'>MAP_VALUE_CONTAINS</A></td><td>Evaluate each substring against the value provided in the first parameter, returning the corresponding value if the string includes the substring, or a default value if it does not.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#map_value_contains_ignore_case'>MAP_VALUE_CONTAINS_IGNORE_CASE</A></td><td>Evaluate each substring against the value provided in the first parameter, case insensitive, and returning the corresponding value if the string includes the substring, or a default value if it does not.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#map_value_equals'>MAP_VALUE_EQUALS</A></td><td>Evaluate each compare_value against the value provided in the first parameter, returning the corresponding value if the value equals the compare_string, or a default value if it does not. This function takes any type of parameters and compare uses the "=" sign underneath, other than just strings, which is different than other MAP_VALUE_ functions.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#map_value_starts_with'>MAP_VALUE_STARTS_WITH</A></td><td>Evaluate each substring against the value provided in the first parameter, returning the corresponding value if the string starts with the substring, or a default value if it does not.</td></tr>
+            <tr><td><a href='transformation_calculate_field_values.html#map_value_starts_with_ignore_case'>MAP_VALUE_STARTS_WITH_IGNORE_CASE</A></td><td>Evaluate each substring against the value provided in the first parameter, case insensitive, and returning the corresponding value if the string starts with the substring, or a default value if it does not.</td></tr>
             <tr><td><a href='transformation_calculate_field_values.html#vlookup'>VLOOKUP</A></td><td>Returns a value by looking up a related value on a custom object similar to the <span class='formula'>VLOOKUP()</span> Excel function.</td></tr>
             </tbody></table></div>
             <div class='v-space'></div>
 
 
-            
+
+
+
+
+
         </div>
     </div>
 </body>
