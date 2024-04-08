@@ -22,7 +22,7 @@
                 Salesforce application, developed entirely using Apex and Lightning Web Components (LWC), it operates
                 exclusively within your Salesforce org. This ensures that no data is ever transmitted to external
                 systems or databases without your explicit authorization. Our commitment to security is underscored by
-                our successful completion of Salesforce's rigorous security review, earning us a spot on the AppExchange
+                our successful completion of Salesforce's rigorous security review, securing our position on the AppExchange
                 as a trusted managed app. Notably, Data Sync Pro does not include any named credentials or remote site
                 settings in the package installation, reinforcing our guarantee that your data remains confined within
                 the bounds of authorized users.
@@ -40,18 +40,19 @@
                 "Is Current Org?", Data Sync Pro seamlessly executes DML/Query actions under the currently logged-in
                 user's context, eliminating the need for separate credentials. Alternatively, when utilizing a
                 Salesforce Named Credential, set up by your system admin or developers, Data Sync Pro leverages
-                Salesforce merged fields for authentication, adhering to best practices as outlined in Salesforce
-                <a target="_blank" href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_callouts_named_credentials_merge_fields.htm">documentation</a>. This approach ensures credential security at the platform level, where app developers can
+                Salesforce merged fields for authentication, adhering to best practices as outlined in 
+                <a target="_blank" href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_callouts_named_credentials_merge_fields.htm">Salesforce documentation</a>. 
+                This approach ensures credential security at the platform level, where app developers can
                 reference but not access credentials directly. Supporting both OAuth2 and Username & Password flows,
                 Data Sync Pro requires only the Named Credential's name in the connection record. Furthermore, for
-                Username & Password flow, should the authorized org's domain URL require it, Data Sync Pro can
-                automatically create a Remote Site Setting entry, facilitating secure, authorized outbound actions.
+                Username & Password flow, Data Sync Pro
+                automatically creates a Remote Site Setting entry for the connected org, facilitating secure, authorized outbound actions.
             </p>
 
             <p>
 
                 When conducting data operations with connected orgs, the user's permission settings, such as profiles,
-                permission sets, OAuth scopes, and system validations, are enforced. Salesforce ensures security
+                permission sets, sharing settings, OAuth scopes, and system validations, are enforced. Salesforce ensures security
                 settings at the platform level, and DSP adheres to all standards and best practices set forth by
                 Salesforce for ISV partners. This includes precautions against SOQL injections, employing "with sharing"
                 in Apex classes, verifying field-level and enforcing record-level access during data queries and
