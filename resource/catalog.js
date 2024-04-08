@@ -4,6 +4,7 @@ var catalog = JSON.parse(
         "Post-Installation": [],
         "Architecture": [
           {
+            "Auth. & Security": [],
             "Data Model": [
               "Directional Executable",
               "Single Connection Executable"
@@ -193,7 +194,7 @@ function getSectionHtml2() {
 
 function getHtmlFileName(sectionName){
 
-    return sectionName.toLowerCase().replaceAll('.', ' ').replaceAll(',', ' ').replaceAll('+', ' ').replaceAll('-', ' ').replaceAll(/\s+/g, '_');
+    return sectionName.toLowerCase().replaceAll('.', ' ').replaceAll('&', ' ').replaceAll(',', ' ').replaceAll('+', ' ').replaceAll('-', ' ').replaceAll(/\s+/g, '_');
 }
 
 function getHtmlFileNameSubSection(sectionName, subSectionName){
