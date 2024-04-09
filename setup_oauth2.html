@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+
+            <h1>OAuth2 Flow</h1>
+
+            <div class='v-space'></div>
+
+            <p>Data Sync facilitates the OAuth2 flow through Salesforce's robust security features, including Connected
+                App, Auth. Provider, and Named Credential. To configure this, let's go through the setup process,
+                assuming our goal is to set up a connection in the DSP Installation Org with a Connection to the org
+                named "Org B":
+            </p>
+
+            <ul>
+                <li class="pli">
+                    <strong>Create a Connected App in Org B:</strong>
+
+                    Navigate to the App Manager within Org B to create a new Connected App. Ensure you activate the
+                    OAuth Flow. Initially, use a temporary URL for the Callback URL. In the "scope" section, select
+                    "refresh_token" and include any additional scopes required for the integration user's data
+                    access.
+
+                </li>
+                <li class="pli">
+                    <strong>Create an Auth. Provider in DSP Installation Org:</strong>
+                    <ul>
+                        <li class="sli">Copy and paste the Consumer Key and Consumer Scret from the Org B's Connected
+                            App to the Auth. Provider.</li>
+                        <li class="sli">Authorize Endpoint URL: Use
+                            <code>"https://test.salesforce.com/services/oauth2/authorize"</code> for a sandbox
+                            environment or
+                            <code>"https://login.salesforce.com/services/oauth2/authorize"</code> for production.
+                        </li>
+                        <li class="sli">Token Endpoint URL,: Use
+                            <code>"https://test.salesforce.com/services/oauth2/token"</code> for a sandbox environment
+                            or
+                            <code>"https://login.salesforce.com/services/oauth2/token"</code> for production.
+                        </li>
+                        <li class="sli">Default Scopes: Set <code>"refresh_token"</code> and any additional scopes
+                            enabled in Org B's Connected App. Use space to seperate the scopes.</li>
+                    </ul>
+                </li>
+                <li class="pli">
+                    <strong>Update Callback URL in Org B's Connected App:</strong>
+
+                    Upon save of the Auth. Provider, a Callback URL will be generated. Update the Connected App's
+                    Callback URL to match the value.
+                    In this example, the URL is
+                    <code>"https://enterprise-e--dev.sandbox.my.salesforce.com/services/authcallback/Salesforce_Org_B"</code>.
+
+                </li>
+
+                <li class="pli">
+                    <strong>Create Named Credential in DSP Installation Org:</strong>
+                    <ul>
+                        <li class="sli">URL: the domain URL of the Org B. This can be found in the "My Domain Settings".
+                        </li>
+                        <li class="sli">Identity Type: Select <code>"Named Principal"</code>.</li>
+                        <li class="sli">Authentication Protocol: Choose <code>"OAuth 2.0"</code>.</li>
+                        <li class="sli">Auth. Provider: Pick the one you just set up.</li>
+                        <li class="sli">Scope: Use "refresh_token full" or any scopes you need.</li>
+                        <li class="sli">Enable "Generate Authorization Header," "Allow Merge Fields in HTTP Header," and
+                            "Allow Merge Fields in HTTP Body."</li>
+                    </ul>
+                </li>
+                <li class="pli">
+                    <strong>Test Connection:</strong> Verify that the setup works as expected.
+                </li>
+            </ul>
+            <div class="v-space"></div>
+
+            <p>For a more detailed walkthrough, refer to the instructional video below:</p>
+            <div class="v-space"></div>
+
+
+
+
+            <div class="image-outer">
+                <img src="resource/img/named_credential_oauth2.gif" style="width:70rem;max-width:150%" />
+                <div class="image-title"></div>
+            </div>
+
+            <div class="v-space"></div>
+            <div class="v-space"></div>
+        </div>
+    </div>
+</body>
+
+</html>

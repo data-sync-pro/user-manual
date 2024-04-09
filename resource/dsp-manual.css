@@ -202,6 +202,12 @@ li{
     font-size:1.0rem;
 }
 
+.sli{
+    list-style-type: square; 
+    font-size:1.0rem;
+}
+
+
 .table-column-name{
     width: 20%;
 }

@@ -1,7 +1,6 @@
 var catalog = JSON.parse(
     `
     {
-        "Post-Installation": [],
         "Architecture": [
           {
             "Auth. & Security": [],
@@ -18,6 +17,16 @@ var catalog = JSON.parse(
               "Merge"
             ]
           }
+        ],
+        "Setup":[{
+                
+                "Permissions":[],
+                "Connections":[
+                    "Current Org",
+                    "Username & Password",
+                    "OAuth2"
+                ]
+            }
         ],
         "Metadata":[
           {
