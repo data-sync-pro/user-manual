@@ -20,30 +20,13 @@ var catalog = JSON.parse(
         ],
         "Setup":[{
                 
-                "Permissions":[],
-                "Connections":[
-                    "Current Org",
+                "Permission":[],
+                "Connection":[
+                    "Is Current Org",
                     "Username & Password",
                     "OAuth2"
                 ]
             }
-        ],
-        "Metadata":[
-          {
-            "Connection": [
-              "Auth. Options",
-              "Connection Quick Actions"
-            ],
-            "Direction": [],
-            "Pipeline": [
-              "Pipeline Builder",
-              "Determine Sequence",
-              "Pipeline Quick Actions"
-            ],
-            "Executable": [
-              "Executable Quick Actions"
-            ]
-          }
         ],
 
         "Transformation": [
@@ -53,6 +36,24 @@ var catalog = JSON.parse(
       }
     `
 );
+/*
+"Metadata":[
+  {
+    "Connection": [
+      "Auth. Options",
+      "Connection Quick Actions"
+    ],
+    "Direction": [],
+    "Pipeline": [
+      "Pipeline Builder",
+      "Determine Sequence",
+      "Pipeline Quick Actions"
+    ],
+    "Executable": [
+      "Executable Quick Actions"
+    ]
+  }
+],*/
 
 function getNavigationHtml(){
 
