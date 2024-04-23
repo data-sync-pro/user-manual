@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px; ">
+        </div>
+
+        <div style="" class="container">
+
+            <h1>Permissions</h1>
+
+            <p>
+                Data Sync Pro primarily utilizes Permission Sets as a fundamental mechanism for security control. This
+                approach is supplemented with Custom Permissions and Sharing Rules, allowing for granular and flexible
+                management of
+                access rights within the system. This combination ensures robust security measures are in place to
+                safeguard data and control user actions effectively.</p>
+
+
+            <div class='v-space'></div>
+
+
+            <h2>Permission Sets</h2>
+
+            <p>Here is the list of Permission Sets included in the Data Sync Pro package.
+
+            </p>
+
+
+            <div>
+
+                <ul>
+
+                    <li class="rli">
+                        <strong>DSP: Data Sync Pro Administrator: </strong>grants "Modify All" access to all DSP
+                        objects, and includes all custom permissions within the DSP package. This is the master
+                        permission
+                        for Data Sync Pro.
+                    </li>
+
+                    <li class="rli">
+                        <strong>DSP: Data Sync Pro User: </strong>provides users with essential access to
+                        Executables(private). If Executables are shared through sharing(read), users will be able to
+                        perform
+                        actions in Q, Automation, or Record Actions, but not Batches. To enable batch execution, add
+                        "DSP: Create Executions".
+
+                        <br>If an Executable record is shared with "edit" access, users are granted
+                        "super user"
+                        privileges for that Executable, allowing them to make necessary changes independently. However,
+                        it's important to note that they are not permitted to modify the fields - Direction, Connection,
+                        Source Object API Name, or Target Object API Name.
+                    </li>
+
+                    <li class="rli">
+                        <strong>DSP: Create Executions: </strong> grants create and edit access to execution related
+                        objects including Pipeline Execution, Execution and Batch Execution.
+                        Apply this permission set in conjunction with the "DSP: Data Sync Pro User" to enable users to
+                        create and edit Execution records to execute batch jobs on-demand or in schedules.
+                    </li>
+
+                    <li class="rli">
+                        <strong>DSP: Create Executables: </strong>provides the create and edit permission to the
+                        Executable object. Apply this permission set in conjunction with the "DSP: Data Sync Pro User"
+                        to enable users to create Executables.
+                    </li>
+
+                    <li class="rli">
+                        <strong>DSP: Download Data in Q: </strong>grants users the permission to download data from the
+                        Q component. This is just a permission set with the custom permission "DSP: Download Data in Q"
+                        enabled.
+                    </li>
+
+                    <li style="list-style-type:none">
+
+                        <div class='v-space'></div>
+                        <div class="image-outer">
+                            <img src="resource/img/permission_sets.png" onclick="window.open(this.src)" />
+                            <div class="image-title">Permission Sets</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class='v-space'></div>
+
+
+            <h2>Custom Permissions</h2>
+
+            <p>Here is the list of Custom Permission included in the Data Sync Pro package. Add them to permission sets
+                to grant users the appropriate accesses.
+            </p>
+
+            <div>
+                <ul>
+
+                    <li class="rli">
+                        <strong>DSP: Access Q on Remote Connections: </strong>
+                        If a Connection is remote, the Q component operates under the context of the integration user.
+                        DSP users need this permission to run queries using the Q component from the Connection record
+                        page.
+                    </li>
+
+                    <li class="rli">
+                        <strong>DSP: Download Data in Q: </strong>grants users the permission to download data from the
+                        Q component.
+                    </li>
+
+                    <li style="list-style-type:none">
+
+                        <div class='v-space'></div>
+                        <div class="image-outer">
+                            <img src="resource/img/custom_permissions.png" onclick="window.open(this.src)" />
+                            <div class="image-title">Custom Permissions</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class='v-space'></div>
+
+
+            <h2>Post-Installation Sharing Rule</h2>
+
+            <p>
+
+
+                The Executable object in Data Sync Pro features a checkbox field titled "All Internal Users Have Read
+                Access?". This field is integral for setting up sharing rules post-package installation(manual setup).
+                When this field
+                is activated, Executables are made accessible to all internal users. Given that Data Sync Pro
+                Executables function as a rules engine in automations, record actions, and executable Q components, it
+                is crucial for users to have read access to these Executables in order to utilize their features. After
+                installing DSP, ensure to create the sharing rule as the below screenshot, and check the field for any
+                Executables that need to be accessible to all
+                internal users, thereby providing the necessary access.
+            </p>
+            <p>
+                Also note that if an Executable is enabled with automation, the "All Internal Users Have Read Access?"
+                field is automatically set to true.
+            </p>
+
+            <div>
+                <ul>
+                    <li style="list-style-type:none">
+
+                        <div class='v-space'></div>
+                        <div class="image-outer">
+                            <img src="resource/img/executable_sharing_rule.png" onclick="window.open(this.src)" />
+                            <div class="image-title">Post-Installation Sharing Rule</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class='v-space'></div>
+        </div>
+    </div>
+</body>
+
+</html>

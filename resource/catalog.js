@@ -20,8 +20,8 @@ var catalog = JSON.parse(
         ],
         "Setup":[{
                 
-                "Permission":[],
-                "Connection":[
+                "Permissions":[],
+                "Connections":[
                     "Is Current Org",
                     "Username & Password",
                     "OAuth2"
