@@ -21,10 +21,13 @@ var catalog = JSON.parse(
         "Setup":[{
                 
                 "Permissions":[],
-                "Connections":[
+                "Connection":[
                     "Is Current Org",
                     "Username & Password",
                     "OAuth2"
+                ],
+                "Direction":[
+                    "Quick Executable(Direction)"
                 ]
             }
         ],
@@ -204,7 +207,7 @@ function getSectionHtml2() {
 
 function getHtmlFileName(sectionName){
 
-    return sectionName.toLowerCase().replaceAll('.', ' ').replaceAll('&', ' ').replaceAll(',', ' ').replaceAll('+', ' ').replaceAll('-', ' ').replaceAll(/\s+/g, '_');
+    return sectionName.toLowerCase().replaceAll('.', ' ').replaceAll('(', ' ').replaceAll(')', '').replaceAll('&', ' ').replaceAll(',', ' ').replaceAll('+', ' ').replaceAll('-', ' ').replaceAll(/\s+/g, '_');
 }
 
 function getHtmlFileNameSubSection(sectionName, subSectionName){
