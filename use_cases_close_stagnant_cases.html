@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px;">
+        </div>
+
+        <div style="margin-bottom: 5rem;" class="container">
+
+
+            
+        
+            
+            <h1>Close Stagnant Cases</h1>
+            
+            <div class='v-space'></div>
+
+
+            <p>Follow the below steps to create an Executable to run a batch job to close staganant Cases.</p>
+            <ul>
+                <li class="pli">Naviage to the "Current => Current" Direction where both the source and target Connections are the current org.</li>
+                <li class="pli">Click "New Executable", and set the following details:
+                    <ul>
+                        <li class="sli">Source Object API Name: <b>Case</b></li>
+                        <li class="sli">Target Object API Name: <b>Case</b></li>
+                        <li class="sli">Source Matching Field: <b>Id</b></li>
+                        <li class="sli">Target Matching Field: <b>Case</b></li>
+                        <li class="sli">Action: <b>Update</b></li>
+                        <li class="sli">Name: <b>Close Stagnant Cases</b></li>
+                    </ul>
+                </li>
+                <li class="pli">Navigate to the "Retrieve" step, update the SOQL query to filter and preview the source data:
+                    
+                    <div class="formula">SELECT CaseNumber, Subject, Type, Priority, Origin, Status, CreatedDate, LastModifiedDate, Account.Name, Contact.Name, TYPEOF Owner WHEN User THEN Name ELSE Name END FROM Case WHERE CreatedDate = LAST_QUARTER AND IsClosed = FALSE AND Status = 'New' AND LastModifiedDate < LAST_N_DAYS:7 ORDER BY LastModifiedDate DESC NULLS LAST</div>
+                </li>
+                <li class="pli">Navigate to the "Mapping" step, add the mapping formula to the "Status" field.</li>
+                <li class="pli">Navigate to the "Verify" step, add "Status" field to the SELECT clause of the target SOQL.</li>
+                <li class="pli">Navigate back to the "Retrieve" step, click any Case to verify the transformation logic defined in the "Mapping" step.</li>
+                <li class="pli">Click "Execute Batch" to execute the batch job on-demand.</li>
+                <li class="pli">Click any Batch Execution to view the execution log and verify the results.</li>
+                <li class="pli">Add a Schedule record as related list to the Executable to run the batch job on the desired schedule basis.</li>
+            </ul>
+            
+
+
+            <div class="image-outer" style="max-width: 150%;">
+                <video width="100%" controls autoplay muted>
+                    <source src="resource/img/close_stagnant_cases.mp4" type="video/mp4">
+                </video>
+
+                <div class="image-title"></div>
+            </div>
+            
+            <div class='v-space'></div>
+
+
+
+
+
+
+
+        </div>
+    </div>
+</body>
+
+</html>

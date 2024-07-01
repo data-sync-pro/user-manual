@@ -25,9 +25,6 @@ var catalog = JSON.parse(
                     "Is Current Org",
                     "Username & Password",
                     "OAuth2"
-                ],
-                "Direction":[
-                    "Quick Executable(Direction)"
                 ]
             }
         ],
@@ -35,11 +32,20 @@ var catalog = JSON.parse(
         "Transformation": [
           "Elements of Mapping",
           "Calculate Field Values"
-        ]
+        ],
+
+        "Use Cases": [{
+            
+            "Batch Jobs": ["Close Stagnant Cases"],
+            "Data Deployments": ["Deploy DSP Configurations"]
+        }]
       }
     `
 );
 /*
+                "Direction":[
+                    "Quick Executable(Direction)"
+                ]
 "Metadata":[
   {
     "Connection": [
@@ -127,9 +133,6 @@ function getSectionHtml() {
                             //console.log('grandChildren[k]: ' + grandChildren[k]);
     
                             let fileNameGrandSection = getHtmlFileNameSubSection(section, grandChildren[k]);
-
-                            console.log("fileNameSection: " + fileNameGrandSection);
-                            console.log("currentFileName: " + currentFileName());
     
                             let activeClassNameSubSection = currentFileName() == fileNameGrandSection ? 'slds-is-active' : 'slds-is-inactive';
                 
