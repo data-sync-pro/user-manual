@@ -41,7 +41,7 @@ var catalog = JSON.parse(
                 "Delete Obsolete Cases",
                 "Restore Deleted Cases"
             ],
-            "Data Deployments": ["Deploy DSP Configurations"]
+            "Record-Based Configurations Deployment": ["Deploy DSP Configurations"]
         }]
       }
     `
