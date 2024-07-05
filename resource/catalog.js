@@ -36,7 +36,11 @@ var catalog = JSON.parse(
 
         "Use Cases": [{
             
-            "Batch Jobs": ["Close Stagnant Cases"],
+            "Batch Jobs": [
+                "Close Stagnant Cases",
+                "Delete Obsolete Cases",
+                "Restore Deleted Cases"
+            ],
             "Data Deployments": ["Deploy DSP Configurations"]
         }]
       }

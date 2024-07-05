@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px;">
+        </div>
+
+        <div style="margin-bottom: 5rem;" class="container">
+
+            
+            <h1>Restore Deleted Cases</h1>
+            
+            <div class='v-space'></div>
+
+
+            <p>Follow the steps below to create an Executable for running a batch job to restore deleted cases.</p>
+            <ul>
+                <li class="pli">Naviage to the "Current => Current" Direction where both the source and target Connections are the current org.</li>
+                <li class="pli">Click "New Executable", and set the following details:
+                    <ul>
+                        <li class="sli">Source Object API Name: <b>Case</b></li>
+                        <li class="sli">Target Object API Name: <b>Case</b></li>
+                        <li class="sli">Source Matching Field: <b>Id</b></li>
+                        <li class="sli">Target Matching Field: <b>Id</b></li>
+                        <li class="sli">Action: <b>Undelete</b></li>
+                        <li class="sli">Name: <b>Restore Deleted Cases</b></li>
+                    </ul>
+                </li>
+                <li class="pli">Navigate to the "Retrieve" step, verify the auto-generated SOQL query and preview the source data:
+                    
+                    <div class="formula">SELECT Id FROM Case WHERE IsDeleted = TRUE ALL ROWS</div>
+                </li>
+        
+                <li class="pli">Click "Execute Batch" to execute the batch job on-demand.</li>
+                <li class="pli">Click any Batch Execution to view the execution log and verify the results.</li>
+            </ul>
+            
+
+
+            <div class="image-outer" style="max-width: 150%;">
+                <video width="100%" controls autoplay muted>
+                    <source src="resource/img/restore_deleted_cases.mp4" type="video/mp4">
+                </video>
+
+                <div class="image-title"></div>
+            </div>
+            
+            <div class='v-space'></div>
+
+
+
+
+
+
+
+        </div>
+    </div>
+</body>
+
+</html>

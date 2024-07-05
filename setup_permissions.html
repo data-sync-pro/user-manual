@@ -46,30 +46,27 @@
                     </li>
 
                     <li class="rli">
-                        <strong>DSP: Data Sync Pro User: </strong>provides users with essential access to
-                        Executables(private). If Executables are shared through sharing(read), users will be able to
-                        perform
-                        actions in Q, Automation, or Record Actions, but not Batches. To enable batch execution, add
-                        "DSP: Create Executions".
+                        <strong>DSP: Data Sync Pro App User: </strong>
+                        Provides users with access to the Data Sync Pro app, along with the ability to execute batch
+                        jobs and perform data uploads, provided they have at least Read access to Executable records
+                        through sharing.
 
-                        <br>If an Executable record is shared with "edit" access, users are granted
-                        "super user"
-                        privileges for that Executable, allowing them to make necessary changes independently. However,
-                        it's important to note that they are not permitted to modify the fields - Direction, Connection,
-                        Source Object API Name, or Target Object API Name.
+                    </li>
+
+
+
+                    <li class="rli">
+                        <strong>DSP: Data Sync Pro Starter: </strong>
+                        Provides users with essential access to DSP package objects. When Executable(private) records
+                        are shared, users can access features such as Triggers, Record Actions, and Data Lists, but not
+                        Batch Jobs, Data Uploads, and the Data Sync Pro app.
+
                     </li>
 
                     <li class="rli">
-                        <strong>DSP: Create Executions: </strong> grants create and edit access to execution related
-                        objects including Pipeline Execution, Execution and Batch Execution.
-                        Apply this permission set in conjunction with the "DSP: Data Sync Pro User" to enable users to
-                        create and edit Execution records to execute batch jobs on-demand or in schedules.
-                    </li>
+                        <strong>DSP: Create Executables: </strong>Apply this permission set in conjunction with the
+                        "DSP: Data Sync Pro App User" to enable users to create Executables.
 
-                    <li class="rli">
-                        <strong>DSP: Create Executables: </strong>provides the create and edit permission to the
-                        Executable object. Apply this permission set in conjunction with the "DSP: Data Sync Pro User"
-                        to enable users to create Executables.
                     </li>
 
                     <li class="rli">
