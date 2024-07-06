@@ -34,14 +34,15 @@ var catalog = JSON.parse(
           "Calculate Field Values"
         ],
 
-        "Use Cases": [{
+        "Recipes": [{
             
             "Batch Jobs": [
                 "Close Stagnant Cases",
+                "Create Tasks for Escalated Cases",
                 "Delete Obsolete Cases",
                 "Restore Deleted Cases"
             ],
-            "Record-Based Configurations Deployment": ["Deploy DSP Configurations"]
+            "Record-Based Configurations": ["Deploy DSP Configurations"]
         }]
       }
     `
