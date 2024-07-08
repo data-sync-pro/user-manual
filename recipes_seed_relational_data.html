@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="resource/salesforce-lightning-design-system.css">
+    <link rel="stylesheet" href="resource/dsp-manual.css">
+    <script src="resource/catalog.js"></script>
+</head>
+
+<body>
+    <div style="width: 100%; display:flex;">
+        <div id="nav" class="" style="width:320px;">
+        </div>
+
+        <div style="margin-bottom: 5rem;" class="container">
+
+
+            
+        
+            
+            <h1>Seed Relational Data via Pipeline</h1>
+            
+            <div class='v-space'></div>
+
+
+            <p>Follow these steps to create a Pipeline and the Executables using the Migration Builder for migrating relational data through dedicated chained batch jobs.</p>
+            <ul>
+                <li class="pli">Naviage to the "Current => Org B" Direction where the source is the current org and the target is Org B.</li>
+                <li class="pli">Click "New Pipeline" from the related list, name it as "Seed Relational Data".</li>
+                <li class="pli">Naviage to the Migration Builder tab, and follow the below steps to create Executables for migrating relational objects:
+                    <ul>
+                        <li class="sli">Select root object: <b>Account</b></li>
+                        <li class="sli">Select <b>Cascade criteria to child objects</b> checkbox.</li>
+                        <li class="sli">Expand nodes in sequence: <b>Account -> Contact -> Case</b>.</li>
+                        <li class="sli">Select the leaf node: <b>Case</b>.</li>
+                        <li class="sli">In the popup modal, set the mappings for <b>Source &amp; Target Objects</b>, and the <b>Matching Fields.</b></li>
+                        <li class="sli">Close the popup modal, add criteria to the source Account object, and validate: <b>Is_Test__c = TRUE</b></li>
+                        <li class="sli">Click <b>Create Executables</b> button to generate Executables in sequential order aligned with the object hierarchy.</li>
+                    </ul>
+                </li>
+                <li class="pli">Navigate to each Executables and Verify the <b>Retrieve Criteria</b> and <b>Field Mappings</b>, expecting:
+                    <ul>
+                        <li class="sli"><b>Is_Test__c = TRUE</b> is added to child objects in cascaded manner.</li>
+                        <li class="sli">For <b>Record Type</b>, DSP uses the Source Object's RecordType.DeveloperName to maintain the relationships in the target, given the same Record Type exists in the Target Object.</li>
+                        <li class="sli">For regular reference fields, DSP uses <b>External ID Field</b> to maintain data relationships.</li>
+                        <li class="sli">All non-reference fields are automatically mapped if the target and source objects have the fields with the same fields and compatible data types.</li>
+                    </ul>
+                </li>
+                <li class="pli">Click <b>Execute Batches</b> to execute the batch jobs in chained order.</li>
+                <li class="pli">Click any Execution link to inspect the execution details, if required, click <b>Re-Execute Failed Batches</b> to restore the migration from the failed Batch Execution logs.</li>
+
+                <li class="pli">Verify the data created in the target org, especially for the data relationships.</li>
+            </ul>
+            
+
+
+            <div class="image-outer" style="max-width: 150%;">
+                <video width="100%" controls muted>
+                    <source src="resource/img/seed_relational_data.mp4" type="video/mp4">
+                </video>
+
+                <div class="image-title"></div>
+            </div>
+            
+            <div class='v-space'></div>
+
+
+
+
+
+
+
+        </div>
+    </div>
+</body>
+
+</html>

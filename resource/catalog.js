@@ -42,7 +42,8 @@ var catalog = JSON.parse(
                 "Delete Obsolete Cases",
                 "Restore Deleted Cases"
             ],
-            "Record-Based Configurations": ["Deploy DSP Configurations"]
+            "Record-Based Configurations": ["Deploy DSP Configurations"],
+            "Sandbox Management": ["Seed Relational Data"]
         }]
       }
     `
