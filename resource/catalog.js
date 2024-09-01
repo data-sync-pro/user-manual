@@ -35,7 +35,9 @@ var catalog = JSON.parse(
         ],
 
         "Recipes": [{
-            
+            "Q":[
+                "Build An SOQL String"
+            ],
             "Batch Jobs": [
                 "Close Stagnant Cases",
                 "Create Tasks for Escalated Cases",
