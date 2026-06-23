@@ -1,0 +1,8 @@
+node_modules/
+.emulator-data/
+.firebase/
+*.log
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+.DS_Store

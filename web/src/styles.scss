@@ -1,0 +1,21 @@
+/* Global tweaks specific to the Angular port (everything else is reused
+   verbatim from styles.css / portal.css / deal-registration.css). */
+
+/* The `hidden` attribute must always win over component `display` rules
+   (e.g. .btn{display:inline-flex}, .wz-nav{display:grid}). Without this,
+   [hidden] bindings like the wizard's Back/Next/Submit buttons don't hide.
+   The source CSS already patches a few elements this way (.fl-err[hidden] …);
+   this makes it universal. */
+[hidden] { display: none !important; }
+
+/* Register modal: the embedded wizard component manages its own app-shell
+   (pinned header + sidebar + scrollable content), so this wrapper is just a
+   flex passthrough that lets the component fill the dialog height. */
+.reg-modal-scroll {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--paper);
+}

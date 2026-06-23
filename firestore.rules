@@ -1,0 +1,46 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---- Helpers ----
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && get(/databases/$(database)/documents/partners/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // ---- partners/{uid} ----
+    // Partner profiles are provisioned by admin/seed; deny self-writes.
+    match /partners/{uid} {
+      allow read: if request.auth.uid == uid || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ---- deals/{dealId} ----
+    match /deals/{dealId} {
+      allow create: if isSignedIn()
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.status == 'pending';
+      allow read: if isSignedIn()
+        && (resource.data.ownerUid == request.auth.uid || isAdmin());
+      // status changes are admin-only
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ---- announcements/{id} ----
+    match /announcements/{id} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // ---- default deny everything else ----
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

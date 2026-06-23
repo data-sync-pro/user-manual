@@ -1,0 +1,345 @@
+@if (!embed) {
+  <app-nav active="register"></app-nav>
+}
+
+<main class="dr">
+  <section class="dr-work">
+    <div class="container dr-work-inner">
+
+      <form class="dr-form wizard" novalidate (ngSubmit)="submit()" (input)="clearInvalid($event)" (change)="clearInvalid($event)">
+        <header class="form-head">
+          <div class="fh-titles">
+            <span class="fh-eyebrow">New deal registration</span>
+            <h2 class="fh-h2">Register a prospective Customer</h2>
+          </div>
+        </header>
+
+        <div class="wz-body">
+
+          <!-- Vertical step sidebar (shown in the wide modal / desktop layout) -->
+          <aside class="wz-side" aria-label="Registration steps">
+            <ol class="wz-side-steps">
+              <li><button type="button" class="wz-side-step" [class.is-active]="step() === 1" [class.is-done]="step() > 1" [disabled]="1 > maxReached()" (click)="gotoStep(1)"><span class="wz-side-dot">1</span><span class="wz-side-meta"><span class="wz-side-label">Customer</span><span class="wz-side-desc">Company details</span></span></button></li>
+              <li><button type="button" class="wz-side-step" [class.is-active]="step() === 2" [class.is-done]="step() > 2" [disabled]="2 > maxReached()" (click)="gotoStep(2)"><span class="wz-side-dot">2</span><span class="wz-side-meta"><span class="wz-side-label">Contact</span><span class="wz-side-desc">Primary contact</span></span></button></li>
+              <li><button type="button" class="wz-side-step" [class.is-active]="step() === 3" [class.is-done]="step() > 3" [disabled]="3 > maxReached()" (click)="gotoStep(3)"><span class="wz-side-dot">3</span><span class="wz-side-meta"><span class="wz-side-label">Purchase</span><span class="wz-side-desc">Plan &amp; orgs</span></span></button></li>
+              <li><button type="button" class="wz-side-step" [class.is-active]="step() === 4" [class.is-done]="step() > 4" [disabled]="4 > maxReached()" (click)="gotoStep(4)"><span class="wz-side-dot">4</span><span class="wz-side-meta"><span class="wz-side-label">Affirmations</span><span class="wz-side-desc">Compliance</span></span></button></li>
+              <li><button type="button" class="wz-side-step" [class.is-active]="step() === 5" [class.is-done]="step() > 5" [disabled]="5 > maxReached()" (click)="gotoStep(5)"><span class="wz-side-dot">5</span><span class="wz-side-meta"><span class="wz-side-label">Review</span><span class="wz-side-desc">Confirm &amp; submit</span></span></button></li>
+            </ol>
+          </aside>
+
+          <div class="wz-content">
+
+          <!-- Stepper (top — shown in the narrow / full-page layout) -->
+          <div class="wz-head" [hidden]="showSuccess()">
+          <ol class="wz-steps">
+            <li><button type="button" class="wz-step" [class.is-active]="step() === 1" [class.is-done]="step() > 1" [disabled]="1 > maxReached()" (click)="gotoStep(1)"><span class="wz-dot">1</span><span class="wz-label">Customer</span></button></li>
+            <li><button type="button" class="wz-step" [class.is-active]="step() === 2" [class.is-done]="step() > 2" [disabled]="2 > maxReached()" (click)="gotoStep(2)"><span class="wz-dot">2</span><span class="wz-label">Contact</span></button></li>
+            <li><button type="button" class="wz-step" [class.is-active]="step() === 3" [class.is-done]="step() > 3" [disabled]="3 > maxReached()" (click)="gotoStep(3)"><span class="wz-dot">3</span><span class="wz-label">Purchase</span></button></li>
+            <li><button type="button" class="wz-step" [class.is-active]="step() === 4" [class.is-done]="step() > 4" [disabled]="4 > maxReached()" (click)="gotoStep(4)"><span class="wz-dot">4</span><span class="wz-label">Affirm</span></button></li>
+            <li><button type="button" class="wz-step" [class.is-active]="step() === 5" [class.is-done]="step() > 5" [disabled]="5 > maxReached()" (click)="gotoStep(5)"><span class="wz-dot">5</span><span class="wz-label">Review</span></button></li>
+          </ol>
+          <div class="wz-track"><span class="wz-fill" [style.width]="fillWidth"></span></div>
+        </div>
+
+        <!-- Rate-limit / error banner -->
+        <div class="form-error" role="alert" [hidden]="!banner()" style="margin:16px 26px 0;padding:12px 14px;border:1px solid var(--signal);background:var(--signal-soft);color:var(--signal);border-radius:var(--r-sm);font-size:13.5px;">{{ banner() }}</div>
+
+        <div class="wz-panels" [hidden]="showSuccess()">
+
+          <!-- STEPS 1-3 · merged scrollable panel (Customer + Contact + Purchase) -->
+          <div class="wz-panel wz-panel-merged" [class.is-active]="step() <= 3">
+
+          <section class="wz-sub" id="sec-customer" aria-label="Customer">
+            <div class="wz-panel-head">
+              <h3 class="wz-panel-title">Customer</h3>
+            </div>
+            <div class="grid g-2">
+              <label class="fld">
+                <span class="fl-l">Legal entity name <span class="req">*</span></span>
+                <input type="text" name="legalEntity" required placeholder="e.g. Northwind Industries, Inc."
+                       [(ngModel)]="data['legalEntity']" [ngModelOptions]="{ standalone: true }"
+                       [attr.aria-invalid]="isInvalid('legalEntity')" />
+                <span class="fl-hint">As it appears on the contract that would be signed.</span>
+              </label>
+              <label class="fld">
+                <span class="fl-l">Domain <span class="req">*</span></span>
+                <input type="text" name="domain" required placeholder="company.com"
+                       [(ngModel)]="data['domain']" [ngModelOptions]="{ standalone: true }"
+                       [attr.aria-invalid]="isInvalid('domain')" />
+              </label>
+              <label class="fld">
+                <span class="fl-l">HQ country</span>
+                <select name="country" [(ngModel)]="data['country']" [ngModelOptions]="{ standalone: true }">
+                  <option>United States</option>
+                  <option>United Kingdom</option>
+                  <option>Canada</option>
+                  <option>Germany</option>
+                  <option>Australia</option>
+                  <option>Singapore</option>
+                  <option>Other — specify in notes</option>
+                </select>
+              </label>
+              <label class="fld">
+                <span class="fl-l">Industry</span>
+                <select name="industry" [(ngModel)]="data['industry']" [ngModelOptions]="{ standalone: true }">
+                  <option>SaaS &amp; Software</option>
+                  <option>Financial services</option>
+                  <option>Healthcare &amp; Life sciences</option>
+                  <option>Industrial &amp; Manufacturing</option>
+                  <option>Retail &amp; eCommerce</option>
+                  <option>Public sector</option>
+                  <option>Other</option>
+                </select>
+              </label>
+              <label class="fld">
+                <span class="fl-l">Approx. company size</span>
+                <select name="companySize" [(ngModel)]="data['companySize']" [ngModelOptions]="{ standalone: true }">
+                  <option>1–50</option>
+                  <option>51–250</option>
+                  <option>251–1,000</option>
+                  <option>1,001–5,000</option>
+                  <option>5,001–25,000</option>
+                  <option>25,000+</option>
+                </select>
+              </label>
+              <label class="fld">
+                <span class="fl-l">Salesforce org type</span>
+                <select name="orgType" [(ngModel)]="data['orgType']" [ngModelOptions]="{ standalone: true }">
+                  <option>Enterprise Edition</option>
+                  <option>Unlimited Edition</option>
+                  <option>Professional Edition</option>
+                  <option>Government Cloud</option>
+                  <option>Unknown / mixed</option>
+                </select>
+              </label>
+            </div>
+          </section>
+
+          <!-- STEP 2 · Contact -->
+          <section class="wz-sub" id="sec-contact" aria-label="Primary contact">
+            <div class="wz-panel-head">
+              <h3 class="wz-panel-title">Primary contact</h3>
+            </div>
+            <div class="grid g-2">
+              <label class="fld">
+                <span class="fl-l">Full name <span class="req">*</span></span>
+                <input type="text" name="contactName" required placeholder="Jane Doe"
+                       [(ngModel)]="data['contactName']" [ngModelOptions]="{ standalone: true }"
+                       [attr.aria-invalid]="isInvalid('contactName')" />
+              </label>
+              <label class="fld">
+                <span class="fl-l">Role <span class="req">*</span></span>
+                <input type="text" name="contactTitle" required placeholder="Developer"
+                       [(ngModel)]="data['contactTitle']" [ngModelOptions]="{ standalone: true }"
+                       [attr.aria-invalid]="isInvalid('contactTitle')" />
+              </label>
+              <label class="fld">
+                <span class="fl-l">Work email <span class="req">*</span></span>
+                <input type="email" name="workEmail" required placeholder="jane@company.com"
+                       [(ngModel)]="data['workEmail']" [ngModelOptions]="{ standalone: true }"
+                       [attr.aria-invalid]="isInvalid('workEmail')" />
+                <span class="fl-err" role="alert" [hidden]="!emailError()">{{ emailError() }}</span>
+                <span class="fl-hint">Use a work address — personal domains (Gmail, Yahoo…) aren't accepted.</span>
+              </label>
+              <label class="fld">
+                <span class="fl-l">Phone</span>
+                <input type="tel" name="phone" placeholder="+1 (555) 555-5555"
+                       [(ngModel)]="data['phone']" [ngModelOptions]="{ standalone: true }" />
+              </label>
+            </div>
+          </section>
+
+          <!-- STEP 3 · Purchase -->
+          <section class="wz-sub" id="sec-purchase" aria-label="Purchase">
+            <div class="wz-panel-head">
+              <h3 class="wz-panel-title">Purchase</h3>
+            </div>
+
+            <h4 class="wz-subhead">Salesforce orgs</h4>
+            <p class="wz-subhint">Executables are sold in blocks of 100 (rounded up).</p>
+
+            <div class="org-list">
+              @for (o of orgs; track $index; let i = $index) {
+                <div class="org-row org-row-inline">
+                  <label class="fld org-f-name">
+                    <span class="fl-l">Production org name <span class="req">*</span></span>
+                    <input type="text" maxlength="80" placeholder="e.g. Acme Production"
+                           [attr.data-org-name]="i" [(ngModel)]="orgs[i].name" [ngModelOptions]="{ standalone: true }"
+                           [attr.aria-invalid]="isOrgInvalid(i)" />
+                  </label>
+                  <label class="fld org-f-num">
+                    <span class="fl-l">Connections</span>
+                    <input type="number" min="1" max="20" [(ngModel)]="orgs[i].conn" [ngModelOptions]="{ standalone: true }" />
+                  </label>
+                  <label class="fld org-f-num">
+                    <span class="fl-l">Executables</span>
+                    <input type="number" min="100" step="100" placeholder="100"
+                           [(ngModel)]="orgs[i].exec" [ngModelOptions]="{ standalone: true }"
+                           (change)="roundExec(i)" (blur)="roundExec(i)" />
+                  </label>
+                  <label class="fld org-f-batch">
+                    <span class="fl-l">Daily batch limit</span>
+                    <select [(ngModel)]="orgs[i].batch" [ngModelOptions]="{ standalone: true }">
+                      @for (b of batchOptions; track b) {
+                        <option>{{ b }}</option>
+                      }
+                    </select>
+                  </label>
+                  @if (orgs.length > 1) {
+                    <button type="button" class="org-remove" (click)="removeOrg(i)" aria-label="Remove this org">
+                      <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                    </button>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="org-foot">
+              <button type="button" class="btn secondary org-add" (click)="addOrg()">
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                Add another org
+              </button>
+              <span class="org-totals"><b>{{ totalConn() }}</b> connections &middot; <b>{{ totalExec() }}</b> executables</span>
+            </div>
+
+            <div class="wz-subsection">
+              <div class="fld">
+                <span class="fl-l">Success plan <span class="req">*</span></span>
+                <div class="seg" role="radiogroup" aria-label="Success plan">
+                  <input type="radio" name="successPlan" id="sp-std" value="Standard" [(ngModel)]="data['successPlan']" [ngModelOptions]="{ standalone: true }" />
+                  <label for="sp-std">Standard</label>
+                  <input type="radio" name="successPlan" id="sp-prem" value="Premium" [(ngModel)]="data['successPlan']" [ngModelOptions]="{ standalone: true }" />
+                  <label for="sp-prem">Premium</label>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          </div><!-- /.wz-panel-merged -->
+
+          <!-- STEP 4 · Affirmations -->
+          <section class="wz-panel" [class.is-active]="step() === 4" aria-label="Affirmations">
+            <div class="wz-panel-head">
+              <span class="wz-panel-eyebrow">Step 4 of 5</span>
+              <h3 class="wz-panel-title">Conflict &amp; consent affirmations</h3>
+              <p class="wz-panel-sub">Each statement maps to a disqualifier in §5.4 or a warranty in §9.2. False affirmations void the registration and may trigger termination under §12.4.</p>
+            </div>
+            <div class="affirm">
+              <label class="aff">
+                <input type="checkbox" name="affirmSelfReferral" required [(ngModel)]="affirms['affirmSelfReferral']" [ngModelOptions]="{ standalone: true }" [attr.aria-invalid]="isInvalid('affirmSelfReferral')" />
+                <span class="aff-body">
+                  <span class="aff-t">Not a self-referral.</span>
+                  <span class="aff-d">Neither Partner nor any Affiliate of Partner is the end Customer or beneficiary of the purchase. <span class="ref">§5.4(a)</span></span>
+                </span>
+              </label>
+              <label class="aff">
+                <input type="checkbox" name="affirmEmployment" required [(ngModel)]="affirms['affirmEmployment']" [ngModelOptions]="{ standalone: true }" [attr.aria-invalid]="isInvalid('affirmEmployment')" />
+                <span class="aff-body">
+                  <span class="aff-t">No employment overlap.</span>
+                  <span class="aff-d">Partner is not an employee, officer, director, or contractor of the referred entity at time of submission. <span class="ref">§5.4(b)</span></span>
+                </span>
+              </label>
+              <label class="aff">
+                <input type="checkbox" name="affirmPipeline" required [(ngModel)]="affirms['affirmPipeline']" [ngModelOptions]="{ standalone: true }" [attr.aria-invalid]="isInvalid('affirmPipeline')" />
+                <span class="aff-body">
+                  <span class="aff-t">No known pre-existing pipeline.</span>
+                  <span class="aff-d">To Partner's knowledge, the referred entity has no active opportunity, named contact, or unexpired trial with Company in the prior ninety (90) days. <span class="ref">§5.4(c)</span></span>
+                </span>
+              </label>
+              <label class="aff">
+                <input type="checkbox" name="affirmConsent" required [(ngModel)]="affirms['affirmConsent']" [ngModelOptions]="{ standalone: true }" [attr.aria-invalid]="isInvalid('affirmConsent')" />
+                <span class="aff-body">
+                  <span class="aff-t">Contact consent.</span>
+                  <span class="aff-d">Partner has obtained all consents required to share the contact's information with Company. <span class="ref">§9.2(c)</span></span>
+                </span>
+              </label>
+              <label class="aff">
+                <input type="checkbox" name="affirmTruthful" required [(ngModel)]="affirms['affirmTruthful']" [ngModelOptions]="{ standalone: true }" [attr.aria-invalid]="isInvalid('affirmTruthful')" />
+                <span class="aff-body">
+                  <span class="aff-t">Truthful submission.</span>
+                  <span class="aff-d">All information in this submission is true and complete to the best of Partner's knowledge. <span class="ref">§9.2(b)</span></span>
+                </span>
+              </label>
+            </div>
+          </section>
+
+          <!-- STEP 5 · Review -->
+          <section class="wz-panel" [class.is-active]="step() === 5" aria-label="Review">
+            <div class="wz-panel-head">
+              <span class="wz-panel-eyebrow">Step 5 of 5</span>
+              <h3 class="wz-panel-title">Review &amp; submit</h3>
+              <p class="wz-panel-sub">Check everything looks right. Use “Edit” to jump back to any section.</p>
+            </div>
+
+            <div class="rv-grid">
+              <div class="rv-card">
+                <div class="rv-h">Customer <button type="button" class="rv-edit" (click)="gotoStep(1)">Edit</button></div>
+                <dl class="rv-dl">
+                  <div class="rv-row"><dt>Legal entity</dt><dd>{{ rv(data['legalEntity']) }}</dd></div>
+                  <div class="rv-row"><dt>Domain</dt><dd>{{ rv(data['domain']) }}</dd></div>
+                  <div class="rv-row"><dt>HQ country</dt><dd>{{ rv(data['country']) }}</dd></div>
+                  <div class="rv-row"><dt>Industry</dt><dd>{{ rv(data['industry']) }}</dd></div>
+                  <div class="rv-row"><dt>Company size</dt><dd>{{ rv(data['companySize']) }}</dd></div>
+                  <div class="rv-row"><dt>Org type</dt><dd>{{ rv(data['orgType']) }}</dd></div>
+                </dl>
+              </div>
+              <div class="rv-card">
+                <div class="rv-h">Contact <button type="button" class="rv-edit" (click)="gotoStep(2)">Edit</button></div>
+                <dl class="rv-dl">
+                  <div class="rv-row"><dt>Full name</dt><dd>{{ rv(data['contactName']) }}</dd></div>
+                  <div class="rv-row"><dt>Title</dt><dd>{{ rv(data['contactTitle']) }}</dd></div>
+                  <div class="rv-row"><dt>Work email</dt><dd>{{ rv(data['workEmail']) }}</dd></div>
+                  <div class="rv-row"><dt>Phone</dt><dd>{{ rv(data['phone']) }}</dd></div>
+                </dl>
+              </div>
+              <div class="rv-card">
+                <div class="rv-h">Purchase <button type="button" class="rv-edit" (click)="gotoStep(3)">Edit</button></div>
+                <dl class="rv-dl">
+                  <div class="rv-row"><dt>Success plan</dt><dd>{{ rv(data['successPlan']) }}</dd></div>
+                  <div class="rv-row"><dt>Salesforce orgs</dt><dd>{{ rvOrgs() }}</dd></div>
+                </dl>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- Success panel -->
+        <div class="form-success" role="status" [hidden]="!showSuccess()" style="margin:22px 26px 0;padding:20px 22px;border:1px solid rgba(17,125,79,.3);background:var(--good-soft);border-radius:var(--r-md);">
+          <span class="fl-hint good" style="font-size:14px;font-weight:600;"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Deal registered &middot; <span class="mono">{{ dealId() }}</span></span>
+          <p style="margin-top:8px;font-size:13.5px;color:var(--ink-2);line-height:1.55;">Your registration has been submitted for review. Company responds within one (1) business day with Accept, Reject with reason, or a Co-sell proposal per §5.2. You can track its status under <a routerLink="/dashboard" style="color:var(--brand-ink);border-bottom:1px solid var(--brand-ink);">My pipeline</a>.</p>
+        </div>
+
+          </div><!-- /.wz-content -->
+        </div><!-- /.wz-body -->
+
+        <!-- Wizard nav (a <div>, not <footer>: in embed mode the global
+             `.embed footer{display:none}` rule must NOT hit this button bar) -->
+        <div class="wz-nav" [hidden]="showSuccess()">
+          <div class="wz-nav-l">
+            <button type="button" class="btn secondary" [hidden]="step() <= 3" (click)="goBack()">&larr; Back</button>
+          </div>
+          <span class="wz-status">{{ statusText }}</span>
+          <div class="wz-nav-r">
+            <button type="button" class="btn" [hidden]="step() === total" (click)="goNext()">Next
+              <svg class="arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button type="submit" class="btn" [hidden]="step() !== total" [disabled]="submitting()">
+              @if (submitting()) {
+                <span style="display:inline-flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:999px;border:1.6px solid rgba(255,255,255,.4);border-top-color:#fff;animation:bwspin .8s linear infinite;display:inline-block"></span>Submitting…</span>
+              } @else {
+                Submit for review
+                <svg class="arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              }
+            </button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </section>
+</main>
+
+@if (!embed) {
+  <app-footer variant="full"></app-footer>
+}

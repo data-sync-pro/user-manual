@@ -1,0 +1,76 @@
+<app-nav active="admin"></app-nav>
+
+<main class="portal">
+
+  <!-- Page head + breadcrumb -->
+  <header class="dr-head">
+    <div class="container">
+      <div class="dr-head-inner">
+        <p class="dr-trail">
+          <a routerLink="/dashboard">Partnership</a><span class="dr-sep">/</span><a routerLink="/dashboard">Partner Portal</a><span class="dr-sep">/</span>Admin
+        </p>
+        <h1>Review every <span class="it">registered deal</span>.</h1>
+        <p class="lead">All partner submissions across the program. Set each deal's status — pending, accepted, won, or lost — to drive co-sell approvals and commission.</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Deals review table -->
+  <section class="section" aria-label="All registered deals">
+    <div class="container">
+
+      <p class="admin-status" role="status" aria-live="polite">{{ statusText() }}</p>
+
+      <div class="exec-card">
+        <div class="admin-table-wrap">
+          <table class="bw-table admin-deals-table">
+            <thead>
+              <tr>
+                <th scope="col">Deal ID</th>
+                <th scope="col">Partner</th>
+                <th scope="col">Customer</th>
+                <th scope="col" class="num">ARR</th>
+                <th scope="col">Stage</th>
+                <th scope="col">Status</th>
+                <th scope="col">Submitted</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if (loading()) {
+                <tr class="deals-empty"><td colspan="8">Loading deals…</td></tr>
+              } @else if (deals().length === 0) {
+                <tr class="deals-empty"><td colspan="8">No deals to review.</td></tr>
+              } @else {
+                @for (d of deals(); track d.id) {
+                  <tr>
+                    <td>{{ d.id }}</td>
+                    <td>{{ d.ownerUid }}</td>
+                    <td>{{ d.customer }}</td>
+                    <td class="num">{{ fmtMoney(d.arr) }}</td>
+                    <td>{{ d.stage }}</td>
+                    <td><span [class]="badge(d.status).cls">{{ badge(d.status).label }}</span></td>
+                    <td class="num">{{ d.submitted }}</td>
+                    <td>
+                      <select class="status-select" [attr.aria-label]="'Set status for ' + d.id"
+                              [value]="d.status" [disabled]="isUpdating(d.id)"
+                              (change)="onStatusChange(d, $any($event.target).value)">
+                        @for (s of statuses; track s) {
+                          <option [value]="s" [selected]="s === d.status">{{ label(s) }}</option>
+                        }
+                      </select>
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<app-footer variant="full"></app-footer>

@@ -1,0 +1,29 @@
+@switch (variant) {
+  @case ('login') {
+    <footer><div class="container">
+      <div class="foot-bottom"><span>&copy; 2026 Data Sync Pro &middot; Partner Portal</span><span class="foot-privacy">Confidential — for registered partners.</span></div>
+    </div></footer>
+  }
+  @case ('dash') {
+    <footer class="dash-foot"><div class="container">
+      <div class="foot-bottom">
+        <span>&copy; 2026 Data Sync Pro &middot; Partner Portal</span>
+        <span class="foot-privacy">Confidential — for registered partners. · <a href="#" (click)="signOut($event)">Sign out</a></span>
+      </div>
+    </div></footer>
+  }
+  @default {
+    <footer><div class="container">
+      <div class="foot-grid">
+        <div class="foot-col">
+          <a class="brand-mark" routerLink="/dashboard" aria-label="Partner Portal home"><img class="logo" src="logo.png" alt="" width="32" height="32" /><span>Data Sync Pro</span></a>
+          <p style="margin-top:14px;color:var(--ink-3);font-size:14.5px;max-width:32ch;">Partner Portal — register deals, track pipeline, manage your partnership.</p>
+        </div>
+        <div class="foot-col"><h5>Portal</h5><ul><li><a routerLink="/dashboard">Dashboard</a></li><li><a routerLink="/dashboard" fragment="register">Register a deal</a></li><li><a routerLink="/admin">Admin</a></li></ul></div>
+        <div class="foot-col"><h5>Resources</h5><ul><li><a href="https://datasyncpro.io/recipes">Recipes</a></li><li><a href="https://datasyncpro.io/user-manual">User Manual</a></li><li><a href="https://datasyncpro.io/faqs">FAQs</a></li></ul></div>
+        <div class="foot-col"><h5>Company</h5><ul><li><a href="https://datasyncpro.io">datasyncpro.io</a></li><li><a href="#" (click)="signOut($event)">Sign out</a></li></ul></div>
+      </div>
+      <div class="foot-bottom"><span>&copy; 2026 Data Sync Pro &middot; Partner Portal</span><span class="foot-privacy">Confidential — for registered partners.</span></div>
+    </div></footer>
+  }
+}

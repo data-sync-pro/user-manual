@@ -1,0 +1,130 @@
+<app-nav active="dashboard"></app-nav>
+
+<!-- DASHBOARD — Deal & Commission console (single-screen, function-first) -->
+<main class="dash">
+
+  <!-- Compact header bar: partner identity + context -->
+  <header class="dash-bar">
+    <div class="dash-bar-l">
+      <div class="dash-title-row">
+        <h1 class="dash-title">{{ dashTitle() }}</h1>
+        <span class="dash-tier" [attr.data-tier]="tierName().toLowerCase()" [attr.title]="tierName() + ' tier'">{{ tierName() }}</span>
+      </div>
+      <p class="dash-sub">{{ dashSub() }}</p>
+    </div>
+  </header>
+
+  <!-- Working area: deal + commission ledger (left) · tier + pipeline (right) -->
+  <div class="dash-main">
+
+    <!-- Unified deals + commission ledger -->
+    <section class="panel panel-deals" aria-label="Deals and commission">
+      <div class="panel-head">
+        <span class="panel-title">Deals &amp; commission</span>
+        <div class="deals-filters" role="tablist" aria-label="Filter deals by status">
+          <button type="button" class="pt" [class.active]="activeFilter() === 'all'" (click)="setFilter('all')">All <span class="pt-c">{{ counts().all }}</span></button>
+          <button type="button" class="pt" [class.active]="activeFilter() === 'pending'" (click)="setFilter('pending')">Pending <span class="pt-c">{{ counts().pending }}</span></button>
+          <button type="button" class="pt" [class.active]="activeFilter() === 'accepted'" (click)="setFilter('accepted')">Accepted <span class="pt-c">{{ counts().accepted }}</span></button>
+          <button type="button" class="pt" [class.active]="activeFilter() === 'won'" (click)="setFilter('won')">Won <span class="pt-c">{{ counts().won }}</span></button>
+          <button type="button" class="pt" [class.active]="activeFilter() === 'lost'" (click)="setFilter('lost')">Lost <span class="pt-c">{{ counts().lost }}</span></button>
+        </div>
+        <div class="deal-search-wrap">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input type="search" placeholder="Search customer, domain, ID…" aria-label="Search deals" autocomplete="off"
+                 [value]="search()" (input)="onSearch($any($event.target).value)" />
+        </div>
+      </div>
+      <div class="panel-body deals-scroll">
+        <table class="bw-table">
+          <thead>
+            <tr>
+              <th scope="col">Deal ID</th>
+              <th scope="col">Customer</th>
+              <th scope="col">Status</th>
+              <th scope="col" class="num">Amount</th>
+              <th scope="col" class="num">Tier %</th>
+              <th scope="col" class="num">Commission</th>
+              <th scope="col" class="num">Submitted</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (dealsLoading()) {
+              <tr class="deals-empty"><td colspan="7">Loading deals…</td></tr>
+            } @else if (filteredDeals().length === 0) {
+              <tr class="deals-empty"><td colspan="7">No deals match this view.</td></tr>
+            } @else {
+              @for (d of filteredDeals(); track d.id) {
+                @let dc = dealComm(d);
+                <tr>
+                  <td>{{ d.id }}</td>
+                  <td><span class="deal-customer">{{ d.customer }}</span></td>
+                  <td><span [class]="badge(d.status).cls">{{ badge(d.status).label }}</span></td>
+                  <td class="num">{{ fmtMoney(d.arr) }}</td>
+                  <td class="num tier-pct">{{ dc.pct }}</td>
+                  <td class="num">
+                    @if (dc.show) {
+                      {{ dc.amount }}
+                    } @else {
+                      <span class="comm-na">—</span>
+                    }
+                  </td>
+                  <td class="num">{{ d.submitted }}</td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Right column: partner tier + pipeline chart -->
+    <div class="dash-side">
+
+      <section class="panel" aria-label="Partner tier">
+        <div class="panel-head">
+          <span class="panel-title">Tier</span>
+          <span class="panel-meta">{{ commRatePct() }} · {{ rateBasis() }}</span>
+        </div>
+        <div class="panel-body tier-card">
+          <span class="tier-card-eyebrow">Trailing-12mo referred ARR</span>
+          <span class="tier-card-val">{{ trailingArrFig().num }}<span class="unit">{{ trailingArrFig().unit }}</span></span>
+          <span class="tier-card-foot">
+            {{ tierName() }} tier
+            @if (nextTierInfo(); as nt) {
+              <span class="tier-next"> · next: {{ nt.name }} at {{ nt.at }}</span>
+            } @else {
+              <span class="tier-next"> · top tier</span>
+            }
+          </span>
+        </div>
+      </section>
+
+      <section class="panel" aria-label="Pipeline by stage">
+        <div class="panel-head">
+          <span class="panel-title">Pipeline by stage</span>
+          <span class="panel-meta">ARR · × {{ commRatePct() }} comm.</span>
+        </div>
+        <div class="panel-body">
+          <app-pipeline-chart id="pipeline-chart" [data]="pipeline()"></app-pipeline-chart>
+        </div>
+      </section>
+
+    </div>
+
+  </div>
+</main>
+
+<app-footer variant="dash"></app-footer>
+
+<!-- REGISTER-DEAL MODAL (renders the wizard component in embed mode) -->
+@if (registerOpen()) {
+  <div class="reg-modal">
+    <div class="reg-modal-backdrop" (click)="closeRegister()"></div>
+    <div class="reg-modal-dialog" role="dialog" aria-modal="true" aria-label="Register a deal">
+      <button type="button" class="reg-modal-close" (click)="closeRegister()" aria-label="Close">&times;</button>
+      <div class="reg-modal-scroll">
+        <app-deal-registration [embed]="true" (submitted)="onDealSubmitted()"></app-deal-registration>
+      </div>
+    </div>
+  </div>
+}

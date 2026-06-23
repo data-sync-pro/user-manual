@@ -1,0 +1,920 @@
+/* =========================================================
+   Partner Portal · portal.css
+   ---------------------------------------------------------
+   PORTAL-SPECIFIC WIDGETS ONLY. styles.css provides all global
+   tokens, type, nav, footer, buttons, tags, .num-grid/.num-cell,
+   .pa-grid/.pa-item, .bw-table, .exec-card, .section-head, .closing,
+   .pt/.pt-c filter buttons, .reveal, etc. This file ADDS:
+     - login auth-card + shared light form fields (.fld/.fl-l/.fl-hint)
+       so login.html/dashboard.html have them WITHOUT the deal-reg inline
+       <style> block (deal-registration.html keeps its own identical inline
+       copy; cascade-safe — values match).
+     - portal page shell helpers (.portal, .dr-head, .dr-trail/.dr-sep)
+     - dashboard KPI delta pills
+     - pipeline-chart SVG wrapper (#pipeline-chart)
+     - announcements list (#announce-list)
+     - quick-actions icon chip + table status helpers
+   CONSUMES the global :root tokens — never redeclares them.
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   Portal main shell
+   --------------------------------------------------------- */
+.portal {
+  display: block;
+}
+.portal-section {
+  padding: clamp(48px, 6vw, 80px) 0;
+}
+.portal-section + .portal-section {
+  border-top: 1px solid var(--rule);
+}
+
+/* Dashboard / page head (mirrors deal-registration .dr-head so all
+   portal pages share one header treatment). */
+.dr-head {
+  padding: clamp(56px, 7vw, 80px) 0 clamp(36px, 5vw, 56px);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--rule);
+}
+.dr-head::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 50% 40% at 85% 25%, rgba(127,185,187,.14), transparent 60%);
+  pointer-events: none;
+}
+.dr-head-inner { position: relative; }
+.dr-head h1 { margin-top: 22px; }
+.dr-head h1 .it {
+  font-family: var(--f-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--brand-ink);
+}
+.dr-head .lead { margin-top: 18px; }
+
+/* Breadcrumb (mono trail) */
+.dr-trail {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+}
+.dr-trail a { color: var(--brand-ink); }
+.dr-trail a:hover { text-decoration: underline; }
+.dr-sep { margin: 0 8px; opacity: .4; }
+
+/* ---------------------------------------------------------
+   Shared light form fields (login + dashboard reuse).
+   Identical to deal-registration's inline .fld set so the look is
+   uniform across the portal. Deal-reg keeps its own inline copy.
+   --------------------------------------------------------- */
+.fld {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+.fl-l {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+.fl-l .req { color: var(--signal); margin-left: 2px; }
+.fld input[type="text"],
+.fld input[type="email"],
+.fld input[type="password"],
+.fld input[type="tel"],
+.fld input[type="month"],
+.fld textarea,
+.fld select {
+  font: inherit;
+  font-size: 14.5px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--r-sm);
+  padding: 11px 13px;
+  letter-spacing: -.005em;
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+  font-family: var(--f-sans);
+  width: 100%;
+}
+.fld input:focus,
+.fld textarea:focus,
+.fld select:focus {
+  outline: 0;
+  border-color: var(--brand);
+  background: var(--card);
+  box-shadow: 0 0 0 3px rgba(22,138,140,.12);
+}
+/* Invalid state — set by portal.js validators via aria-invalid */
+.fld input[aria-invalid="true"],
+.fld textarea[aria-invalid="true"],
+.fld select[aria-invalid="true"] {
+  border-color: var(--signal);
+  box-shadow: 0 0 0 3px rgba(200,74,26,.12);
+}
+.fld textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
+.fld select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'><path d='M4 6l4 4 4-4' stroke='%235E6878' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+  padding-right: 36px;
+  cursor: pointer;
+}
+.fl-hint {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  line-height: 1.4;
+}
+.fl-hint.good {
+  color: var(--good);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.fl-hint.good svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+/* Inline validation error region — driven by [data-error-for] + aria-invalid.
+   Hidden by default; portal.js unhides + fills .textContent. */
+.fl-err {
+  font-family: var(--f-sans);
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--signal);
+}
+.fl-err[hidden] { display: none; }
+
+/* ---------------------------------------------------------
+   LOGIN — minimal-chrome page + centered auth card
+   --------------------------------------------------------- */
+/* Pre-auth nav: brand only, centered, no links/cta/hamburger. */
+.nav.nav-min .nav-inner { justify-content: center; }
+
+.auth-wrap {
+  min-height: calc(100vh - 64px);
+  display: grid;
+  place-items: center;
+  padding: clamp(32px, 6vw, 72px) var(--gutter);
+}
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-3);
+  padding: clamp(28px, 4vw, 40px);
+  position: relative;
+  overflow: hidden;
+}
+.auth-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(60% 70% at 100% 0%, rgba(127,185,187,.14), transparent 60%);
+}
+.auth-card > * { position: relative; }
+.auth-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.auth-brand img { width: 32px; height: 32px; display: block; }
+.auth-brand span { font-size: 14.5px; font-weight: 500; color: var(--brand-ink); letter-spacing: -.01em; }
+.auth-card .eyebrow { margin-bottom: 10px; }
+.auth-card h2 {
+  font-size: clamp(26px, 3vw, 32px);
+  letter-spacing: -.025em;
+  line-height: 1.05;
+}
+.auth-card h2 .it {
+  font-family: var(--f-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--brand-ink);
+}
+.auth-sub {
+  margin-top: 10px;
+  font-size: 14.5px;
+  color: var(--ink-3);
+  line-height: 1.45;
+}
+.auth-form {
+  margin-top: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.auth-form .btn {
+  width: 100%;
+  justify-content: center;
+  margin-top: 4px;
+  padding: 13px 18px;
+}
+.auth-help {
+  margin-top: 18px;
+  font-size: 12.5px;
+  color: var(--mute);
+  text-align: center;
+  line-height: 1.5;
+}
+.auth-help a { color: var(--brand-ink); }
+.auth-help a:hover { text-decoration: underline; }
+/* Top-level form error (bad credentials, network) */
+.auth-form .form-error {
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--signal);
+  background: var(--signal-soft);
+  border: 1px solid rgba(200,74,26,.22);
+  border-radius: var(--r-sm);
+  padding: 10px 12px;
+}
+.auth-form .form-error[hidden] { display: none; }
+
+/* ---------------------------------------------------------
+   DASHBOARD — KPI delta pills on .num-cell
+   --------------------------------------------------------- */
+/* A small pill placed under the .label inside a .num-cell. Uses the
+   global .tag look but tighter; .tag.good / .tag.signal still apply. */
+.kpi-delta {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: .02em;
+  padding: 3px 8px 4px;
+  border-radius: 999px;
+  border: 1px solid var(--good-soft);
+  background: var(--good-soft);
+  color: var(--good);
+}
+.kpi-delta.down {
+  border-color: rgba(200,74,26,.2);
+  background: var(--signal-soft);
+  color: var(--signal);
+}
+.kpi-delta.flat {
+  border-color: var(--rule);
+  background: var(--paper);
+  color: var(--ink-3);
+}
+.kpi-delta .kpi-arrow { width: 11px; height: 11px; }
+/* count-up figure keeps tabular figures so width doesn't jump */
+.num-cell .big { font-variant-numeric: tabular-nums; }
+
+/* ---------------------------------------------------------
+   PIPELINE CHART — inline-SVG horizontal bar chart wrapper
+   portal.js injects <svg> into #pipeline-chart.
+   --------------------------------------------------------- */
+.chart-card { /* an .exec-card wrapper; padding handled here */ }
+.chart-card .chart-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--rule);
+  background: linear-gradient(180deg, var(--paper-3), transparent);
+}
+.chart-card .chart-head .chart-title {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -.01em;
+  color: var(--ink);
+}
+.chart-card .chart-head .chart-meta {
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  letter-spacing: .04em;
+  color: var(--ink-3);
+}
+#pipeline-chart {
+  padding: 22px 22px 18px;
+  width: 100%;
+}
+#pipeline-chart svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+/* SVG primitives the renderer emits — themed via these classes */
+#pipeline-chart .pc-bar {
+  fill: var(--brand);
+  rx: 3;
+}
+#pipeline-chart .pc-bar-track {
+  fill: var(--paper-3);
+  rx: 3;
+}
+#pipeline-chart .pc-stage-label {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  letter-spacing: .02em;
+  fill: var(--ink-2);
+}
+#pipeline-chart .pc-value-label {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  letter-spacing: .02em;
+  fill: var(--brand-ink);
+  font-weight: 500;
+}
+#pipeline-chart .pc-count-label {
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  letter-spacing: .04em;
+  fill: var(--ink-3);
+}
+#pipeline-chart .pc-axis {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: .04em;
+  fill: var(--mute);
+}
+#pipeline-chart .pc-gridline {
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+#pipeline-chart .pc-empty {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  fill: var(--ink-3);
+}
+
+/* ---------------------------------------------------------
+   DEALS PANEL — filter bar + search (uses global .pt/.pt-c, .bw-table)
+   --------------------------------------------------------- */
+.deals-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.deals-filters {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--rule);
+}
+/* Filter tabs (.pt/.pt-c) — defined here so the standalone dashboard page
+   has them without the deal-registration inline <style>. Identical to the
+   deal-reg pipeline tabs so the look is uniform across the portal. */
+.deals-filters .pt {
+  background: transparent;
+  border: 0;
+  padding: 9px 12px 11px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -.005em;
+  color: var(--ink-3);
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  transition: color .12s ease, border-color .12s ease;
+  margin-bottom: -1px;
+}
+.deals-filters .pt:hover { color: var(--ink); }
+.deals-filters .pt.active { color: var(--ink); border-bottom-color: var(--brand); }
+.deals-filters .pt-c {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0;
+  color: var(--ink-3);
+  background: var(--paper-3);
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+.deals-filters .pt.active .pt-c { background: var(--brand-soft); color: var(--brand-ink); }
+.deal-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 220px;
+  flex: 0 1 280px;
+}
+.deal-search-wrap svg {
+  position: absolute;
+  left: 12px;
+  width: 15px; height: 15px;
+  color: var(--mute);
+  pointer-events: none;
+}
+#deal-search {
+  font: inherit;
+  font-size: 14px;
+  width: 100%;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--r-sm);
+  padding: 9px 13px 9px 34px;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+#deal-search:focus {
+  outline: 0;
+  border-color: var(--brand);
+  background: var(--card);
+  box-shadow: 0 0 0 3px rgba(22,138,140,.12);
+}
+/* Wrap the table on narrow screens (spec: tables scroll under 640) */
+.deals-table-wrap {
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--card);
+}
+.deals-table-wrap .bw-table { width: 100%; }
+.deals-table-wrap .bw-table td .deal-customer {
+  color: var(--ink);
+  font-weight: 500;
+}
+.deals-table-wrap .bw-table td .deal-domain {
+  color: var(--ink-3);
+  font-size: 11.5px;
+}
+/* Empty / no-results row */
+#deals-tbody .deals-empty td {
+  text-align: center;
+  color: var(--ink-3);
+  padding: 28px 20px;
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+}
+@media (max-width: 640px) {
+  .deals-table-wrap { overflow-x: auto; }
+  .deals-table-wrap .bw-table { min-width: 560px; }
+}
+
+/* ---------------------------------------------------------
+   QUICK ACTIONS — icon chip on .pa-item (global .pa-grid layout)
+   --------------------------------------------------------- */
+.pa-item.pa-action {
+  text-decoration: none;
+  transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+.pa-item.pa-action:hover {
+  border-color: var(--rule-2);
+  transform: translateY(-2px);
+  box-shadow: var(--sh-2);
+}
+.pa-item .pa-icn {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: grid; place-items: center;
+  background: var(--brand-soft);
+  color: var(--brand-ink);
+  margin-bottom: 4px;
+}
+.pa-item .pa-icn svg { width: 17px; height: 17px; }
+.pa-item .pa-title {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -.01em;
+  color: var(--ink);
+}
+.pa-item .pa-arrow {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  letter-spacing: .04em;
+  color: var(--brand-ink);
+}
+.pa-item .pa-arrow svg { width: 13px; height: 13px; transition: transform .15s ease; }
+.pa-item.pa-action:hover .pa-arrow svg { transform: translateX(2px); }
+
+/* ---------------------------------------------------------
+   ANNOUNCEMENTS — list inside an .exec-card
+   --------------------------------------------------------- */
+.announce-card .announce-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--rule);
+  background: linear-gradient(180deg, var(--paper-3), transparent);
+}
+.announce-card .announce-head .icn {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: grid; place-items: center;
+  background: var(--brand-soft);
+  color: var(--brand-ink);
+}
+.announce-card .announce-head .icn svg { width: 17px; height: 17px; }
+.announce-card .announce-head .title {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -.01em;
+}
+#announce-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#announce-list li {
+  padding: 16px 22px;
+  border-top: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 16px;
+  align-items: baseline;
+}
+#announce-list li:first-child { border-top: 0; }
+#announce-list .an-date {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: .04em;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+#announce-list .an-body .an-title {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -.005em;
+  color: var(--ink);
+  display: block;
+}
+#announce-list .an-body .an-text {
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+@media (max-width: 560px) {
+  #announce-list li { grid-template-columns: 1fr; gap: 4px; }
+}
+
+/* ---------------------------------------------------------
+   Responsive helpers (spec breakpoints)
+   --------------------------------------------------------- */
+@media (max-width: 720px) {
+  .deals-toolbar { flex-direction: column; align-items: stretch; }
+  .deal-search-wrap { flex: 1 1 auto; }
+}
+@media (max-width: 640px) {
+  .auth-wrap { min-height: calc(100vh - 56px); padding-top: 28px; }
+}
+
+/* ---------------------------------------------------------
+   ADMIN — all-deals review table (admin.html)
+   Reuses the global .bw-table; adds the status/toast region and the
+   per-row Actions <select>. portal.js (data-auth="admin") fills
+   #admin-deals-tbody and wires the selects to updateDealStatus().
+   --------------------------------------------------------- */
+/* Status / toast region above the table */
+.admin-status {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  letter-spacing: .04em;
+  color: var(--ink-3);
+  margin-bottom: 16px;
+  min-height: 1.4em;
+}
+.admin-status.good { color: var(--good); }
+.admin-status.error { color: var(--signal); }
+
+/* The admin table is wider (8 cols) — let it scroll on narrow screens
+   without breaking the .exec-card chrome. */
+.admin-table-wrap { overflow-x: auto; }
+.admin-deals-table { min-width: 880px; table-layout: auto; }
+.admin-deals-table th,
+.admin-deals-table td { padding: 11px 16px; }
+
+/* Per-row Actions <select> — compact, themed via tokens (matches .fld select). */
+.admin-deals-table .status-select {
+  font: inherit;
+  font-family: var(--f-sans);
+  font-size: 12.5px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--r-sm);
+  padding: 6px 28px 6px 10px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'><path d='M4 6l4 4 4-4' stroke='%235E6878' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  background-size: 13px;
+  transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+}
+.admin-deals-table .status-select:focus {
+  outline: 0;
+  border-color: var(--brand);
+  background-color: var(--card);
+  box-shadow: 0 0 0 3px rgba(22,138,140,.12);
+}
+.admin-deals-table .status-select:disabled { opacity: .55; cursor: default; }
+
+/* =====================================================================
+   COMPACT DASHBOARD  (.dash)  — function-first, single-screen layout.
+   Consumes global :root tokens; overrides the older marketing-style
+   dashboard widgets via higher specificity. No reveal animations.
+   ===================================================================== */
+.dash {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 16px var(--gutter) 22px;
+}
+
+/* Header bar: title + context (left), primary action (right) */
+.dash-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.dash-title { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
+/* Company name + partner tier badge */
+.dash-title-row { display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.dash-tier {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  /* neutral (Registered / fallback) */
+  color: var(--ink-3);
+  background: var(--paper-3);
+  border: 1px solid var(--rule-2);
+}
+.dash-tier::before { content: ''; width: 6px; height: 6px; border-radius: 999px; background: currentColor; }
+.dash-tier[data-tier="silver"] { color: #647084; background: rgba(120, 132, 148, 0.16); border-color: rgba(120, 132, 148, 0.42); }
+.dash-tier[data-tier="gold"] { color: #8a6a17; background: rgba(201, 162, 39, 0.14); border-color: rgba(201, 162, 39, 0.45); }
+.dash-tier[data-tier="platinum"] { color: #2f7e80; background: rgba(46, 140, 140, 0.12); border-color: rgba(46, 140, 140, 0.4); }
+.dash-sub {
+  margin: 5px 0 0;
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+}
+.dash-bar-r .btn { padding: 9px 16px; font-size: 13.5px; }
+
+/* Working area: deals (left) + side column (right) */
+.dash-main {
+  display: grid;
+  grid-template-columns: minmax(0, 2.3fr) minmax(300px, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+.dash-side { display: flex; flex-direction: column; gap: 14px; }
+
+/* Generic panel chrome */
+.dash .panel {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-1);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+.dash .panel-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--rule);
+  background: linear-gradient(180deg, var(--paper-3), transparent);
+}
+.dash .panel-title {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.dash .panel-meta {
+  margin-left: auto;
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  color: var(--ink-3);
+}
+.dash .panel-body { min-height: 0; }
+
+/* Deals panel: filters + search inline in the head; dense scrollable table */
+.dash .panel-deals .panel-head { flex-wrap: wrap; row-gap: 8px; }
+.dash .panel-deals .deals-filters { display: flex; gap: 2px; flex-wrap: wrap; align-items: center; }
+.dash .panel-deals .deal-search-wrap {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--paper);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--r-sm);
+  padding: 5px 10px;
+  min-width: 210px;
+}
+.dash .deal-search-wrap svg { position: static; width: 14px; height: 14px; color: var(--ink-3); flex: none; }
+.dash .deal-search-wrap input {
+  border: 0;
+  background: none;
+  outline: none;
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--ink);
+  width: 100%;
+}
+.dash .deal-search-wrap:focus-within { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(22,138,140,.12); }
+
+/* Filter tabs — underline-on-active (tab form), matching the portal tab style */
+.dash .pt {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  color: var(--ink-3);
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  transition: color .12s ease, border-color .12s ease;
+}
+.dash .pt:hover { color: var(--ink); }
+.dash .pt.active { color: var(--ink); border-bottom-color: var(--brand); }
+.dash .pt .pt-c {
+  font-size: 10.5px;
+  color: var(--ink-3);
+  background: var(--paper-3);
+  padding: 1px 7px;
+  border-radius: 999px;
+}
+.dash .pt.active .pt-c { background: var(--brand-soft); color: var(--brand-ink); }
+
+/* Dense table; sticky header inside the scroll area */
+.dash .deals-scroll { max-height: calc(100vh - 300px); min-height: 150px; overflow: auto; }
+/* Auto layout (override styles.css table-layout:fixed) so columns size to
+   their content instead of equal-width cells whose long text overlaps the
+   next column. */
+.dash .bw-table { width: 100%; border-collapse: collapse; table-layout: auto; }
+.dash .bw-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 8px 14px;
+  background: var(--paper-3);
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-align: left;
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+.dash .bw-table td {
+  padding: 8px 14px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  border-bottom: 1px solid var(--rule);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.dash .bw-table tbody tr:last-child td { border-bottom: 0; }
+.dash .bw-table tbody tr:hover td { background: var(--paper-2); }
+.dash .bw-table .num { text-align: right; }
+.dash .bw-table .deal-customer { color: var(--ink); font-weight: 500; }
+.dash .bw-table .deal-domain { color: var(--ink-3); }
+/* Customer column may wrap (it is the longest); all other cells stay nowrap. */
+.dash .bw-table td:nth-child(2) { white-space: normal; min-width: 150px; }
+.dash .bw-table .deals-empty td { color: var(--ink-3); text-align: center; padding: 26px 14px; font-family: var(--f-mono); font-size: 12px; }
+
+/* Pipeline chart — compact, fills the side panel */
+.dash #pipeline-chart { padding: 12px 14px; }
+.dash #pipeline-chart svg { display: block; width: 100%; height: auto; }
+
+
+/* Per-deal rolling tier rate + lost-deal commission placeholder */
+.dash .bw-table .tier-pct { color: var(--ink-3); }
+.dash .bw-table .comm-na { color: var(--ink-3); }
+
+/* Partner tier card (right column) */
+.dash .tier-card { display: flex; flex-direction: column; gap: 6px; padding: 14px; }
+.dash .tier-card-eyebrow {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.dash .tier-card-val {
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.dash .tier-card-val .unit { font-size: 19px; font-weight: 500; color: var(--ink-3); margin-left: 1px; }
+.dash .tier-card-foot {
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  color: var(--brand-ink);
+  margin-top: 1px;
+}
+.dash .tier-card-foot .tier-next { color: var(--ink-3); }
+
+/* Slim footer for the dashboard */
+.dash-foot { padding: 12px 0; border-top: 1px solid var(--rule); margin-top: 16px; background: var(--paper); }
+.dash-foot .foot-bottom { margin: 0; display: flex; justify-content: space-between; gap: 12px; font-family: var(--f-mono); font-size: 11.5px; color: var(--ink-3); flex-wrap: wrap; }
+.dash-foot .foot-privacy a { color: var(--ink-2); }
+.dash-foot .foot-privacy a:hover { color: var(--brand-ink); }
+
+/* Responsive */
+@media (max-width: 980px) {
+  .dash-main { grid-template-columns: 1fr; }
+  .dash .deals-scroll { max-height: none; }
+}
+@media (max-width: 560px) {
+  .dash-bar { flex-direction: column; align-items: flex-start; }
+}
+
+/* =====================================================================
+   REGISTRATION MODAL  — deal-registration.html opens in an iframe popup
+   ===================================================================== */
+.reg-modal { position: fixed; inset: 0; z-index: 200; }
+.reg-modal[hidden] { display: none; }
+.reg-modal-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(11,16,25,.55);
+  -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
+  animation: regfade .18s ease;
+}
+@keyframes regfade { from { opacity: 0; } to { opacity: 1; } }
+.reg-modal-dialog {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: min(760px, 94vw); height: min(88vh, 920px);
+  background: var(--paper);
+  border: 1px solid var(--rule); border-radius: var(--r-lg);
+  box-shadow: var(--sh-3);
+  overflow: hidden; display: flex; flex-direction: column;
+  animation: regpop .2s cubic-bezier(.2,.6,.2,1);
+}
+@keyframes regpop {
+  from { opacity: 0; transform: translate(-50%,-47%) scale(.985); }
+  to { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+}
+.reg-modal-close {
+  position: absolute; top: 12px; right: 14px; z-index: 3;
+  width: 34px; height: 34px; border-radius: 999px;
+  border: 1px solid var(--rule); background: var(--card); color: var(--ink-2);
+  font-size: 20px; line-height: 1; cursor: pointer;
+  display: grid; place-items: center;
+  transition: background .12s ease, color .12s ease;
+}
+.reg-modal-close:hover { background: var(--paper-2); color: var(--ink); }
+.reg-modal-frame { width: 100%; height: 100%; border: 0; display: block; background: var(--paper); }
+.reg-modal-loading {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-family: var(--f-mono); font-size: 12px; color: var(--ink-3);
+  background: var(--paper); pointer-events: none;
+}
+body.reg-open { overflow: hidden; }
+
+/* Embed mode: when deal-registration.html is loaded inside the modal iframe,
+   hide the page chrome so only the wizard form shows. (.embed is set on <html>
+   by an inline head script when the page detects it is framed.) */
+.embed .nav,
+.embed footer { display: none !important; }
+.embed .dr { background: var(--paper); }
+.embed .dr-work { padding: 16px 0 22px; }
+.embed .dr-work-inner { max-width: none; }

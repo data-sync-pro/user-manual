@@ -1,0 +1,35 @@
+<!-- Shared portal nav -->
+<nav class="nav" [class.scrolled]="scrolled()" [class.menu-open]="menuOpen()">
+  <div class="nav-inner">
+    <a class="brand-mark" routerLink="/dashboard" aria-label="Partner Portal home">
+      <img class="logo" src="logo.png" alt="" width="32" height="32" /><span>Data Sync Pro</span></a>
+    <div class="nav-links">
+      <a routerLink="/dashboard" [class.active]="active === 'dashboard'"
+         [attr.aria-current]="active === 'dashboard' ? 'page' : null">Dashboard</a>
+      @if (isAdmin) {
+        <a routerLink="/admin" [class.active]="active === 'admin'"
+           [attr.aria-current]="active === 'admin' ? 'page' : null">Admin</a>
+      }
+    </div>
+    <div class="nav-spacer"></div>
+    <div class="nav-cta">
+      <a class="btn" routerLink="/dashboard" fragment="register" [class.active]="active === 'register'">Register a deal</a>
+      <a class="btn secondary" href="#" (click)="signOut($event)">Sign out</a>
+    </div>
+    <button class="nav-toggle" type="button"
+            [attr.aria-label]="menuOpen() ? 'Close menu' : 'Open menu'"
+            [attr.aria-expanded]="menuOpen()" (click)="toggleMenu()">
+      <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" [hidden]="!menuOpen()">
+    <div class="nav-mobile-inner">
+      <a routerLink="/dashboard" (click)="closeMenu()">Dashboard</a>
+      @if (isAdmin) {
+        <a routerLink="/admin" (click)="closeMenu()">Admin</a>
+      }
+      <a class="btn" routerLink="/dashboard" fragment="register" (click)="closeMenu()">Register a deal</a>
+      <a class="btn secondary" href="#" (click)="signOut($event)">Sign out</a>
+    </div>
+  </div>
+</nav>
