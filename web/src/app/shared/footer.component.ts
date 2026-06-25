@@ -1,6 +1,7 @@
 import { Component, Input, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../core/auth.service';
+import { ReportIssueComponent } from './report-issue.component';
 
 // Shared footer with the three layouts the original site used:
 //   'login' — slim, no sign-out link
@@ -9,7 +10,7 @@ import { AuthService } from '../core/auth.service';
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ReportIssueComponent],
   templateUrl: './footer.component.html',
 })
 export class FooterComponent {

@@ -120,12 +120,20 @@
             <div class="wz-panel-head">
               <h3 class="wz-panel-title">Primary contact</h3>
             </div>
+
             <div class="grid g-2">
+
               <label class="fld">
-                <span class="fl-l">Full name <span class="req">*</span></span>
-                <input type="text" name="contactName" required placeholder="Jane Doe"
-                       [(ngModel)]="data['contactName']" [ngModelOptions]="{ standalone: true }"
-                       [attr.aria-invalid]="isInvalid('contactName')" />
+                <span class="fl-l">First name <span class="req">*</span></span>
+                <input type="text" name="contactFirstName" required placeholder="Jane"
+                       [(ngModel)]="data['contactFirstName']" [ngModelOptions]="{ standalone: true }"
+                       [attr.aria-invalid]="isInvalid('contactFirstName')" />
+              </label>
+              <label class="fld">
+                <span class="fl-l">Last name <span class="req">*</span></span>
+                <input type="text" name="contactLastName" required placeholder="Doe"
+                       [(ngModel)]="data['contactLastName']" [ngModelOptions]="{ standalone: true }"
+                       [attr.aria-invalid]="isInvalid('contactLastName')" />
               </label>
               <label class="fld">
                 <span class="fl-l">Role <span class="req">*</span></span>
@@ -142,12 +150,19 @@
                 <span class="fl-hint">Use a work address — personal domains (Gmail, Yahoo…) aren't accepted.</span>
               </label>
               <label class="fld">
-                <span class="fl-l">Phone</span>
-                <input type="tel" name="phone" placeholder="+1 (555) 555-5555"
-                       [(ngModel)]="data['phone']" [ngModelOptions]="{ standalone: true }" />
+                <span class="fl-l">Track<span class="req">*</span></span>
+                <div class="seg" role="radiogroup" aria-label="Partner track">
+                  <input type="radio" name="track" id="trk-sol" value="Solution" [(ngModel)]="data['track']" [ngModelOptions]="{ standalone: true }" />
+                  <label for="trk-sol">Solution</label>
+                  <input type="radio" name="track" id="trk-ref" value="Referral" [(ngModel)]="data['track']" [ngModelOptions]="{ standalone: true }" />
+                  <label for="trk-ref">Referral</label>
+                </div>
               </label>
             </div>
+
           </section>
+
+          
 
           <!-- STEP 3 · Purchase -->
           <section class="wz-sub" id="sec-purchase" aria-label="Purchase">
@@ -209,7 +224,7 @@
                   <input type="radio" name="successPlan" id="sp-std" value="Standard" [(ngModel)]="data['successPlan']" [ngModelOptions]="{ standalone: true }" />
                   <label for="sp-std">Standard</label>
                   <input type="radio" name="successPlan" id="sp-prem" value="Premium" [(ngModel)]="data['successPlan']" [ngModelOptions]="{ standalone: true }" />
-                  <label for="sp-prem">Premium</label>
+                  <label for="sp-prem">Premium<em>+25%</em></label>
                 </div>
               </div>
             </div>
@@ -286,7 +301,8 @@
               <div class="rv-card">
                 <div class="rv-h">Contact <button type="button" class="rv-edit" (click)="gotoStep(2)">Edit</button></div>
                 <dl class="rv-dl">
-                  <div class="rv-row"><dt>Full name</dt><dd>{{ rv(data['contactName']) }}</dd></div>
+                  <div class="rv-row"><dt>First name</dt><dd>{{ rv(data['contactFirstName']) }}</dd></div>
+                  <div class="rv-row"><dt>Last name</dt><dd>{{ rv(data['contactLastName']) }}</dd></div>
                   <div class="rv-row"><dt>Title</dt><dd>{{ rv(data['contactTitle']) }}</dd></div>
                   <div class="rv-row"><dt>Work email</dt><dd>{{ rv(data['workEmail']) }}</dd></div>
                   <div class="rv-row"><dt>Phone</dt><dd>{{ rv(data['phone']) }}</dd></div>
@@ -295,6 +311,7 @@
               <div class="rv-card">
                 <div class="rv-h">Purchase <button type="button" class="rv-edit" (click)="gotoStep(3)">Edit</button></div>
                 <dl class="rv-dl">
+                  <div class="rv-row"><dt>Partner track</dt><dd>{{ rv(data['track']) }}</dd></div>
                   <div class="rv-row"><dt>Success plan</dt><dd>{{ rv(data['successPlan']) }}</dd></div>
                   <div class="rv-row"><dt>Salesforce orgs</dt><dd>{{ rvOrgs() }}</dd></div>
                 </dl>
@@ -321,7 +338,7 @@
           </div>
           <span class="wz-status">{{ statusText }}</span>
           <div class="wz-nav-r">
-            <button type="button" class="btn" [hidden]="step() === total" (click)="goNext()">Next
+            <button type="button" class="btn" [hidden]="step() === total" [disabled]="!canAdvance()" (click)="goNext()">Next
               <svg class="arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
             <button type="submit" class="btn" [hidden]="step() !== total" [disabled]="submitting()">

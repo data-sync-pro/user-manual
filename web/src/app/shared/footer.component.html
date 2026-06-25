@@ -8,7 +8,7 @@
     <footer class="dash-foot"><div class="container">
       <div class="foot-bottom">
         <span>&copy; 2026 Data Sync Pro &middot; Partner Portal</span>
-        <span class="foot-privacy">Confidential — for registered partners. · <a href="#" (click)="signOut($event)">Sign out</a></span>
+        <span class="foot-privacy">Confidential — for registered partners. · <app-report-issue></app-report-issue> · <a href="#" (click)="signOut($event)">Sign out</a></span>
       </div>
     </div></footer>
   }
@@ -21,7 +21,7 @@
         </div>
         <div class="foot-col"><h5>Portal</h5><ul><li><a routerLink="/dashboard">Dashboard</a></li><li><a routerLink="/dashboard" fragment="register">Register a deal</a></li><li><a routerLink="/admin">Admin</a></li></ul></div>
         <div class="foot-col"><h5>Resources</h5><ul><li><a href="https://datasyncpro.io/recipes">Recipes</a></li><li><a href="https://datasyncpro.io/user-manual">User Manual</a></li><li><a href="https://datasyncpro.io/faqs">FAQs</a></li></ul></div>
-        <div class="foot-col"><h5>Company</h5><ul><li><a href="https://datasyncpro.io">datasyncpro.io</a></li><li><a href="#" (click)="signOut($event)">Sign out</a></li></ul></div>
+        <div class="foot-col"><h5>Company</h5><ul><li><a href="https://datasyncpro.io">datasyncpro.io</a></li><li><app-report-issue></app-report-issue></li><li><a href="#" (click)="signOut($event)">Sign out</a></li></ul></div>
       </div>
       <div class="foot-bottom"><span>&copy; 2026 Data Sync Pro &middot; Partner Portal</span><span class="foot-privacy">Confidential — for registered partners.</span></div>
     </div></footer>

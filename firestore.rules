@@ -38,6 +38,15 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // ---- reports/{id} ----
+    // User-submitted error/issue reports. Any signed-in user files their own;
+    // only admins read or triage them.
+    match /reports/{id} {
+      allow create: if isSignedIn()
+        && request.resource.data.reporterUid == request.auth.uid;
+      allow read, update, delete: if isAdmin();
+    }
+
     // ---- default deny everything else ----
     match /{document=**} {
       allow read, write: if false;

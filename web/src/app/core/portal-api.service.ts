@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import {
   Firestore,
+  Timestamp,
   collection,
   doc,
   query,
@@ -69,6 +70,8 @@ function mapDealDoc(snap: QueryDocumentSnapshot<DocumentData>): Deal {
     stage: data['stage'] || '',
     status: (data['status'] || 'pending') as DealStatus,
     submitted: tsToDateStr(data['submittedAt']),
+    track: data['track'] || '',
+    paidDate: tsToDateStr(data['paidAt']),
   };
 }
 
@@ -76,6 +79,12 @@ function mapDealDoc(snap: QueryDocumentSnapshot<DocumentData>): Deal {
 function genDealId(): string {
   const n = String(Math.floor(1000 + Math.random() * 9000));
   return 'DR-2026-' + n;
+}
+
+// Generate a human report id 'ER-2026-NNNN' (random 4-digit).
+function genReportId(): string {
+  const n = String(Math.floor(1000 + Math.random() * 9000));
+  return 'ER-2026-' + n;
 }
 
 // Map the deal-registration form's verbose sales-stage labels to the canonical
@@ -167,10 +176,20 @@ export class PortalApiService {
       arr,
       stage,
       status: 'pending' as const,
-      track: (partner && partner.track) || (payload['track'] as string) || '',
+      // The deal's registered track wins; fall back to the partner's default.
+      track: (payload['track'] as string) || (partner && partner.track) || '',
       products,
       contact: {
-        name: (payload['contactName'] as string) || (payload['name'] as string) || '',
+        firstName: (payload['contactFirstName'] as string) || '',
+        lastName: (payload['contactLastName'] as string) || '',
+        // Keep a combined name for display/back-compat (built from first+last).
+        name:
+          [payload['contactFirstName'], payload['contactLastName']]
+            .filter(Boolean)
+            .join(' ') ||
+          (payload['contactName'] as string) ||
+          (payload['name'] as string) ||
+          '',
         title: (payload['contactTitle'] as string) || (payload['title'] as string) || '',
         email:
           (payload['email'] as string) ||
@@ -195,6 +214,34 @@ export class PortalApiService {
     return { id, status: 'pending' };
   }
 
+  // Writes a reports/{ER-2026-NNNN} doc for a user-reported error/issue.
+  // Auto-attaches the reporter, the page they were on, and their user agent.
+  async submitReport(input: {
+    category?: string;
+    message: string;
+    page?: string;
+  }): Promise<{ id: string }> {
+    const message = String(input?.message || '').trim();
+    if (!message) throw new Error('Please describe the issue before submitting.');
+
+    const user = this.authSvc.currentUser();
+    const partner = this.authSvc.currentPartner();
+    const id = genReportId();
+    const docData = {
+      id,
+      reporterUid: user?.uid || '',
+      reporterEmail: partner?.email || user?.email || '',
+      category: input.category || 'Other',
+      message: message.slice(0, 5000),
+      page: input.page || '',
+      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
+      status: 'open' as const,
+      createdAt: serverTimestamp(),
+    };
+    await setDoc(doc(this.db, 'reports', id), docData);
+    return { id };
+  }
+
   /* ---- ADMIN-only ---- */
 
   // All deals across partners, newest first.
@@ -211,5 +258,12 @@ export class PortalApiService {
 
   updateDealStatus(dealId: string, status: DealStatus): Promise<void> {
     return updateDoc(doc(this.db, 'deals', dealId), { status });
+  }
+
+  // Record (or clear) the date the client paid. Stored as a Timestamp at UTC
+  // midnight so it round-trips through tsToDateStr; '' clears it back to null.
+  setDealPaidDate(dealId: string, ymd: string): Promise<void> {
+    const paidAt = ymd ? Timestamp.fromDate(new Date(ymd.slice(0, 10) + 'T00:00:00Z')) : null;
+    return updateDoc(doc(this.db, 'deals', dealId), { paidAt });
   }
 }

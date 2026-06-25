@@ -30,7 +30,7 @@ const STEP_ANCHORS: Record<number, string> = {
 // Required field names per wizard step (orgs are validated separately).
 const REQUIRED: Record<number, string[]> = {
   1: ['legalEntity', 'domain'],
-  2: ['contactName', 'contactTitle', 'workEmail'],
+  2: ['contactFirstName', 'contactLastName', 'contactTitle', 'workEmail'],
   3: [],
   4: ['affirmSelfReferral', 'affirmEmployment', 'affirmPipeline', 'affirmConsent', 'affirmTruthful'],
   5: [],
@@ -70,11 +70,13 @@ export class DealRegistrationComponent {
     industry: 'SaaS & Software',
     companySize: '1–50',
     orgType: 'Enterprise Edition',
-    contactName: '',
+    contactFirstName: '',
+    contactLastName: '',
     contactTitle: '',
     workEmail: '',
     phone: '',
     successPlan: 'Standard',
+    track: 'Solution',
   };
   affirms: Record<string, boolean> = {
     affirmSelfReferral: false,
@@ -273,12 +275,31 @@ export class DealRegistrationComponent {
   goNext(): void {
     const s = this.step();
     if (s >= TOTAL) return;
-    // Leaving the merged group → validate all of its sub-steps together.
-    if (s === MERGED) {
+    // Steps 1-3 share one screen — validate them all together and jump straight
+    // to step 4 (no stepping 1→2→3 within the merged panel).
+    if (s <= MERGED) {
       if (this.validateMerged()) this.show(MERGED + 1);
       return;
     }
     if (this.validateStep(s)) this.show(s + 1);
+  }
+
+  // Whether the current leg's required fields are filled — drives the Next
+  // button's disabled (greyed) state. Steps 1-3 are one screen, so their
+  // requirements (Customer + Contact fields + every org named) are checked
+  // together; step 4 requires all affirmations checked.
+  canAdvance(): boolean {
+    const s = this.step();
+    if (s <= MERGED) {
+      const required = [...REQUIRED[1], ...REQUIRED[2]];
+      if (required.some((name) => !String(this.data[name] ?? '').trim())) return false;
+      if (this.orgs.some((o) => !o.name.trim())) return false;
+      return true;
+    }
+    if (s === 4) {
+      return REQUIRED[4].every((name) => this.affirms[name]);
+    }
+    return true;
   }
   goBack(): void {
     if (this.step() > 1) this.show(this.step() - 1);
@@ -313,11 +334,13 @@ export class DealRegistrationComponent {
       industry: this.data['industry'],
       companySize: this.data['companySize'],
       orgType: this.data['orgType'],
-      contactName: this.data['contactName'],
+      contactFirstName: this.data['contactFirstName'],
+      contactLastName: this.data['contactLastName'],
       contactTitle: this.data['contactTitle'],
       workEmail: this.data['workEmail'],
       phone: this.data['phone'],
       successPlan: this.data['successPlan'],
+      track: this.data['track'],
       orgs: this.orgs.map((o) => ({
         name: o.name,
         connections: Number(o.conn) || 0,

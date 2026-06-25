@@ -33,14 +33,15 @@
                 <th scope="col">Stage</th>
                 <th scope="col">Status</th>
                 <th scope="col">Submitted</th>
+                <th scope="col">Client paid</th>
                 <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
               @if (loading()) {
-                <tr class="deals-empty"><td colspan="8">Loading deals…</td></tr>
+                <tr class="deals-empty"><td colspan="9">Loading deals…</td></tr>
               } @else if (deals().length === 0) {
-                <tr class="deals-empty"><td colspan="8">No deals to review.</td></tr>
+                <tr class="deals-empty"><td colspan="9">No deals to review.</td></tr>
               } @else {
                 @for (d of deals(); track d.id) {
                   <tr>
@@ -51,6 +52,11 @@
                     <td>{{ d.stage }}</td>
                     <td><span [class]="badge(d.status).cls">{{ badge(d.status).label }}</span></td>
                     <td class="num">{{ d.submitted }}</td>
+                    <td>
+                      <input type="date" class="paid-input" [attr.aria-label]="'Client paid date for ' + d.id"
+                             [value]="d.paidDate" [disabled]="isUpdating(d.id)"
+                             (change)="onPaidDateChange(d, $any($event.target).value)" />
+                    </td>
                     <td>
                       <select class="status-select" [attr.aria-label]="'Set status for ' + d.id"
                               [value]="d.status" [disabled]="isUpdating(d.id)"

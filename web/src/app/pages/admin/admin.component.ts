@@ -96,6 +96,33 @@ export class AdminComponent implements OnInit {
       });
   }
 
+  // Record the date the client paid — drives the partner's commission schedule.
+  onPaidDateChange(deal: Deal, ymd: string): void {
+    const prev = deal.paidDate;
+    if (ymd === prev) return;
+
+    const upd = new Set(this.updating());
+    upd.add(deal.id);
+    this.updating.set(upd);
+
+    this.api
+      .setDealPaidDate(deal.id, ymd)
+      .then(() => {
+        this.deals.update((list) =>
+          list.map((d) => (d.id === deal.id ? { ...d, paidDate: ymd } : d)),
+        );
+        this.clearUpdating(deal.id);
+        this.toast(deal.id + (ymd ? ' · client paid ' + ymd : ' · payment date cleared'));
+      })
+      .catch((err: Error) => {
+        this.deals.update((list) =>
+          list.map((d) => (d.id === deal.id ? { ...d, paidDate: prev } : d)),
+        );
+        this.clearUpdating(deal.id);
+        this.toast('Update failed: ' + (err?.message || 'error'));
+      });
+  }
+
   private clearUpdating(id: string): void {
     const upd = new Set(this.updating());
     upd.delete(id);
