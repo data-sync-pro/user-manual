@@ -1,10 +1,11 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PortalApiService } from '../../core/portal-api.service';
 import { fmtMoney } from '../../core/format';
-import { Deal, DealStatus } from '../../core/models';
+import { Deal, DealStatus, PartnerRow } from '../../core/models';
 import { NavComponent } from '../../shared/nav.component';
 import { FooterComponent } from '../../shared/footer.component';
+import { SecurityPanelComponent } from '../../shared/security-panel.component';
 
 const STATUS_BADGE: Record<DealStatus, { cls: string; label: string }> = {
   pending: { cls: 'tag', label: 'Pending' },
@@ -17,13 +18,14 @@ const STATUSES: DealStatus[] = ['pending', 'accepted', 'won', 'lost'];
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [RouterLink, NavComponent, FooterComponent],
+  imports: [RouterLink, NavComponent, FooterComponent, SecurityPanelComponent],
   templateUrl: './admin.component.html',
 })
 export class AdminComponent implements OnInit {
   private api = inject(PortalApiService);
 
   readonly deals = signal<Deal[]>([]);
+  readonly partners = signal<PartnerRow[]>([]);
   readonly loading = signal(true);
   readonly statusText = signal('Loading deals…');
   readonly updating = signal<Set<string>>(new Set());
@@ -31,7 +33,21 @@ export class AdminComponent implements OnInit {
   readonly statuses = STATUSES;
   readonly fmtMoney = fmtMoney;
 
+  // Each partner + how many deals they own (derived from the all-deals load).
+  readonly partnerRows = computed(() => {
+    const counts = new Map<string, number>();
+    this.deals().forEach((d) => counts.set(d.ownerUid, (counts.get(d.ownerUid) || 0) + 1));
+    return this.partners().map((p) => ({ ...p, dealCount: counts.get(p.uid) || 0 }));
+  });
+
   private toastTimer: ReturnType<typeof setTimeout> | null = null;
+
+  // Owner uid -> the partner's (Salesforce-consistent) company name; falls back
+  // to the uid if the partner profile hasn't loaded.
+  partnerName(uid: string): string {
+    const p = this.partners().find((x) => x.uid === uid);
+    return p?.company || p?.name || uid;
+  }
 
   badge(status: DealStatus) {
     return STATUS_BADGE[status] || STATUS_BADGE.pending;
@@ -52,6 +68,11 @@ export class AdminComponent implements OnInit {
         this.loading.set(false);
         this.statusText.set('Failed to load deals: ' + (err?.message || 'error'));
       });
+
+    this.api
+      .getAllPartners()
+      .then((ps) => this.partners.set(Array.isArray(ps) ? ps : []))
+      .catch(() => this.partners.set([]));
   }
 
   private setCountText(): void {

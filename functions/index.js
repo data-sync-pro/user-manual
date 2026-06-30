@@ -18,10 +18,11 @@
  *   SF_API_VERSION        default v60.0
  */
 const { onDocumentCreated } = require('firebase-functions/v2/firestore');
+const { onCall, HttpsError } = require('firebase-functions/v2/https');
 const { setGlobalOptions } = require('firebase-functions/v2');
 const logger = require('firebase-functions/logger');
 const { initializeApp } = require('firebase-admin/app');
-const { getFirestore, FieldValue } = require('firebase-admin/firestore');
+const { getFirestore, FieldValue, Timestamp } = require('firebase-admin/firestore');
 const fs = require('fs');
 const path = require('path');
 
@@ -46,6 +47,14 @@ function getPrivateKey() {
 function assertConfigured() {
   const missing = ['SF_CLIENT_ID', 'SF_USERNAME'].filter((k) => !process.env[k]);
   if (missing.length) throw new Error('Salesforce not configured — missing: ' + missing.join(', '));
+}
+
+// The partner's Salesforce Account Id (partners/{uid}.salesforceAccountId), or
+// null. Ties portal partners to a SF Account for PartnerAccount-scoped sync.
+async function partnerAccountId(uid) {
+  if (!uid) return null;
+  const snap = await db.collection('partners').doc(uid).get();
+  return (snap.exists && snap.get('salesforceAccountId')) || null;
 }
 
 // Trim a value to a text field's max length; '' / null -> undefined (omit field).
@@ -76,9 +85,18 @@ function splitName(full) {
 function mapDealToSObject(deal, dealId) {
   const contact = deal.contact || {};
   const orgs = Array.isArray(deal.orgs) ? deal.orgs : [];
-  const orgSummary = orgs
-    .map((o) => `${o.name || 'org'} (${o.connections || 0} conn / ${o.executables || 0} exec)`)
-    .join('; ');
+  // Customer Salesforce orgs serialized as a JSON array string for
+  // RequestedLicenseInfo__c, e.g.
+  // [{"name":"o1","connections":5,"executables":200,"daily_batch":"20k"}].
+  const orgsJson = JSON.stringify(
+    orgs.map((o) => ({
+      name: o.name || '',
+      connections: Number(o.connections) || 0,
+      executables: Number(o.executables) || 0,
+      // Drop the " records" suffix: '20k records' -> '20k', '1M records' -> '1M'.
+      daily_batch: String(o.batch || '').replace(/\s*records$/i, '').trim(),
+    })),
+  );
   // Prefer the explicit first/last fields; fall back to splitting a combined
   // name for legacy deals registered before the form captured them separately.
   const fallback = splitName(contact.name);
@@ -92,24 +110,18 @@ function mapDealToSObject(deal, dealId) {
     CustomerWebsite__c: toUrl(deal.domain),
     CustomerContactFirstName__c: clip(first, 20),
     CustomerContactLastName__c: clip(last, 20),
+    CustomerContactTitle__c: clip(contact.title, 20),
     CustomerContactEmail__c: clip(contact.email, 80),
+    // Dedicated fields (all Text(20)) — formerly crammed into RequestedLicenseInfo__c.
+    Stage__c: clip(deal.stage, 20),
+    CustomerCountry__c: clip(deal.hqCountry, 20),
+    industry__c: clip(deal.industry, 20), // API name is lowercase in this org
+    CustomerCompanySize__c: clip(deal.companySize, 20),
+    CustomerOrgType__c: clip(deal.orgType, 20),
     Track__c: clip(deal.track), // picklist — value must exist (Solution / Referral)
     Status__c: clip(deal.status), // picklist — value must exist (pending/accepted/won/lost)
-    RequestedLicenseInfo__c: clip(
-      [
-        deal.stage ? `Stage: ${deal.stage}` : '',
-        contact.title ? `Contact title: ${contact.title}` : '',
-        contact.phone ? `Contact phone: ${contact.phone}` : '',
-        deal.hqCountry ? `HQ country: ${deal.hqCountry}` : '',
-        deal.industry ? `Industry: ${deal.industry}` : '',
-        deal.companySize ? `Company size: ${deal.companySize}` : '',
-        deal.orgType ? `Org type: ${deal.orgType}` : '',
-        orgSummary ? `Customer SF orgs: ${orgSummary}` : '',
-      ]
-        .filter(Boolean)
-        .join('\n'),
-      32768,
-    ),
+    // Customer Salesforce orgs as a JSON array string (parseable downstream).
+    RequestedLicenseInfo__c: clip(orgsJson, 32768),
   };
 }
 
@@ -171,7 +183,12 @@ exports.syncDealToSalesforce = onDocumentCreated('deals/{dealId}', async (event)
 
   try {
     assertConfigured();
-    const result = await upsertSalesforce(mapDealToSObject(deal, dealId), dealId);
+    const sobject = mapDealToSObject(deal, dealId);
+    // Attribute the deal to the partner's Salesforce Account so the
+    // PartnerAccount-scoped reverse mirror can find it.
+    const accountId = await partnerAccountId(deal.ownerUid);
+    if (accountId) sobject.PartnerAccount__c = accountId;
+    const result = await upsertSalesforce(sobject, dealId);
     await snap.ref.update({
       salesforceId: result.id,
       salesforceObject: SF_OBJECT,
@@ -184,4 +201,138 @@ exports.syncDealToSalesforce = onDocumentCreated('deals/{dealId}', async (event)
     await snap.ref.update({ salesforceSyncError: err.message });
     throw err; // let Functions retry (if enabled)
   }
+});
+
+/* ============================ REVERSE SYNC ============================ */
+/* Pull Salesforce-side edits (status, amount, …) back onto the deal docs.
+ * Triggered by the dashboard on load; throttled per user so a rapid refresh
+ * doesn't hammer Salesforce. The forward sync is onCreate only, so writing
+ * these updates never re-triggers it (no loop). */
+
+const PULL_THROTTLE_MS = 5 * 60 * 1000; // once per 5 minutes per user
+const DEAL_STATUSES = ['pending', 'accepted', 'won', 'lost'];
+const SF_PULL_FIELDS = [
+  'Id', SF_EXTERNAL_ID_FIELD, 'Status__c', 'Amount__c', 'Track__c', 'Stage__c',
+  'CustomerCompanyName__c', 'CustomerWebsite__c',
+  'CustomerContactFirstName__c', 'CustomerContactLastName__c',
+  'CustomerContactTitle__c', 'CustomerContactEmail__c',
+  'CustomerCountry__c', 'industry__c', 'CustomerCompanySize__c', 'CustomerOrgType__c',
+  'CreatedDate', 'LastModifiedDate',
+];
+
+const stripProto = (u) => String(u || '').replace(/^https?:\/\//i, '').replace(/\/+$/, '');
+
+// SF record -> a deal document (Salesforce is the source of truth). Used with
+// set({merge:true}) so it CREATES the deal if missing and updates it otherwise,
+// without clobbering portal-only fields it doesn't carry. `docId` is the
+// resolved Firestore key — our external id when present, else the SF record Id
+// (for deals created directly in Salesforce that don't carry a SourceSystemID).
+function mapSObjectToDealDoc(r, uid, docId) {
+  const doc = {
+    id: docId || r[SF_EXTERNAL_ID_FIELD] || r.Id,
+    ownerUid: uid,
+    salesforceId: r.Id,
+    salesforceLastModified: r.LastModifiedDate || null,
+    salesforceSyncedFromAt: FieldValue.serverTimestamp(),
+  };
+  const status = String(r.Status__c || '').toLowerCase();
+  if (DEAL_STATUSES.includes(status)) doc.status = status;
+  if (r.Amount__c != null) doc.arr = Number(r.Amount__c);
+  if (r.Track__c) doc.track = r.Track__c;
+  if (r.Stage__c) doc.stage = r.Stage__c;
+  if (r.CustomerCompanyName__c) doc.customer = r.CustomerCompanyName__c;
+  if (r.CustomerWebsite__c) doc.domain = stripProto(r.CustomerWebsite__c);
+  if (r.CustomerCountry__c) doc.hqCountry = r.CustomerCountry__c;
+  if (r.industry__c) doc.industry = r.industry__c;
+  if (r.CustomerCompanySize__c) doc.companySize = r.CustomerCompanySize__c;
+  if (r.CustomerOrgType__c) doc.orgType = r.CustomerOrgType__c;
+
+  const contact = {};
+  if (r.CustomerContactFirstName__c) contact.firstName = r.CustomerContactFirstName__c;
+  if (r.CustomerContactLastName__c) contact.lastName = r.CustomerContactLastName__c;
+  if (r.CustomerContactFirstName__c || r.CustomerContactLastName__c) {
+    contact.name = [r.CustomerContactFirstName__c, r.CustomerContactLastName__c].filter(Boolean).join(' ');
+  }
+  if (r.CustomerContactTitle__c) contact.title = r.CustomerContactTitle__c;
+  if (r.CustomerContactEmail__c) contact.email = r.CustomerContactEmail__c;
+  if (Object.keys(contact).length) doc.contact = contact;
+
+  // submittedAt drives the dashboard's ordered query — seed it from SF CreatedDate
+  // so deals created in Salesforce still show up after the mirror.
+  if (r.CreatedDate) doc.submittedAt = Timestamp.fromDate(new Date(r.CreatedDate));
+  return doc;
+}
+
+async function querySalesforce(soql) {
+  const { access_token, instance_url } = await getAccessToken();
+  const res = await fetch(`${instance_url}/services/data/${SF_API_VERSION}/query?q=${encodeURIComponent(soql)}`, {
+    headers: { Authorization: `Bearer ${access_token}` },
+  });
+  if (!res.ok) throw new Error(`Salesforce query failed: ${res.status} ${await res.text()}`);
+  return res.json();
+}
+
+// Callable: mirror this partner's Salesforce deals into Firestore (Salesforce is
+// the source of truth). Scoped by PartnerAccount__c = the partner's SF Account;
+// upsert-creates deals that exist in Salesforce but not yet locally. Throttled to
+// once per PULL_THROTTLE_MS per user — the dashboard calls it on load.
+exports.refreshFromSalesforce = onCall(async (request) => {
+  const uid = request.auth && request.auth.uid;
+  if (!uid) throw new HttpsError('unauthenticated', 'Sign in required.');
+
+  // An explicit "Refresh from Salesforce" click bypasses the auto-throttle; the
+  // automatic on-load pull does not (force omitted).
+  const force = !!(request.data && request.data.force);
+
+  // Throttle on the last SUCCESSFUL pull for this user.
+  const metaRef = db.collection('syncMeta').doc(uid);
+  const meta = await metaRef.get();
+  const lastPull = meta.exists && meta.get('lastPullAt') ? meta.get('lastPullAt').toMillis() : 0;
+  const since = Date.now() - lastPull;
+  if (!force && since < PULL_THROTTLE_MS) {
+    return { skipped: true, reason: 'throttled', nextInMs: PULL_THROTTLE_MS - since };
+  }
+
+  try {
+    assertConfigured();
+  } catch (e) {
+    throw new HttpsError('failed-precondition', e.message);
+  }
+
+  const accountId = await partnerAccountId(uid);
+  if (!accountId) {
+    await metaRef.set({ lastPullAt: FieldValue.serverTimestamp() }, { merge: true });
+    return { updated: 0, count: 0, reason: 'no-account' };
+  }
+
+  let updated = 0;
+  try {
+    // Mirror every deal linked to this partner's SF Account. Deals created
+    // directly in Salesforce may not carry our external id (SourceSystemID) yet,
+    // so we DON'T require it here — those key on the SF record Id below.
+    const soql =
+      `SELECT ${SF_PULL_FIELDS.join(', ')} FROM ${SF_OBJECT} ` +
+      `WHERE PartnerAccount__c = '${String(accountId).replace(/'/g, "\\'")}'`;
+    const data = await querySalesforce(soql); // up to 2000 rows/page; demo scale
+    const batch = db.batch();
+    let n = 0;
+    for (const r of data.records || []) {
+      // Prefer our external id; fall back to the SF record Id for Salesforce-
+      // originated deals. Using a stable per-record key keeps repeat pulls
+      // idempotent (set+merge overwrites the same doc, never duplicates it).
+      const docId = r[SF_EXTERNAL_ID_FIELD] || r.Id;
+      if (!docId) continue;
+      batch.set(db.collection('deals').doc(docId), mapSObjectToDealDoc(r, uid, docId), { merge: true });
+      n++;
+    }
+    if (n) await batch.commit();
+    updated = n;
+  } catch (err) {
+    logger.error(`refreshFromSalesforce failed for ${uid}: ${err.message}`);
+    throw new HttpsError('internal', err.message);
+  }
+
+  await metaRef.set({ lastPullAt: FieldValue.serverTimestamp() }, { merge: true });
+  logger.info(`refreshFromSalesforce: mirrored ${updated} deal(s) for ${uid} (account ${accountId})`);
+  return { updated, count: updated };
 });

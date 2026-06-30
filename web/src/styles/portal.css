@@ -242,6 +242,75 @@
   padding: 10px 12px;
 }
 .auth-form .form-error[hidden] { display: none; }
+/* "Forgot password?" link + reset confirmation on the login form */
+.auth-row-end { display: flex; justify-content: flex-end; margin-top: -6px; }
+.auth-link {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--brand-ink);
+  cursor: pointer;
+}
+.auth-link:hover { text-decoration: underline; }
+.auth-link:disabled { color: var(--mute); cursor: default; text-decoration: none; }
+.auth-reset-msg {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-sm);
+  padding: 9px 11px;
+}
+/* "or" divider between the password form and the Google sign-in button */
+.auth-or {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0 2px;
+  color: var(--mute);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.auth-or::before, .auth-or::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--rule-2);
+}
+/* Google sign-in button — matches the password button footprint */
+.btn.auth-google {
+  width: 100%;
+  justify-content: center;
+  padding: 12px 18px;
+  gap: 10px;
+}
+.btn.auth-google .g-icon { flex: 0 0 auto; }
+
+/* Account-security panel ("Sign-in methods") — connect Google / set a password */
+.sec-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.sec-row:last-of-type { border-bottom: 0; }
+.sec-row-info { display: flex; align-items: center; gap: 10px; }
+.sec-row-label { font-weight: 600; color: var(--ink-2); }
+.sec-pw-form { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+.sec-reauth { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.sec-reauth-msg { color: var(--ink-3); font-size: 12.5px; }
+.sec-reauth input {
+  padding: 10px 12px;
+  border: 1px solid var(--rule-2);
+  border-radius: var(--r-sm);
+  font: inherit;
+}
+.sec-done { margin-top: 10px; color: var(--ink-3); font-size: 12.5px; }
 
 /* ---------------------------------------------------------
    DASHBOARD — KPI delta pills on .num-cell
@@ -652,6 +721,58 @@
 }
 .admin-deals-table .paid-input:disabled { opacity: .55; cursor: default; }
 
+/* Partners directory (admin) */
+.admin-subhead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 12px;
+}
+.admin-subcount {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-3);
+  background: var(--paper-3);
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+.admin-partners-table { min-width: 760px; table-layout: auto; }
+.admin-partners-table th,
+.admin-partners-table td { padding: 11px 16px; }
+.admin-partners-table .admin-sub { display: block; font-size: 11.5px; color: var(--ink-3); }
+.admin-partners-table .mono { font-family: var(--f-mono); font-size: 11.5px; color: var(--ink-2); }
+.admin-view-btn { padding: 6px 12px; font-size: 13px; white-space: nowrap; }
+
+/* Admin console laid out like the dashboard: stacked full-width panels */
+.dash .dash-stack { display: flex; flex-direction: column; gap: 14px; }
+.dash .admin-scroll { overflow: auto; max-height: calc(100vh - 260px); }
+
+/* Admin "view as partner" banner on the dashboard */
+.dash .admin-view-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  padding: 9px 14px;
+  border: 1px solid var(--brand);
+  background: var(--brand-soft);
+  border-radius: var(--r-md);
+}
+.dash .admin-view-banner .avb-text { font-size: 13px; color: var(--brand-ink); }
+.dash .admin-view-banner .avb-back {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  color: var(--brand-ink);
+  border-bottom: 1px solid var(--brand-ink);
+  white-space: nowrap;
+}
+
 /* =====================================================================
    COMPACT DASHBOARD  (.dash)  — function-first, single-screen layout.
    Consumes global :root tokens; overrides the older marketing-style
@@ -704,7 +825,29 @@
 .dash-bar-r .btn { padding: 9px 16px; font-size: 13.5px; }
 
 /* Tier summary beside the company name — separated stat cells */
-.dash-bar-r { display: flex; align-items: flex-end; }
+.dash-bar-r { display: flex; align-items: flex-end; gap: 16px; }
+
+/* Manual "Refresh from Salesforce" control: button + result line */
+.sf-sync { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.sf-sync-btn { padding: 9px 16px; font-size: 13px; }
+.sf-sync-btn[disabled] { opacity: 0.6; cursor: progress; }
+.sf-spin {
+  width: 13px; height: 13px; flex: 0 0 auto;
+  border-radius: 999px;
+  border: 1.6px solid var(--rule-2);
+  border-top-color: var(--ink);
+  animation: bwspin 0.9s linear infinite; /* keyframes defined in styles.css */
+}
+.sf-sync-msg {
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  max-width: 240px;
+  text-align: right;
+  line-height: 1.3;
+}
+.sf-sync-msg.err { color: var(--signal); }
 .hdr-tier { display: flex; align-items: stretch; flex-wrap: wrap; }
 .hdr-stat {
   display: flex;

@@ -1,16 +1,18 @@
 import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Functions, httpsCallable } from '@angular/fire/functions';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../core/auth.service';
 import { PortalApiService } from '../../core/portal-api.service';
 import { fmtMoney, formatArrShort, splitArrShort } from '../../core/format';
-import { Deal, DealStatus } from '../../core/models';
+import { Deal, DealStatus, Partner } from '../../core/models';
 import { Tier, tierFor, nextTier, rateFor } from '../../core/tiers';
 import { buildCommissionSchedule } from '../../core/commission';
 import { NavComponent } from '../../shared/nav.component';
 import { FooterComponent } from '../../shared/footer.component';
 import { CommissionScheduleComponent } from '../../shared/commission-schedule.component';
 import { DealRegistrationComponent } from '../deal-registration/deal-registration.component';
+import { SecurityPanelComponent } from '../../shared/security-panel.component';
 
 type Filter = 'all' | DealStatus;
 
@@ -64,7 +66,7 @@ const COLUMNS: SortCol[] = [
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [NavComponent, FooterComponent, CommissionScheduleComponent, DealRegistrationComponent],
+  imports: [RouterLink, NavComponent, FooterComponent, CommissionScheduleComponent, DealRegistrationComponent, SecurityPanelComponent],
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit, OnDestroy {
@@ -72,9 +74,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private api = inject(PortalApiService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private functions = inject(Functions);
 
   // Header
   readonly dashTitle = signal('Dashboard');
+
+  // Admin "view as partner" mode: set via ?as=<uid> when the viewer is an admin,
+  // so the dashboard renders THAT partner's data instead of the viewer's.
+  readonly viewUid = signal<string | null>(null);
+  readonly viewedPartner = signal<Partner | null>(null);
+  readonly isViewing = computed(() => this.viewUid() !== null);
 
   // Deals
   readonly allDeals = signal<Deal[]>([]);
@@ -184,6 +193,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     buildCommissionSchedule(this.allDeals(), (d) => this.dealRate(d), new Date()),
   );
 
+  // Manual "Refresh from Salesforce" control: in-flight flag + result message.
+  readonly syncing = signal(false);
+  readonly syncMsg = signal('');
+  readonly syncErr = signal(false);
+
   // Register modal
   readonly registerOpen = signal(false);
   private submittedInModal = false;
@@ -224,11 +238,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .reduce((s, e) => s + (Number(e.arr) || 0), 0);
   }
 
+  // The track whose rates apply by default — the viewed partner's in admin view,
+  // otherwise the signed-in partner's. Per-deal track still wins over this.
+  private effectiveTrack(): string | undefined {
+    return (this.isViewing() ? this.viewedPartner()?.track : this.auth.partner()?.track) || undefined;
+  }
+
   // Per-deal commission rate = the tier rate at this deal's point in time, on
   // the deal's own registered track (Solution/Referral), falling back to the
   // partner's default track for legacy deals with no track recorded.
   dealRate(deal: Deal): number {
-    const track = deal.track || this.auth.partner()?.track;
+    const track = deal.track || this.effectiveTrack();
     return rateFor(tierFor(this.trailingArrAsOf(deal)), track);
   }
 
@@ -245,7 +265,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (!this.isSettled(d)) return { show: false, amount: '', pct: '—', tier: '' };
     // Tier in effect at this deal's point in time → the rate that locked in.
     const tier = tierFor(this.trailingArrAsOf(d));
-    const rate = rateFor(tier, d.track || this.auth.partner()?.track);
+    const rate = rateFor(tier, d.track || this.effectiveTrack());
     return {
       show: true,
       amount: fmtMoney(Math.round((Number(d.arr) || 0) * rate)),
@@ -255,13 +275,78 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.fillHeader();
-    this.fillDeals();
+    // Admin viewing a partner's dashboard: /dashboard?as=<uid>.
+    const as = this.route.snapshot.queryParamMap.get('as');
+    if (as && this.auth.isAdmin()) {
+      this.viewUid.set(as);
+      this.api.getPartner(as).then((p) => {
+        this.viewedPartner.set(p);
+        this.fillHeader();
+      });
+      this.fillDeals();
+      // No Salesforce refresh / registration while viewing as admin.
+    } else {
+      this.fillHeader();
+      this.fillDeals();
+      // On login/refresh, pull any Salesforce-side edits back in (server-side
+      // throttled to once per 5 min). Reload deals if anything changed.
+      this.refreshFromSalesforce();
+    }
 
-    // Deep link / nav: /dashboard#register opens the modal.
+    // Deep link / nav: /dashboard#register opens the modal (not in view mode).
     this.fragSub = this.route.fragment.subscribe((frag) => {
-      if (frag === 'register') this.openRegister();
+      if (frag === 'register' && !this.isViewing()) this.openRegister();
     });
+  }
+
+  // Calls the refreshFromSalesforce callable; re-loads deals if it pulled changes.
+  // Failures (Salesforce down, throttled) are non-fatal — cached deals still show.
+  private refreshFromSalesforce(): void {
+    const call = httpsCallable<unknown, { updated?: number; skipped?: boolean }>(
+      this.functions,
+      'refreshFromSalesforce',
+    );
+    call({})
+      .then((res) => {
+        if (res.data?.updated) this.fillDeals();
+      })
+      .catch((err: { message?: string }) => {
+        console.warn('[dashboard] Salesforce refresh skipped:', err?.message || err);
+      });
+  }
+
+  // Manual refresh: explicit user action, so it bypasses the server-side 5-min
+  // auto-throttle (force:true). Pulls this partner's latest Salesforce deals,
+  // reloads the table if anything changed, and surfaces a short result message.
+  async syncNow(): Promise<void> {
+    if (this.syncing() || this.isViewing()) return;
+    this.syncing.set(true);
+    this.syncErr.set(false);
+    this.syncMsg.set('');
+    const call = httpsCallable<
+      { force: boolean },
+      { updated?: number; count?: number; skipped?: boolean; reason?: string }
+    >(this.functions, 'refreshFromSalesforce');
+    try {
+      const res = await call({ force: true });
+      const data = res.data || {};
+      if (data.reason === 'no-account') {
+        this.syncMsg.set('No Salesforce account is linked to your profile.');
+      } else {
+        const n = data.updated || 0;
+        if (n > 0) {
+          this.fillDeals();
+          this.syncMsg.set(`Updated ${n} deal${n === 1 ? '' : 's'} from Salesforce.`);
+        } else {
+          this.syncMsg.set('Already up to date.');
+        }
+      }
+    } catch (err: unknown) {
+      this.syncErr.set(true);
+      this.syncMsg.set((err as { message?: string })?.message || 'Salesforce sync failed.');
+    } finally {
+      this.syncing.set(false);
+    }
   }
 
   ngOnDestroy(): void {
@@ -337,14 +422,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private fillHeader(): void {
-    const p = this.auth.currentPartner();
+    const p = this.isViewing() ? this.viewedPartner() : this.auth.currentPartner();
     if (!p) return;
     if (p.company || p.name) this.dashTitle.set(p.company || p.name || 'Dashboard');
   }
 
   private fillDeals(): void {
     this.dealsLoading.set(true);
-    this.api.getDeals().then((deals) => {
+    const uid = this.viewUid();
+    const load = uid ? this.api.getDealsForUid(uid) : this.api.getDeals();
+    load.then((deals) => {
       this.allDeals.set(Array.isArray(deals) ? deals : []);
       this.dealsLoading.set(false);
     });
@@ -352,6 +439,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   // ---- Register modal ----
   openRegister(): void {
+    if (this.isViewing()) return; // admins don't register on a partner's behalf
     this.submittedInModal = false;
     this.registerOpen.set(true);
     document.body.classList.add('reg-open');

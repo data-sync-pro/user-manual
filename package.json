@@ -5,13 +5,10 @@
   "description": "Data Sync Pro Partner Portal — Firebase (Hosting + Auth + Firestore)",
   "type": "commonjs",
   "scripts": {
-    "emulators": "firebase emulators:start --import=./.emulator-data --export-on-exit=./.emulator-data",
-    "emulators:fresh": "firebase emulators:start",
-    "seed": "node scripts/seed.js",
-    "new-deal": "node scripts/new-deal.js",
-    "dev": "firebase emulators:start --import=./.emulator-data --export-on-exit=./.emulator-data",
+    "dev": "npm --prefix web start",
     "build": "npm --prefix web run build",
-    "start:web": "npm --prefix web start"
+    "start:web": "npm --prefix web start",
+    "bootstrap": "node scripts/bootstrap.js"
   },
   "devDependencies": {
     "firebase-admin": "^13.0.2"

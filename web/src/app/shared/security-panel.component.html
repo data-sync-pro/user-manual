@@ -1,0 +1,85 @@
+<section class="panel" aria-label="Account security">
+  <div class="panel-head">
+    <span class="panel-title">Sign-in methods</span>
+    @if (lp().email) { <span class="panel-meta">{{ lp().email }}</span> }
+  </div>
+  <div class="panel-body">
+
+    <!-- Google method row -->
+    <div class="sec-row">
+      <div class="sec-row-info">
+        <span class="sec-row-label">Google</span>
+        @if (lp().google) {
+          <span class="tag good">Connected</span>
+        } @else {
+          <span class="tag">Not connected</span>
+        }
+      </div>
+      @if (!lp().google) {
+        <button class="btn secondary auth-google" type="button" [disabled]="!!busy()" (click)="connectGoogle()">
+          <svg class="g-icon" viewBox="0 0 18 18" width="18" height="18" aria-hidden="true">
+            <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62Z"/>
+            <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18Z"/>
+            <path fill="#FBBC05" d="M3.97 10.72A5.4 5.4 0 0 1 3.68 9c0-.6.1-1.18.29-1.72V4.95H.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.05l3.01-2.33Z"/>
+            <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58Z"/>
+          </svg>
+          {{ busy() === 'google' ? 'Connecting…' : 'Connect Google' }}
+        </button>
+      }
+    </div>
+
+    <!-- Password method row -->
+    <div class="sec-row">
+      <div class="sec-row-info">
+        <span class="sec-row-label">Password</span>
+        @if (lp().password) {
+          <span class="tag good">Set</span>
+        } @else {
+          <span class="tag">Not set</span>
+        }
+      </div>
+      @if (!lp().password && !showPwForm()) {
+        <button class="btn secondary" type="button" [disabled]="!!busy()" (click)="showPwForm.set(true)">Set a password</button>
+      }
+    </div>
+
+    <!-- Inline set-password form (revealed) -->
+    @if (showPwForm() && !lp().password) {
+      <form class="sec-pw-form" novalidate (ngSubmit)="submitPassword()">
+        <div class="fld">
+          <label class="fl-l" for="sec-pw">New password <span class="req">*</span></label>
+          <input type="password" id="sec-pw" name="newpw" autocomplete="new-password" minlength="6" required
+                 placeholder="At least 6 characters" [(ngModel)]="pw" />
+        </div>
+        <button class="btn" type="submit" [disabled]="!!busy() || pw.length < 6">
+          {{ busy() === 'password' ? 'Saving…' : 'Save password' }}
+        </button>
+      </form>
+    }
+
+    <!-- Re-auth prompt (only when an action returned requires-recent-login) -->
+    @if (needReauth()) {
+      <div class="sec-reauth">
+        @if (lp().password) {
+          <p class="sec-reauth-msg">For your security, re-enter your password to continue.</p>
+          <input type="password" name="reauthpw" autocomplete="current-password" placeholder="Your password"
+                 [(ngModel)]="reauthPw" [ngModelOptions]="{ standalone: true }" />
+          <button class="btn secondary" type="button" [disabled]="!!busy()" (click)="confirmReauthPassword()">Confirm</button>
+        } @else {
+          <p class="sec-reauth-msg">For your security, sign in with Google again to continue.</p>
+          <button class="btn secondary" type="button" [disabled]="!!busy()" (click)="confirmReauthGoogle()">Re-authenticate with Google</button>
+        }
+      </div>
+    }
+
+    <!-- Status / error line (mirrors the dashboard's sync-message pattern) -->
+    @if (msg()) {
+      <p class="sf-sync-msg" [class.err]="msgErr()" role="status">{{ msg() }}</p>
+    }
+
+    <!-- Both methods active -->
+    @if (lp().google && lp().password) {
+      <p class="sec-done">Both sign-in methods are active — you can use either to sign in.</p>
+    }
+  </div>
+</section>

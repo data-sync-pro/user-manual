@@ -9,6 +9,8 @@ export interface Partner {
   track?: string;
   email?: string;
   role?: string;
+  // SF Account this partner maps to (PartnerAccount__c) — scopes the mirror.
+  salesforceAccountId?: string;
   createdAt?: unknown;
 }
 
@@ -80,6 +82,11 @@ export interface ErrorReport {
   page: string; // path/hash where the issue was found
   status: 'open' | 'resolved';
   createdAt?: unknown;
+}
+
+// A partner profile plus its document id (uid) — admin partner list.
+export interface PartnerRow extends Partner {
+  uid: string;
 }
 
 // Minimal summary returned by AuthService.signIn().

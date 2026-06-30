@@ -1,4 +1,7 @@
 node_modules/
+# Service account keys — NEVER commit these (full admin access to the project)
+serviceAccountKey.json
+**/serviceAccountKey.json
 .emulator-data/
 .firebase/
 *.log

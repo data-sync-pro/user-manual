@@ -7,6 +7,7 @@ import {
   query,
   where,
   orderBy,
+  getDoc,
   getDocs,
   setDoc,
   updateDoc,
@@ -21,6 +22,8 @@ import {
   Deal,
   DealStatus,
   Kpis,
+  Partner,
+  PartnerRow,
   PipelineEntry,
 } from './models';
 
@@ -109,17 +112,23 @@ export class PortalApiService {
   // Current user's deals, newest first.
   async getDeals(): Promise<Deal[]> {
     const user = this.authSvc.currentUser();
-    if (!user) return [];
+    return user ? this.getDealsForUid(user.uid) : [];
+  }
+
+  // A specific partner's deals, newest first (admin uses this to view a partner's
+  // dashboard; rules permit admin to read any deal).
+  async getDealsForUid(uid: string): Promise<Deal[]> {
+    if (!uid) return [];
     try {
       const q = query(
         collection(this.db, 'deals'),
-        where('ownerUid', '==', user.uid),
+        where('ownerUid', '==', uid),
         orderBy('submittedAt', 'desc'),
       );
       const qs = await getDocs(q);
       return qs.docs.map(mapDealDoc);
     } catch (err) {
-      console.warn('[PortalApi] getDeals failed:', (err as Error)?.message);
+      console.warn('[PortalApi] getDealsForUid failed:', (err as Error)?.message);
       return [];
     }
   }
@@ -155,7 +164,8 @@ export class PortalApiService {
     const id = genDealId();
     const arr =
       Number(String(payload['arr'] != null ? payload['arr'] : '').replace(/[^0-9.]/g, '')) || 0;
-    const stage = canonicalStage(payload['stage']);
+    // Leave stage empty when the form didn't capture one — don't invent 'Discovery'.
+    const stage = payload['stage'] ? canonicalStage(payload['stage']) : '';
     const partner = this.authSvc.currentPartner();
 
     const products = Array.isArray(payload['products'])
@@ -242,7 +252,30 @@ export class PortalApiService {
     return { id };
   }
 
+  // A single partner profile (admin viewing another partner's dashboard).
+  async getPartner(uid: string): Promise<Partner | null> {
+    if (!uid) return null;
+    try {
+      const snap = await getDoc(doc(this.db, 'partners', uid));
+      return snap.exists() ? (snap.data() as Partner) : null;
+    } catch (err) {
+      console.warn('[PortalApi] getPartner failed:', (err as Error)?.message);
+      return null;
+    }
+  }
+
   /* ---- ADMIN-only ---- */
+
+  // All partner profiles (admin directory).
+  async getAllPartners(): Promise<PartnerRow[]> {
+    try {
+      const qs = await getDocs(collection(this.db, 'partners'));
+      return qs.docs.map((snap) => ({ uid: snap.id, ...(snap.data() as Partner) }));
+    } catch (err) {
+      console.warn('[PortalApi] getAllPartners failed:', (err as Error)?.message);
+      return [];
+    }
+  }
 
   // All deals across partners, newest first.
   async getAllDeals(): Promise<Deal[]> {

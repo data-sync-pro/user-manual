@@ -3,6 +3,13 @@
 <!-- DASHBOARD — Deal & Commission console (single-screen, function-first) -->
 <main class="dash">
 
+  @if (isViewing()) {
+    <div class="admin-view-banner" role="status">
+      <span class="avb-text">Viewing <b>{{ dashTitle() }}</b>’s dashboard as admin</span>
+      <a routerLink="/admin" class="avb-back">← Back to admin</a>
+    </div>
+  }
+
   <!-- Compact header bar: partner identity + tier summary -->
   <header class="dash-bar">
     <div class="dash-bar-l">
@@ -29,6 +36,21 @@
           </span>
         </div>
       </div>
+
+      <!-- Manual "Refresh from Salesforce" — pulls the latest SF-side edits now -->
+      @if (!isViewing()) {
+        <div class="sf-sync">
+          <button type="button" class="btn secondary sf-sync-btn"
+                  (click)="syncNow()" [disabled]="syncing()"
+                  aria-label="Refresh deals from Salesforce">
+            @if (syncing()) { <span class="sf-spin" aria-hidden="true"></span> }
+            {{ syncing() ? 'Syncing…' : 'Refresh from Salesforce' }}
+          </button>
+          @if (syncMsg()) {
+            <span class="sf-sync-msg" [class.err]="syncErr()" role="status">{{ syncMsg() }}</span>
+          }
+        </div>
+      }
     </div>
   </header>
 
@@ -161,6 +183,12 @@
           <app-commission-schedule [data]="schedule()"></app-commission-schedule>
         </div>
       </section>
+
+      <!-- Account security — only for the signed-in user's own account, not when
+           an admin is viewing a partner's dashboard. -->
+      @if (!isViewing()) {
+        <app-security-panel></app-security-panel>
+      }
 
     </div>
 

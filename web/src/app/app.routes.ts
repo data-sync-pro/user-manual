@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { guestGuard, requiredGuard, adminGuard } from './core/guards';
+import { guestGuard, requiredGuard, dashboardGuard, adminGuard } from './core/guards';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -11,7 +11,7 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    canActivate: [requiredGuard],
+    canActivate: [dashboardGuard],
     loadComponent: () =>
       import('./pages/dashboard/dashboard.component').then((m) => m.DashboardComponent),
   },
