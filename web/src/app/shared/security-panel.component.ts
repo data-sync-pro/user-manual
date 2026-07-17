@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../core/auth.service';
 
@@ -18,8 +18,13 @@ export class SecurityPanelComponent implements OnInit {
 
   // Which methods are currently linked (+ the account email).
   readonly lp = signal(this.auth.linkedProviders());
+  // How many sign-in methods are active — drives the "multiple methods" note.
+  readonly activeCount = computed(() => {
+    const p = this.lp();
+    return (p.google ? 1 : 0) + (p.microsoft ? 1 : 0) + (p.password ? 1 : 0);
+  });
   // Which async op is in flight (disables buttons, swaps labels).
-  readonly busy = signal<null | 'google' | 'password' | 'reauth'>(null);
+  readonly busy = signal<null | 'google' | 'microsoft' | 'password' | 'reauth'>(null);
   readonly msg = signal<string | null>(null);
   readonly msgErr = signal(false);
   readonly showPwForm = signal(false);
@@ -27,7 +32,7 @@ export class SecurityPanelComponent implements OnInit {
   readonly needReauth = signal(false);
 
   // The action to replay after a successful re-authentication.
-  private pendingAction: 'google' | 'password' | null = null;
+  private pendingAction: 'google' | 'microsoft' | 'password' | null = null;
 
   pw = '';
   reauthPw = '';
@@ -53,6 +58,14 @@ export class SecurityPanelComponent implements OnInit {
     this.run('google', () => this.auth.linkGoogle(), 'Google connected — you can now sign in with Google too.');
   }
 
+  // Connect Microsoft to the current account. Called straight from the click so
+  // the popup keeps its user gesture.
+  connectMicrosoft(): void {
+    this.pendingAction = 'microsoft';
+    this.run('microsoft', () => this.auth.linkMicrosoft(),
+      'Microsoft connected — you can now sign in with Microsoft too.');
+  }
+
   // Submit the "set a password" form for a Google-only account.
   submitPassword(): void {
     if (this.pw.length < 6) {
@@ -67,7 +80,7 @@ export class SecurityPanelComponent implements OnInit {
 
   // Shared runner for the two link actions: manages busy/msg state and the
   // requires-recent-login branch (reveal the reauth UI instead of erroring).
-  private run(kind: 'google' | 'password', action: () => Promise<void>, okMsg: string): void {
+  private run(kind: 'google' | 'microsoft' | 'password', action: () => Promise<void>, okMsg: string): void {
     this.busy.set(kind);
     this.msg.set(null);
     this.msgErr.set(false);
@@ -104,6 +117,14 @@ export class SecurityPanelComponent implements OnInit {
       .catch((e: Error) => this.reauthFailed(e));
   }
 
+  confirmReauthMicrosoft(): void {
+    this.busy.set('reauth');
+    this.msg.set(null);
+    this.auth.reauthMicrosoft()
+      .then(() => this.afterReauth())
+      .catch((e: Error) => this.reauthFailed(e));
+  }
+
   confirmReauthPassword(): void {
     this.busy.set('reauth');
     this.msg.set(null);
@@ -118,12 +139,13 @@ export class SecurityPanelComponent implements OnInit {
     if (this.pendingAction === 'password') {
       // addPassword uses linkWithCredential (no popup) — safe to replay directly.
       this.submitPassword();
-    } else if (this.pendingAction === 'google') {
+    } else if (this.pendingAction === 'google' || this.pendingAction === 'microsoft') {
       // Replaying linkWithPopup from this promise continuation would open a popup
       // OUTSIDE a user gesture (blocked by Safari, intermittently by Chromium).
       // The session is recent now, so just ask the user to click again — the
-      // "Connect Google" button is still shown (lp().google is false).
-      this.msg.set('Verified — click “Connect Google” again to finish.');
+      // Connect button is still shown (the provider is still unlinked).
+      const label = this.pendingAction === 'google' ? 'Connect Google' : 'Connect Microsoft';
+      this.msg.set(`Verified — click “${label}” again to finish.`);
       this.msgErr.set(false);
     }
   }

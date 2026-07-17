@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PartnerType__c</fullName>
+    <label>Partner Type</label>
+    <description>Non-empty marks the Account as a partner AND supplies the partner's commission track (SF_PARTNER_TYPE_FIELD). Read by syncPartnersFromSalesforce; value clipped to 50 in code. Restricted picklist so the track stays valid — switch to Text(50) if partner types are free-form.</description>
+    <type>Picklist</type>
+    <required>false</required>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Solution</fullName>
+                <default>false</default>
+                <label>Solution</label>
+            </value>
+            <value>
+                <fullName>Referral</fullName>
+                <default>false</default>
+                <label>Referral</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

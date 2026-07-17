@@ -1,4 +1,4 @@
-<section class="panel" aria-label="Account security">
+<section class="panel sec-panel" aria-label="Account security">
   <div class="panel-head">
     <span class="panel-title">Sign-in methods</span>
     @if (lp().email) { <span class="panel-meta">{{ lp().email }}</span> }
@@ -7,40 +7,84 @@
 
     <!-- Google method row -->
     <div class="sec-row">
-      <div class="sec-row-info">
-        <span class="sec-row-label">Google</span>
-        @if (lp().google) {
-          <span class="tag good">Connected</span>
-        } @else {
-          <span class="tag">Not connected</span>
-        }
-      </div>
-      @if (!lp().google) {
-        <button class="btn secondary auth-google" type="button" [disabled]="!!busy()" (click)="connectGoogle()">
-          <svg class="g-icon" viewBox="0 0 18 18" width="18" height="18" aria-hidden="true">
+      <div class="sec-method">
+        <span class="sec-icon" aria-hidden="true">
+          <svg viewBox="0 0 18 18" width="18" height="18">
             <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62Z"/>
             <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18Z"/>
             <path fill="#FBBC05" d="M3.97 10.72A5.4 5.4 0 0 1 3.68 9c0-.6.1-1.18.29-1.72V4.95H.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.05l3.01-2.33Z"/>
             <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58Z"/>
           </svg>
-          {{ busy() === 'google' ? 'Connecting…' : 'Connect Google' }}
-        </button>
-      }
+        </span>
+        <div class="sec-method-text">
+          <span class="sec-row-label">Google</span>
+          <span class="sec-method-desc">Sign in with your Google account</span>
+        </div>
+      </div>
+      <div class="sec-row-end">
+        @if (lp().google) {
+          <span class="tag good">Connected</span>
+        } @else {
+          <span class="tag">Not connected</span>
+          <button class="btn secondary sec-action" type="button" [disabled]="!!busy()" (click)="connectGoogle()">
+            {{ busy() === 'google' ? 'Connecting…' : 'Connect' }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Microsoft method row -->
+    <div class="sec-row">
+      <div class="sec-method">
+        <span class="sec-icon" aria-hidden="true">
+          <svg viewBox="0 0 21 21" width="16" height="16">
+            <rect x="1" y="1" width="9" height="9" fill="#F25022"/>
+            <rect x="11" y="1" width="9" height="9" fill="#7FBA00"/>
+            <rect x="1" y="11" width="9" height="9" fill="#00A4EF"/>
+            <rect x="11" y="11" width="9" height="9" fill="#FFB900"/>
+          </svg>
+        </span>
+        <div class="sec-method-text">
+          <span class="sec-row-label">Microsoft</span>
+          <span class="sec-method-desc">Sign in with your Microsoft account</span>
+        </div>
+      </div>
+      <div class="sec-row-end">
+        @if (lp().microsoft) {
+          <span class="tag good">Connected</span>
+        } @else {
+          <span class="tag">Not connected</span>
+          <button class="btn secondary sec-action" type="button" [disabled]="!!busy()" (click)="connectMicrosoft()">
+            {{ busy() === 'microsoft' ? 'Connecting…' : 'Connect' }}
+          </button>
+        }
+      </div>
     </div>
 
     <!-- Password method row -->
     <div class="sec-row">
-      <div class="sec-row-info">
-        <span class="sec-row-label">Password</span>
+      <div class="sec-method">
+        <span class="sec-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="10" width="16" height="10" rx="2"/>
+            <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+          </svg>
+        </span>
+        <div class="sec-method-text">
+          <span class="sec-row-label">Password</span>
+          <span class="sec-method-desc">Sign in with email and a password</span>
+        </div>
+      </div>
+      <div class="sec-row-end">
         @if (lp().password) {
           <span class="tag good">Set</span>
         } @else {
           <span class="tag">Not set</span>
+          @if (!showPwForm()) {
+            <button class="btn secondary sec-action" type="button" [disabled]="!!busy()" (click)="showPwForm.set(true)">Set a password</button>
+          }
         }
       </div>
-      @if (!lp().password && !showPwForm()) {
-        <button class="btn secondary" type="button" [disabled]="!!busy()" (click)="showPwForm.set(true)">Set a password</button>
-      }
     </div>
 
     <!-- Inline set-password form (revealed) -->
@@ -66,8 +110,13 @@
                  [(ngModel)]="reauthPw" [ngModelOptions]="{ standalone: true }" />
           <button class="btn secondary" type="button" [disabled]="!!busy()" (click)="confirmReauthPassword()">Confirm</button>
         } @else {
-          <p class="sec-reauth-msg">For your security, sign in with Google again to continue.</p>
-          <button class="btn secondary" type="button" [disabled]="!!busy()" (click)="confirmReauthGoogle()">Re-authenticate with Google</button>
+          <p class="sec-reauth-msg">For your security, sign in again to continue.</p>
+          @if (lp().google) {
+            <button class="btn secondary" type="button" [disabled]="!!busy()" (click)="confirmReauthGoogle()">Re-authenticate with Google</button>
+          }
+          @if (lp().microsoft) {
+            <button class="btn secondary" type="button" [disabled]="!!busy()" (click)="confirmReauthMicrosoft()">Re-authenticate with Microsoft</button>
+          }
         }
       </div>
     }
@@ -77,9 +126,14 @@
       <p class="sf-sync-msg" [class.err]="msgErr()" role="status">{{ msg() }}</p>
     }
 
-    <!-- Both methods active -->
-    @if (lp().google && lp().password) {
-      <p class="sec-done">Both sign-in methods are active — you can use either to sign in.</p>
+    <!-- Multiple methods active -->
+    @if (activeCount() >= 2) {
+      <p class="sec-done">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 6 9 17l-5-5"/>
+        </svg>
+        Multiple sign-in methods are active — you can use any of them to sign in.
+      </p>
     }
   </div>
 </section>

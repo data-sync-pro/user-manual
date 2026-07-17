@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CustomerContactEmail__c</fullName>
+    <label>Customer Contact Email</label>
+    <description>Contact email (clipped to 80 in code = Email field length). Switch to Text(80) if malformed values must not fail the upsert.</description>
+    <type>Email</type>
+    <required>false</required>
+    <unique>false</unique>
+</CustomField>

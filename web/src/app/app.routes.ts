@@ -10,6 +10,13 @@ export const routes: Routes = [
       import('./pages/login/login.component').then((m) => m.LoginComponent),
   },
   {
+    // Firebase email-action handler target (password reset). Public + no guard:
+    // the user arrives here signed-out, holding a one-time code from the email.
+    path: 'auth/action',
+    loadComponent: () =>
+      import('./pages/reset-password/reset-password.component').then((m) => m.ResetPasswordComponent),
+  },
+  {
     path: 'dashboard',
     canActivate: [dashboardGuard],
     loadComponent: () =>
@@ -28,6 +35,12 @@ export const routes: Routes = [
     canActivate: [adminGuard],
     loadComponent: () =>
       import('./pages/admin/admin.component').then((m) => m.AdminComponent),
+  },
+  {
+    path: 'account',
+    canActivate: [requiredGuard],
+    loadComponent: () =>
+      import('./pages/account/account.component').then((m) => m.AccountComponent),
   },
   { path: '**', redirectTo: 'login' },
 ];

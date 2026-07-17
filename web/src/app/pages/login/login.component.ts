@@ -1,9 +1,8 @@
 import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
 import { isValidEmail } from '../../core/validators';
-import { LoginResult } from '../../core/models';
 import { FooterComponent } from '../../shared/footer.component';
 
 @Component({
@@ -15,6 +14,7 @@ import { FooterComponent } from '../../shared/footer.component';
 export class LoginComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   email = '';
   password = '';
@@ -24,11 +24,20 @@ export class LoginComponent {
   readonly formError = signal('');
   readonly submitting = signal(false);
   readonly googleSubmitting = signal(false);
+  readonly microsoftSubmitting = signal(false);
   readonly resetSending = signal(false);
   readonly resetMsg = signal('');
+  // Shown when the user landed here after an idle auto sign-out.
+  readonly notice = signal('');
 
   private emailRef = viewChild<ElementRef<HTMLInputElement>>('emailInp');
   private pwRef = viewChild<ElementRef<HTMLInputElement>>('pwInp');
+
+  constructor() {
+    if (this.route.snapshot.queryParamMap.get('reason') === 'timeout') {
+      this.notice.set('You were signed out after 30 minutes of inactivity. Please sign in again.');
+    }
+  }
 
   // Submit is enabled only when both fields are filled + the email is valid.
   get formValid(): boolean {
@@ -78,7 +87,7 @@ export class LoginComponent {
     this.submitting.set(true);
     this.auth
       .signIn(email, pw)
-      .then((res) => this.completeSignIn(res))
+      .then(() => this.completeSignIn())
       .catch((err: Error) => {
         this.formError.set(err?.message || 'Sign-in failed. Check your credentials and try again.');
         this.submitting.set(false);
@@ -92,10 +101,23 @@ export class LoginComponent {
     this.googleSubmitting.set(true);
     this.auth
       .signInWithGoogle()
-      .then((res) => this.completeSignIn(res))
+      .then(() => this.completeSignIn())
       .catch((err: Error) => {
         this.formError.set(err?.message || 'Google sign-in failed. Please try again.');
         this.googleSubmitting.set(false);
+      });
+  }
+
+  // Microsoft sign-in (popup). Same invite-only provisioning gate as the others.
+  signInWithMicrosoft(): void {
+    this.formError.set('');
+    this.microsoftSubmitting.set(true);
+    this.auth
+      .signInWithMicrosoft()
+      .then(() => this.completeSignIn())
+      .catch((err: Error) => {
+        this.formError.set(err?.message || 'Microsoft sign-in failed. Please try again.');
+        this.microsoftSubmitting.set(false);
       });
   }
 
@@ -121,19 +143,10 @@ export class LoginComponent {
       .finally(() => this.resetSending.set(false));
   }
 
-  // Persist the session summary and route to the role's home.
-  private completeSignIn(res: LoginResult): void {
-    if (!res || !res.token) {
-      this.formError.set('Sign-in failed. Please try again.');
-      this.submitting.set(false);
-      this.googleSubmitting.set(false);
-      return;
-    }
-    try {
-      sessionStorage.setItem('portal.session', JSON.stringify(res));
-    } catch {
-      /* ignore */
-    }
+  // Route to the role's home. Auth state is managed entirely by the Firebase
+  // SDK and persisted to sessionStorage (session-scoped persistence set in
+  // app.config.ts), so the sign-in clears when the browser window is closed.
+  private completeSignIn(): void {
     // Admins land on the admin console (their dashboard); partners on theirs.
     this.router.navigateByUrl(this.auth.isAdmin() ? '/admin' : '/dashboard');
   }

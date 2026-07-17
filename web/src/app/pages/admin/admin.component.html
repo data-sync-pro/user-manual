@@ -93,14 +93,13 @@
               <th scope="col">Status</th>
               <th scope="col">Submitted</th>
               <th scope="col">Client paid</th>
-              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
             @if (loading()) {
-              <tr class="deals-empty"><td colspan="9">Loading deals…</td></tr>
+              <tr class="deals-empty"><td colspan="8">Loading deals…</td></tr>
             } @else if (deals().length === 0) {
-              <tr class="deals-empty"><td colspan="9">No deals to review.</td></tr>
+              <tr class="deals-empty"><td colspan="8">No deals to review.</td></tr>
             } @else {
               @for (d of deals(); track d.id) {
                 <tr>
@@ -116,15 +115,6 @@
                            [value]="d.paidDate" [disabled]="isUpdating(d.id)"
                            (change)="onPaidDateChange(d, $any($event.target).value)" />
                   </td>
-                  <td>
-                    <select class="status-select" [attr.aria-label]="'Set status for ' + d.id"
-                            [value]="d.status" [disabled]="isUpdating(d.id)"
-                            (change)="onStatusChange(d, $any($event.target).value)">
-                      @for (s of statuses; track s) {
-                        <option [value]="s" [selected]="s === d.status">{{ label(s) }}</option>
-                      }
-                    </select>
-                  </td>
                 </tr>
               }
             }
@@ -132,9 +122,6 @@
         </table>
       </div>
     </section>
-
-    <!-- Account security for the signed-in admin's own account -->
-    <app-security-panel></app-security-panel>
 
   </div>
 </main>

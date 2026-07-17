@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Partner Portal Partner Sync</label>
+    <description>Account/Contact READ for the partner-provisioning query (syncPartnersFromSalesforce). Standard CRM objects — NOT allowed on a Salesforce Integration license; assign only to a Platform or full Salesforce license user.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+
+    <!-- Account/Contact: read-only, View All so the partner query sees every marked Account + its
+         primary contact regardless of ownership. Standard objects => require a Platform or full
+         Salesforce license (the Salesforce Integration license rejects Read Account/Contact). -->
+    <objectPermissions>
+        <object>Account</object>
+        <allowCreate>false</allowCreate>
+        <allowRead>true</allowRead>
+        <allowEdit>false</allowEdit>
+        <allowDelete>false</allowDelete>
+        <viewAllRecords>true</viewAllRecords>
+        <modifyAllRecords>false</modifyAllRecords>
+    </objectPermissions>
+    <objectPermissions>
+        <object>Contact</object>
+        <allowCreate>false</allowCreate>
+        <allowRead>true</allowRead>
+        <allowEdit>false</allowEdit>
+        <allowDelete>false</allowDelete>
+        <viewAllRecords>true</viewAllRecords>
+        <modifyAllRecords>false</modifyAllRecords>
+    </objectPermissions>
+
+    <!-- Account custom fields the query reads. -->
+    <fieldPermissions>
+        <field>Account.PartnerType__c</field>
+        <readable>true</readable>
+        <editable>false</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>Account.Primary_Contact__c</field>
+        <readable>true</readable>
+        <editable>false</editable>
+    </fieldPermissions>
+
+    <!-- Contact.Email is read via Primary_Contact__r.Email. -->
+    <fieldPermissions>
+        <field>Contact.Email</field>
+        <readable>true</readable>
+        <editable>false</editable>
+    </fieldPermissions>
+</PermissionSet>

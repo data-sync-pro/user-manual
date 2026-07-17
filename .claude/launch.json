@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "account-preview",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["http-server", "public", "-p", "4599", "-c-1"],
+      "port": 4599
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status__c</fullName>
+    <label>Status</label>
+    <description>Deal status. Values are load-bearing (lowercase) — the pull only mirrors back a status in this set.</description>
+    <type>Picklist</type>
+    <required>false</required>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>pending</fullName>
+                <default>true</default>
+                <label>pending</label>
+            </value>
+            <value>
+                <fullName>accepted</fullName>
+                <default>false</default>
+                <label>accepted</label>
+            </value>
+            <value>
+                <fullName>won</fullName>
+                <default>false</default>
+                <label>won</label>
+            </value>
+            <value>
+                <fullName>lost</fullName>
+                <default>false</default>
+                <label>lost</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

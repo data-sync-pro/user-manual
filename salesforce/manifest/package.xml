@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>DealRegistration__c</members>
+        <members>DealRegistration__c.Amount__c</members>
+        <members>DealRegistration__c.CustomerCompanyName__c</members>
+        <members>DealRegistration__c.CustomerCompanySize__c</members>
+        <members>DealRegistration__c.CustomerContactEmail__c</members>
+        <members>DealRegistration__c.CustomerContactFirstName__c</members>
+        <members>DealRegistration__c.CustomerContactLastName__c</members>
+        <members>DealRegistration__c.CustomerContactTitle__c</members>
+        <members>DealRegistration__c.CustomerCountry__c</members>
+        <members>DealRegistration__c.CustomerOrgType__c</members>
+        <members>DealRegistration__c.CustomerWebsite__c</members>
+        <members>DealRegistration__c.PartnerAccount__c</members>
+        <members>DealRegistration__c.PartnerPortalDealID__c</members>
+        <members>DealRegistration__c.RequestedLicenseInfo__c</members>
+        <members>DealRegistration__c.Stage__c</members>
+        <members>DealRegistration__c.Status__c</members>
+        <members>DealRegistration__c.Track__c</members>
+        <members>DealRegistration__c.industry__c</members>
+        <members>Account.PartnerType__c</members>
+        <members>Account.Primary_Contact__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>DealRegistration__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>Partner_Portal_Integration</members>
+        <members>Partner_Portal_Partner_Sync</members>
+        <name>PermissionSet</name>
+    </types>
+    <version>60.0</version>
+</Package>

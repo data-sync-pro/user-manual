@@ -11,7 +11,6 @@
        copy; cascade-safe — values match).
      - portal page shell helpers (.portal, .dr-head, .dr-trail/.dr-sep)
      - dashboard KPI delta pills
-     - pipeline-chart SVG wrapper (#pipeline-chart)
      - announcements list (#announce-list)
      - quick-actions icon chip + table status helpers
    CONSUMES the global :root tokens — never redeclares them.
@@ -209,6 +208,17 @@
   color: var(--ink-3);
   line-height: 1.45;
 }
+/* One-off notice above the login form — e.g. after an idle auto sign-out */
+.auth-notice {
+  margin-top: 22px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--brand-ink);
+  background: var(--brand-soft);
+  border: 1px solid rgba(63, 133, 135, 0.22);
+  border-radius: var(--r-sm);
+  padding: 10px 12px;
+}
 .auth-form {
   margin-top: 26px;
   display: flex;
@@ -263,6 +273,26 @@
   border-radius: var(--r-sm);
   padding: 9px 11px;
 }
+
+/* Password-reset action page (/auth/action) — verify / success / invalid states */
+.reset-verify { display: flex; align-items: center; gap: 12px; padding: 12px 0; }
+.reset-spin { width: 22px; height: 22px; border-width: 2.4px; }
+.reset-state-msg { font-size: 14px; color: var(--ink-3); }
+.reset-state { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.reset-state h2 { margin: 6px 0 0; }
+.reset-state .auth-sub { margin-top: 2px; }
+.reset-state .btn { margin-top: 10px; }
+.reset-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+}
+.reset-icon.good { color: var(--good); background: var(--good-soft); border: 1px solid rgba(14, 110, 71, 0.2); }
+.reset-icon.warn { color: var(--signal); background: var(--signal-soft); border: 1px solid rgba(200, 74, 26, 0.22); }
+.auth-link-center { display: block; width: 100%; text-align: center; margin-top: 2px; }
+
 /* "or" divider between the password form and the Google sign-in button */
 .auth-or {
   display: flex;
@@ -280,37 +310,136 @@
   height: 1px;
   background: var(--rule-2);
 }
-/* Google sign-in button — matches the password button footprint */
-.btn.auth-google {
-  width: 100%;
+/* OAuth sign-in buttons (Google / Microsoft) — sit side by side under the "or" */
+.auth-oauth-row { display: flex; gap: 10px; }
+.btn.auth-oauth {
+  flex: 1 1 0;
+  min-width: 0;
   justify-content: center;
-  padding: 12px 18px;
-  gap: 10px;
+  padding: 12px 14px;
+  gap: 9px;
 }
-.btn.auth-google .g-icon { flex: 0 0 auto; }
+.btn.auth-oauth .g-icon,
+.btn.auth-oauth .ms-icon { flex: 0 0 auto; }
 
-/* Account-security panel ("Sign-in methods") — connect Google / set a password */
+/* ---------------------------------------------------------
+   ACCOUNT SETTINGS  (/account)
+   Identity card + "Sign-in methods" security panel.
+   --------------------------------------------------------- */
+
+/* Account settings page — these cards were designed for a narrow column;
+   cap their width on the otherwise full-width /account page. */
+.dash .account-stack { max-width: 560px; }
+
+/* Identity card: avatar chip + who you're signed in as */
+.acct-id {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-1);
+}
+.acct-id-avatar {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-family: var(--f-mono);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--brand-ink);
+  background: var(--brand-soft);
+  border: 1px solid rgba(63, 133, 135, 0.22);
+}
+.acct-id-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.acct-id-primary {
+  font-weight: 600;
+  font-size: 14.5px;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.acct-id-meta {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  color: var(--ink-3);
+}
+
+/* Security panel ("Sign-in methods") — connect Google / set a password */
+.sec-panel .panel-body { padding: 4px 16px 16px; }
 .sec-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--rule);
+  gap: 14px;
+  padding: 14px 0;
 }
-.sec-row:last-of-type { border-bottom: 0; }
-.sec-row-info { display: flex; align-items: center; gap: 10px; }
-.sec-row-label { font-weight: 600; color: var(--ink-2); }
-.sec-pw-form { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
-.sec-reauth { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
-.sec-reauth-msg { color: var(--ink-3); font-size: 12.5px; }
+.sec-row + .sec-row { border-top: 1px solid var(--rule); }
+
+/* Left side: method icon badge + label/description */
+.sec-method { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.sec-icon {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-md);
+  display: grid;
+  place-items: center;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  color: var(--ink-2);
+}
+.sec-method-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.sec-row-label { font-weight: 600; font-size: 13.5px; color: var(--ink-2); }
+.sec-method-desc { font-size: 12px; color: var(--ink-3); }
+
+/* Right side: status tag + inline action */
+.sec-row-end { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+.sec-action { padding: 7px 14px; font-size: 13px; }
+
+.sec-pw-form { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.sec-reauth {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+}
+.sec-reauth-msg { margin: 0; color: var(--ink-3); font-size: 12.5px; }
 .sec-reauth input {
   padding: 10px 12px;
   border: 1px solid var(--rule-2);
   border-radius: var(--r-sm);
   font: inherit;
 }
-.sec-done { margin-top: 10px; color: var(--ink-3); font-size: 12.5px; }
+.sec-done {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 12px;
+  color: var(--good);
+  font-size: 12.5px;
+}
+.sec-done svg { flex: 0 0 auto; }
+/* The status line reuses .sf-sync-msg (right-aligned in the dashboard header);
+   left-align and unclamp it inside the panel body. */
+.sec-panel .sf-sync-msg { margin-top: 12px; max-width: none; text-align: left; }
+
+@media (max-width: 480px) {
+  .sec-row { flex-wrap: wrap; }
+  .sec-row-end { width: 100%; padding-left: 46px; }
+}
 
 /* ---------------------------------------------------------
    DASHBOARD — KPI delta pills on .num-cell
@@ -344,86 +473,6 @@
 .kpi-delta .kpi-arrow { width: 11px; height: 11px; }
 /* count-up figure keeps tabular figures so width doesn't jump */
 .num-cell .big { font-variant-numeric: tabular-nums; }
-
-/* ---------------------------------------------------------
-   PIPELINE CHART — inline-SVG horizontal bar chart wrapper
-   portal.js injects <svg> into #pipeline-chart.
-   --------------------------------------------------------- */
-.chart-card { /* an .exec-card wrapper; padding handled here */ }
-.chart-card .chart-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 18px 22px;
-  border-bottom: 1px solid var(--rule);
-  background: linear-gradient(180deg, var(--paper-3), transparent);
-}
-.chart-card .chart-head .chart-title {
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: -.01em;
-  color: var(--ink);
-}
-.chart-card .chart-head .chart-meta {
-  font-family: var(--f-mono);
-  font-size: 11.5px;
-  letter-spacing: .04em;
-  color: var(--ink-3);
-}
-#pipeline-chart {
-  padding: 22px 22px 18px;
-  width: 100%;
-}
-#pipeline-chart svg {
-  width: 100%;
-  height: auto;
-  display: block;
-  overflow: visible;
-}
-/* SVG primitives the renderer emits — themed via these classes */
-#pipeline-chart .pc-bar {
-  fill: var(--brand);
-  rx: 3;
-}
-#pipeline-chart .pc-bar-track {
-  fill: var(--paper-3);
-  rx: 3;
-}
-#pipeline-chart .pc-stage-label {
-  font-family: var(--f-mono);
-  font-size: 12px;
-  letter-spacing: .02em;
-  fill: var(--ink-2);
-}
-#pipeline-chart .pc-value-label {
-  font-family: var(--f-mono);
-  font-size: 12px;
-  letter-spacing: .02em;
-  fill: var(--brand-ink);
-  font-weight: 500;
-}
-#pipeline-chart .pc-count-label {
-  font-family: var(--f-mono);
-  font-size: 10.5px;
-  letter-spacing: .04em;
-  fill: var(--ink-3);
-}
-#pipeline-chart .pc-axis {
-  font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: .04em;
-  fill: var(--mute);
-}
-#pipeline-chart .pc-gridline {
-  stroke: var(--rule);
-  stroke-width: 1;
-}
-#pipeline-chart .pc-empty {
-  font-family: var(--f-mono);
-  font-size: 12px;
-  fill: var(--ink-3);
-}
 
 /* ---------------------------------------------------------
    DEALS PANEL — filter bar + search (uses global .pt/.pt-c, .bw-table)
@@ -650,10 +699,10 @@
 }
 
 /* ---------------------------------------------------------
-   ADMIN — all-deals review table (admin.html)
+   ADMIN — all-deals review table (admin.component.html)
    Reuses the global .bw-table; adds the status/toast region and the
-   per-row Actions <select>. portal.js (data-auth="admin") fills
-   #admin-deals-tbody and wires the selects to updateDealStatus().
+   per-row client-paid date input. Status itself is read-only here —
+   it is owned by Salesforce and mirrored in by the pull.
    --------------------------------------------------------- */
 /* Status / toast region above the table */
 .admin-status {
@@ -674,33 +723,7 @@
 .admin-deals-table th,
 .admin-deals-table td { padding: 11px 16px; }
 
-/* Per-row Actions <select> — compact, themed via tokens (matches .fld select). */
-.admin-deals-table .status-select {
-  font: inherit;
-  font-family: var(--f-sans);
-  font-size: 12.5px;
-  color: var(--ink);
-  background: var(--paper);
-  border: 1px solid var(--rule-2);
-  border-radius: var(--r-sm);
-  padding: 6px 28px 6px 10px;
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'><path d='M4 6l4 4 4-4' stroke='%235E6878' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 9px center;
-  background-size: 13px;
-  transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
-}
-.admin-deals-table .status-select:focus {
-  outline: 0;
-  border-color: var(--brand);
-  background-color: var(--card);
-  box-shadow: 0 0 0 3px rgba(22,138,140,.12);
-}
-.admin-deals-table .status-select:disabled { opacity: .55; cursor: default; }
-
-/* Per-row client-paid date input — matches the status <select> chrome. */
+/* Per-row client-paid date input — compact, themed via tokens. */
 .admin-deals-table .paid-input {
   font: inherit;
   font-family: var(--f-mono);

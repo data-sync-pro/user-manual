@@ -1,0 +1,198 @@
+{
+    "fileVersion": 0,
+    "serverMaxRevisionCounter": 58,
+    "sourceMembers": {
+        "AppMenu__AppSwitcher": {
+            "memberType": "AppMenu",
+            "serverRevisionCounter": 1,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ExternalClientApplication__PartnerPortalIntegration": {
+            "memberType": "ExternalClientApplication",
+            "serverRevisionCounter": 26,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ExtlClntAppConfigurablePolicies__PartnerPortalIntegration_plcy": {
+            "memberType": "ExtlClntAppConfigurablePolicies",
+            "serverRevisionCounter": 27,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ExtlClntAppOauthSettings__PartnerPortalIntegration_oauth": {
+            "memberType": "ExtlClntAppOauthSettings",
+            "serverRevisionCounter": 28,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ExtlClntAppGlobalOauthSettings__PartnerPortalIntegration_glbloauth": {
+            "memberType": "ExtlClntAppGlobalOauthSettings",
+            "serverRevisionCounter": 29,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ExtlClntAppOauthSecuritySettings__PartnerPortalIntegration_oauthSecurity": {
+            "memberType": "ExtlClntAppOauthSecuritySettings",
+            "serverRevisionCounter": 30,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ExtlClntAppOauthConfigurablePolicies__PartnerPortalIntegration_oauthPlcy": {
+            "memberType": "ExtlClntAppOauthConfigurablePolicies",
+            "serverRevisionCounter": 31,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "Profile__Salesforce API Only System Integrations": {
+            "memberType": "Profile",
+            "serverRevisionCounter": 32,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "Profile__Admin": {
+            "memberType": "Profile",
+            "serverRevisionCounter": 33,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "CustomField__Account.PartnerType__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 34,
+            "lastRetrievedFromServer": 34,
+            "isNameObsolete": false
+        },
+        "CustomField__Account.Primary_Contact__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 35,
+            "lastRetrievedFromServer": 35,
+            "isNameObsolete": false
+        },
+        "CustomObject__Account": {
+            "memberType": "CustomObject",
+            "serverRevisionCounter": 36,
+            "lastRetrievedFromServer": 36,
+            "isNameObsolete": false
+        },
+        "CustomField__DealRegistration__c.Amount__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 37,
+            "lastRetrievedFromServer": 37,
+            "isNameObsolete": false
+        },
+        "CustomField__DealRegistration__c.CustomerCompanyName__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 38,
+            "lastRetrievedFromServer": 38,
+            "isNameObsolete": false
+        },
+        "CustomField__DealRegistration__c.CustomerCompanySize__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 39,
+            "lastRetrievedFromServer": 39,
+            "isNameObsolete": false
+        },
+        "CustomField__DealRegistration__c.CustomerContactEmail__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 40,
+            "lastRetrievedFromServer": 40,
+            "isNameObsolete": false
+        },
+        "CustomField__DealRegistration__c.CustomerContactFirstName__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 41,
+            "lastRetrievedFromServer": 41,
+            "isNameObsolete": false
+        },
+        "CustomField__DealRegistration__c.CustomerContactLastName__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 42,
+            "lastRetrievedFromServer": 42,
+            "isNameObsolete": false
+        },
+        "CustomField__DealRegistration__c.CustomerContactTitle__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 43,
+            "lastRetrievedFromServer": 43,
+            "isNameObsolete": false
+        },
+        "CustomField__DealRegistration__c.CustomerCountry__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 44,
+            "lastRetrievedFromServer": 44,
+            "isNameObsolete": false
+        },
+        "CustomField__DealRegistration__c.CustomerOrgType__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 45,
+            "lastRetrievedFromServer": 45,
+            "isNameObsolete": false
+        },
+        "CustomField__DealRegistration__c.CustomerWebsite__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 46,
+            "lastRetrievedFromServer": 46,
+            "isNameObsolete": false
+        },
+        "CustomField__DealRegistration__c.PartnerAccount__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 47,
+            "lastRetrievedFromServer": 47,
+            "isNameObsolete": false
+        },
+        "CustomObject__DealRegistration__c": {
+            "memberType": "CustomObject",
+            "serverRevisionCounter": 55,
+            "lastRetrievedFromServer": 55,
+            "isNameObsolete": false
+        },
+        "CustomField__DealRegistration__c.PartnerPortalDealID__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 49,
+            "lastRetrievedFromServer": 49,
+            "isNameObsolete": false
+        },
+        "CustomField__DealRegistration__c.RequestedLicenseInfo__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 50,
+            "lastRetrievedFromServer": 50,
+            "isNameObsolete": false
+        },
+        "CustomField__DealRegistration__c.Stage__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 51,
+            "lastRetrievedFromServer": 51,
+            "isNameObsolete": false
+        },
+        "CustomField__DealRegistration__c.Status__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 52,
+            "lastRetrievedFromServer": 52,
+            "isNameObsolete": false
+        },
+        "CustomField__DealRegistration__c.Track__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 53,
+            "lastRetrievedFromServer": 53,
+            "isNameObsolete": false
+        },
+        "CustomField__DealRegistration__c.industry__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 54,
+            "lastRetrievedFromServer": 54,
+            "isNameObsolete": false
+        },
+        "PermissionSet__Partner_Portal_Integration": {
+            "memberType": "PermissionSet",
+            "serverRevisionCounter": 57,
+            "lastRetrievedFromServer": 57,
+            "isNameObsolete": false
+        },
+        "PermissionSet__Partner_Portal_Partner_Sync": {
+            "memberType": "PermissionSet",
+            "serverRevisionCounter": 58,
+            "lastRetrievedFromServer": 58,
+            "isNameObsolete": false
+        }
+    }
+}

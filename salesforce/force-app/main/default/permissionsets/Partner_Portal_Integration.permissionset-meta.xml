@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Partner Portal Integration</label>
+    <description>DealRegistration__c access for the Partner Portal JWT integration user (deal upsert + pull). Compatible with the Salesforce Integration license. Assign to the integration user after deploy.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+
+    <!-- Deal object: create + read + edit (upsert), View All so the pull sees every record. No delete.
+         Custom object => allowed for a Salesforce Integration license user. -->
+    <objectPermissions>
+        <object>DealRegistration__c</object>
+        <allowCreate>true</allowCreate>
+        <allowRead>true</allowRead>
+        <allowEdit>true</allowEdit>
+        <allowDelete>false</allowDelete>
+        <viewAllRecords>true</viewAllRecords>
+        <modifyAllRecords>false</modifyAllRecords>
+    </objectPermissions>
+
+    <!-- DealRegistration fields: read + edit (upsert writes them; pull reads them). -->
+    <fieldPermissions>
+        <field>DealRegistration__c.PartnerPortalDealID__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>DealRegistration__c.Amount__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>DealRegistration__c.CustomerCompanyName__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>DealRegistration__c.CustomerWebsite__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>DealRegistration__c.CustomerContactFirstName__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>DealRegistration__c.CustomerContactLastName__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>DealRegistration__c.CustomerContactTitle__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>DealRegistration__c.CustomerContactEmail__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>DealRegistration__c.Stage__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>DealRegistration__c.CustomerCountry__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>DealRegistration__c.industry__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>DealRegistration__c.CustomerCompanySize__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>DealRegistration__c.CustomerOrgType__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>DealRegistration__c.Track__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>DealRegistration__c.Status__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>DealRegistration__c.RequestedLicenseInfo__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>DealRegistration__c.PartnerAccount__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+</PermissionSet>

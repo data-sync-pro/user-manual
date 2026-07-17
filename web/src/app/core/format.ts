@@ -26,8 +26,10 @@ export const fmtMoney = (n: unknown): string =>
   '$' + (Number(n) || 0).toLocaleString('en-US');
 
 // Format a Firestore Timestamp (or Date / millis / 'YYYY-MM-DD' string) as a
-// 'YYYY-MM-DD' string for the `submitted` field.
-export function tsToDateStr(ts: unknown): string {
+// 'YYYY-MM-DD' string. Local calendar day by default (true instants like
+// submittedAt); pass utc=true for date-only fields stored at UTC midnight
+// (paidAt) — local getters would render those a day early west of UTC.
+export function tsToDateStr(ts: unknown, utc = false): string {
   if (!ts) return '';
   let d: Date;
   if (ts instanceof Timestamp) d = ts.toDate();
@@ -38,9 +40,9 @@ export function tsToDateStr(ts: unknown): string {
   else if ((ts as { seconds?: number }).seconds != null) d = new Date((ts as { seconds: number }).seconds * 1000);
   else return '';
   if (isNaN(d.getTime())) return '';
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
+  const y = utc ? d.getUTCFullYear() : d.getFullYear();
+  const m = String((utc ? d.getUTCMonth() : d.getMonth()) + 1).padStart(2, '0');
+  const day = String(utc ? d.getUTCDate() : d.getDate()).padStart(2, '0');
   return y + '-' + m + '-' + day;
 }
 

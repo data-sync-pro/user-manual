@@ -5,7 +5,6 @@ import { fmtMoney } from '../../core/format';
 import { Deal, DealStatus, PartnerRow } from '../../core/models';
 import { NavComponent } from '../../shared/nav.component';
 import { FooterComponent } from '../../shared/footer.component';
-import { SecurityPanelComponent } from '../../shared/security-panel.component';
 
 const STATUS_BADGE: Record<DealStatus, { cls: string; label: string }> = {
   pending: { cls: 'tag', label: 'Pending' },
@@ -13,12 +12,11 @@ const STATUS_BADGE: Record<DealStatus, { cls: string; label: string }> = {
   won: { cls: 'tag good', label: 'Closed won' },
   lost: { cls: 'tag signal', label: 'Lost' },
 };
-const STATUSES: DealStatus[] = ['pending', 'accepted', 'won', 'lost'];
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [RouterLink, NavComponent, FooterComponent, SecurityPanelComponent],
+  imports: [RouterLink, NavComponent, FooterComponent],
   templateUrl: './admin.component.html',
 })
 export class AdminComponent implements OnInit {
@@ -30,7 +28,6 @@ export class AdminComponent implements OnInit {
   readonly statusText = signal('Loading deals…');
   readonly updating = signal<Set<string>>(new Set());
 
-  readonly statuses = STATUSES;
   readonly fmtMoney = fmtMoney;
 
   // Each partner + how many deals they own (derived from the all-deals load).
@@ -51,9 +48,6 @@ export class AdminComponent implements OnInit {
 
   badge(status: DealStatus) {
     return STATUS_BADGE[status] || STATUS_BADGE.pending;
-  }
-  label(status: DealStatus): string {
-    return (STATUS_BADGE[status] || { label: status }).label;
   }
 
   ngOnInit(): void {
@@ -90,33 +84,6 @@ export class AdminComponent implements OnInit {
     return this.updating().has(id);
   }
 
-  onStatusChange(deal: Deal, next: DealStatus): void {
-    const prev = deal.status;
-    if (next === prev) return;
-
-    const upd = new Set(this.updating());
-    upd.add(deal.id);
-    this.updating.set(upd);
-
-    this.api
-      .updateDealStatus(deal.id, next)
-      .then(() => {
-        this.deals.update((list) =>
-          list.map((d) => (d.id === deal.id ? { ...d, status: next } : d)),
-        );
-        this.clearUpdating(deal.id);
-        this.toast(deal.id + ' → ' + this.label(next));
-      })
-      .catch((err: Error) => {
-        // Revert the visible selection by re-rendering with the old status.
-        this.deals.update((list) =>
-          list.map((d) => (d.id === deal.id ? { ...d, status: prev } : d)),
-        );
-        this.clearUpdating(deal.id);
-        this.toast('Update failed: ' + (err?.message || 'error'));
-      });
-  }
-
   // Record the date the client paid — drives the partner's commission schedule.
   onPaidDateChange(deal: Deal, ymd: string): void {
     const prev = deal.paidDate;
@@ -126,12 +93,16 @@ export class AdminComponent implements OnInit {
     upd.add(deal.id);
     this.updating.set(upd);
 
+    // Optimistic update BEFORE the call so a failure's revert (next -> prev)
+    // actually reaches the DOM — reverting a model that never changed is a
+    // no-op for Angular and would leave the input showing the failed value.
+    this.deals.update((list) =>
+      list.map((d) => (d.id === deal.id ? { ...d, paidDate: ymd } : d)),
+    );
+
     this.api
       .setDealPaidDate(deal.id, ymd)
       .then(() => {
-        this.deals.update((list) =>
-          list.map((d) => (d.id === deal.id ? { ...d, paidDate: ymd } : d)),
-        );
         this.clearUpdating(deal.id);
         this.toast(deal.id + (ymd ? ' · client paid ' + ymd : ' · payment date cleared'));
       })

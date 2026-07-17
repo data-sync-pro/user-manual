@@ -15,51 +15,10 @@ import {
   QueryDocumentSnapshot,
   DocumentData,
 } from '@angular/fire/firestore';
+import { Functions, httpsCallable } from '@angular/fire/functions';
 import { AuthService } from './auth.service';
 import { tsToDateStr } from './format';
-import {
-  Announcement,
-  Deal,
-  DealStatus,
-  Kpis,
-  Partner,
-  PartnerRow,
-  PipelineEntry,
-} from './models';
-
-/* Commission model (gold tier · Solution track default):
- * 27% of won ARR + 3% loyalty. YTD = commission on closed-won deals. */
-const COMMISSION_RATE = 0.27;
-const LOYALTY_RATE = 0.03;
-
-// Derive KPI figures from the deals array (identical math to portal.js).
-export function deriveKpis(deals: Deal[]): Kpis {
-  deals = Array.isArray(deals) ? deals : [];
-  const total = deals.length;
-  const accepted = deals.filter((d) => d.status === 'accepted').length;
-  const pipelineArr = deals
-    .filter((d) => d.status === 'pending' || d.status === 'accepted')
-    .reduce((s, d) => s + (Number(d.arr) || 0), 0);
-  const wonArr = deals
-    .filter((d) => d.status === 'won')
-    .reduce((s, d) => s + (Number(d.arr) || 0), 0);
-  const commissionYtd = Math.round(wonArr * (COMMISSION_RATE + LOYALTY_RATE));
-  return { deals: total, accepted, pipelineArr, commissionYtd };
-}
-
-// Derive ARR + count grouped by sales stage (open + recently closed-won).
-export function derivePipeline(deals: Deal[]): PipelineEntry[] {
-  deals = Array.isArray(deals) ? deals : [];
-  const order = ['Discovery', 'Qualification', 'Proposal', 'Negotiation', 'Closed Won'];
-  const byStage: Record<string, PipelineEntry> = {};
-  deals.forEach((d) => {
-    if (d.status === 'lost') return;
-    if (!byStage[d.stage]) byStage[d.stage] = { stage: d.stage, arr: 0, count: 0 };
-    byStage[d.stage].arr += Number(d.arr) || 0;
-    byStage[d.stage].count += 1;
-  });
-  return order.filter((s) => byStage[s]).map((s) => byStage[s]);
-}
+import { Announcement, Deal, DealStatus, Partner, PartnerRow } from './models';
 
 // Map a Firestore deal doc -> the dashboard/admin row shape.
 function mapDealDoc(snap: QueryDocumentSnapshot<DocumentData>): Deal {
@@ -74,39 +33,52 @@ function mapDealDoc(snap: QueryDocumentSnapshot<DocumentData>): Deal {
     status: (data['status'] || 'pending') as DealStatus,
     submitted: tsToDateStr(data['submittedAt']),
     track: data['track'] || '',
-    paidDate: tsToDateStr(data['paidAt']),
+    // paidAt is stored at UTC midnight — format in UTC so the day doesn't
+    // shift for users west of UTC (a one-day shift can move a commission
+    // payout across a quarter boundary).
+    paidDate: tsToDateStr(data['paidAt'], true),
+    // Locked-in commission rate/tier snapshotted by the pull at settlement.
+    lockedRate: typeof data['lockedRate'] === 'number' ? data['lockedRate'] : undefined,
+    lockedTier: data['lockedTier'] || undefined,
   };
 }
 
-// Generate a human deal id 'DR-2026-NNNN' (random 4-digit).
-function genDealId(): string {
-  const n = String(Math.floor(1000 + Math.random() * 9000));
-  return 'DR-2026-' + n;
-}
-
-// Generate a human report id 'ER-2026-NNNN' (random 4-digit).
-function genReportId(): string {
-  const n = String(Math.floor(1000 + Math.random() * 9000));
-  return 'ER-2026-' + n;
+// Generate a human-readable id like 'ER-2026-483920': dynamic year + 6 random
+// digits (reports only — deal ids come from Salesforce). Collisions are rare
+// at this size, and submit retries with a fresh id when one does happen
+// (Firestore rules turn a colliding create into a denied update).
+function genId(prefix: string): string {
+  const n = String(Math.floor(100000 + Math.random() * 900000));
+  return prefix + '-' + new Date().getFullYear() + '-' + n;
 }
 
 // Map the deal-registration form's verbose sales-stage labels to the canonical
-// pipeline enum so new deals group into the dashboard chart.
+// pipeline enum. Canonical values pass through unchanged — checked FIRST, since
+// e.g. /discovery/i would otherwise rewrite the canonical 'Discovery'.
 function canonicalStage(s: unknown): string {
   const str = String(s || '');
+  const canon = ['Discovery', 'Qualification', 'Proposal', 'Negotiation', 'Closed Won', 'Closed Lost'];
+  if (canon.indexOf(str) >= 0) return str;
   if (/identified/i.test(str)) return 'Discovery';
   if (/discovery/i.test(str)) return 'Qualification';
   if (/demo/i.test(str)) return 'Proposal';
   if (/evaluation|poc/i.test(str)) return 'Proposal';
   if (/pricing|security/i.test(str)) return 'Negotiation';
   if (/verbal|commit/i.test(str)) return 'Negotiation';
-  const canon = ['Discovery', 'Qualification', 'Proposal', 'Negotiation', 'Closed Won', 'Closed Lost'];
-  return canon.indexOf(str) >= 0 ? str : 'Discovery';
+  return 'Discovery';
+}
+
+// True for the FirebaseError a random-id collision produces: the write hits an
+// existing doc, becomes an update, and partners may not update — so Firestore
+// answers 'permission-denied'.
+function isPermissionDenied(err: unknown): boolean {
+  return (err as { code?: string })?.code === 'permission-denied';
 }
 
 @Injectable({ providedIn: 'root' })
 export class PortalApiService {
   private db = inject(Firestore);
+  private functions = inject(Functions);
   private authSvc = inject(AuthService);
 
   // Current user's deals, newest first.
@@ -116,29 +88,17 @@ export class PortalApiService {
   }
 
   // A specific partner's deals, newest first (admin uses this to view a partner's
-  // dashboard; rules permit admin to read any deal).
+  // dashboard; rules permit admin to read any deal). Rejects on a failed read —
+  // callers must be able to tell "no deals" from "couldn't load".
   async getDealsForUid(uid: string): Promise<Deal[]> {
     if (!uid) return [];
-    try {
-      const q = query(
-        collection(this.db, 'deals'),
-        where('ownerUid', '==', uid),
-        orderBy('submittedAt', 'desc'),
-      );
-      const qs = await getDocs(q);
-      return qs.docs.map(mapDealDoc);
-    } catch (err) {
-      console.warn('[PortalApi] getDealsForUid failed:', (err as Error)?.message);
-      return [];
-    }
-  }
-
-  async getKpis(): Promise<Kpis> {
-    return deriveKpis(await this.getDeals());
-  }
-
-  async getPipeline(): Promise<PipelineEntry[]> {
-    return derivePipeline(await this.getDeals());
+    const q = query(
+      collection(this.db, 'deals'),
+      where('ownerUid', '==', uid),
+      orderBy('submittedAt', 'desc'),
+    );
+    const qs = await getDocs(q);
+    return qs.docs.map(mapDealDoc);
   }
 
   async getAnnouncements(): Promise<Announcement[]> {
@@ -155,13 +115,20 @@ export class PortalApiService {
     }
   }
 
-  // Writes a deals/{DR-2026-NNNN} doc owned by the current user.
-  async submitDeal(payload: Record<string, unknown>): Promise<{ id: string; status: 'pending' }> {
+  // Registers the deal Salesforce-first via the registerDeal callable: the
+  // record is created in Salesforce (the source of truth) and its record Id
+  // IS the deal id — nothing is generated locally. The function also writes
+  // the deals/{sfId} mirror doc, so the dashboard sees it immediately.
+  // `clientToken` is a stable per-submission idempotency key (reused across
+  // retries) so a timed-out or retried submit converges on one SF record.
+  async submitDeal(
+    payload: Record<string, unknown>,
+    clientToken?: string,
+  ): Promise<{ id: string; status: 'pending' }> {
     const user = this.authSvc.currentUser();
     if (!user) throw new Error('You must be signed in to register a deal.');
     payload = payload || {};
 
-    const id = genDealId();
     const arr =
       Number(String(payload['arr'] != null ? payload['arr'] : '').replace(/[^0-9.]/g, '')) || 0;
     // Leave stage empty when the form didn't capture one — don't invent 'Discovery'.
@@ -174,9 +141,7 @@ export class PortalApiService {
         ? [String(payload['products'])]
         : [];
 
-    const docData = {
-      id,
-      ownerUid: user.uid,
+    const dealData = {
       customer:
         (payload['customer'] as string) ||
         (payload['company'] as string) ||
@@ -185,7 +150,6 @@ export class PortalApiService {
       domain: (payload['domain'] as string) || '',
       arr,
       stage,
-      status: 'pending' as const,
       // The deal's registered track wins; fall back to the partner's default.
       track: (payload['track'] as string) || (partner && partner.track) || '',
       products,
@@ -216,15 +180,40 @@ export class PortalApiService {
       orgs: Array.isArray(payload['orgs']) ? payload['orgs'] : [],
       engagement: (payload['engagement'] as string) || (payload['context'] as string) || '',
       origin: (payload['origin'] as string) || '',
-      payload,
-      submittedAt: serverTimestamp(),
+      // Legal attestations (arrays of ['confirmed'] from the wizard) -> booleans.
+      affirmations: {
+        affirmSelfReferral: !!(payload['affirmSelfReferral'] as unknown[])?.length,
+        affirmEmployment: !!(payload['affirmEmployment'] as unknown[])?.length,
+        affirmPipeline: !!(payload['affirmPipeline'] as unknown[])?.length,
+        affirmConsent: !!(payload['affirmConsent'] as unknown[])?.length,
+        affirmTruthful: !!(payload['affirmTruthful'] as unknown[])?.length,
+      },
+      clientToken: clientToken || '',
     };
 
-    await setDoc(doc(this.db, 'deals', id), docData);
-    return { id, status: 'pending' };
+    const call = httpsCallable<typeof dealData, { id: string; status: 'pending' }>(
+      this.functions,
+      'registerDeal',
+    );
+    try {
+      const res = await call(dealData);
+      return { id: res.data.id, status: 'pending' };
+    } catch (err) {
+      const e = err as { code?: string; message?: string };
+      // Callable error codes arrive as 'functions/<code>'.
+      if ((e.code || '').endsWith('permission-denied')) {
+        throw new Error(
+          "Your account isn't allowed to register deals. Please contact your partner manager.",
+        );
+      }
+      // Server messages (account not linked, SF unavailable, …) are already
+      // user-readable; 'internal' is the unhandled-exception fallback.
+      const msg = e.message && e.message !== 'internal' ? e.message : '';
+      throw new Error(msg || 'Could not register the deal. Please try again later.');
+    }
   }
 
-  // Writes a reports/{ER-2026-NNNN} doc for a user-reported error/issue.
+  // Writes a reports/{ER-YYYY-NNNNNN} doc for a user-reported error/issue.
   // Auto-attaches the reporter, the page they were on, and their user agent.
   async submitReport(input: {
     category?: string;
@@ -236,9 +225,7 @@ export class PortalApiService {
 
     const user = this.authSvc.currentUser();
     const partner = this.authSvc.currentPartner();
-    const id = genReportId();
     const docData = {
-      id,
       reporterUid: user?.uid || '',
       reporterEmail: partner?.email || user?.email || '',
       category: input.category || 'Other',
@@ -248,8 +235,17 @@ export class PortalApiService {
       status: 'open' as const,
       createdAt: serverTimestamp(),
     };
-    await setDoc(doc(this.db, 'reports', id), docData);
-    return { id };
+    // Same collision-retry as submitDeal (report updates are admin-only too).
+    for (let attempt = 0; ; attempt++) {
+      const id = genId('ER');
+      try {
+        await setDoc(doc(this.db, 'reports', id), { id, ...docData });
+        return { id };
+      } catch (err) {
+        if (isPermissionDenied(err) && attempt < 2) continue;
+        throw err;
+      }
+    }
   }
 
   // A single partner profile (admin viewing another partner's dashboard).
@@ -266,31 +262,18 @@ export class PortalApiService {
 
   /* ---- ADMIN-only ---- */
 
-  // All partner profiles (admin directory).
+  // All partner profiles (admin directory). Rejects on a failed read.
   async getAllPartners(): Promise<PartnerRow[]> {
-    try {
-      const qs = await getDocs(collection(this.db, 'partners'));
-      return qs.docs.map((snap) => ({ uid: snap.id, ...(snap.data() as Partner) }));
-    } catch (err) {
-      console.warn('[PortalApi] getAllPartners failed:', (err as Error)?.message);
-      return [];
-    }
+    const qs = await getDocs(collection(this.db, 'partners'));
+    return qs.docs.map((snap) => ({ uid: snap.id, ...(snap.data() as Partner) }));
   }
 
-  // All deals across partners, newest first.
+  // All deals across partners, newest first. Rejects on a failed read so the
+  // admin console can show its error state instead of "0 deals".
   async getAllDeals(): Promise<Deal[]> {
-    try {
-      const q = query(collection(this.db, 'deals'), orderBy('submittedAt', 'desc'));
-      const qs = await getDocs(q);
-      return qs.docs.map(mapDealDoc);
-    } catch (err) {
-      console.warn('[PortalApi] getAllDeals failed:', (err as Error)?.message);
-      return [];
-    }
-  }
-
-  updateDealStatus(dealId: string, status: DealStatus): Promise<void> {
-    return updateDoc(doc(this.db, 'deals', dealId), { status });
+    const q = query(collection(this.db, 'deals'), orderBy('submittedAt', 'desc'));
+    const qs = await getDocs(q);
+    return qs.docs.map(mapDealDoc);
   }
 
   // Record (or clear) the date the client paid. Stored as a Timestamp at UTC

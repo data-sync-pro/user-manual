@@ -7,6 +7,9 @@
       <a [routerLink]="isAdmin ? '/admin' : '/dashboard'"
          [class.active]="active === 'dashboard' || active === 'admin'"
          [attr.aria-current]="(active === 'dashboard' || active === 'admin') ? 'page' : null">Dashboard</a>
+      <a routerLink="/account"
+         [class.active]="active === 'account'"
+         [attr.aria-current]="active === 'account' ? 'page' : null">Account</a>
     </div>
     <div class="nav-spacer"></div>
     <div class="nav-cta">
@@ -24,6 +27,7 @@
   <div class="nav-mobile" [hidden]="!menuOpen()">
     <div class="nav-mobile-inner">
       <a [routerLink]="isAdmin ? '/admin' : '/dashboard'" (click)="closeMenu()">Dashboard</a>
+      <a routerLink="/account" (click)="closeMenu()">Account</a>
       @if (!isAdmin) {
         <a class="btn" routerLink="/dashboard" fragment="register" (click)="closeMenu()">Register a deal</a>
       }

@@ -1,0 +1,34 @@
+<app-nav active="account"></app-nav>
+
+<!-- ACCOUNT SETTINGS — same compact shell as the dashboard/admin consoles -->
+<main class="dash">
+
+  <header class="dash-bar">
+    <div class="dash-bar-l">
+      <div class="dash-title-row">
+        <h1 class="dash-title">Account settings</h1>
+      </div>
+      <p class="dash-sub">Manage how you sign in to the partner portal.</p>
+    </div>
+  </header>
+
+  <div class="dash-stack account-stack">
+
+    <!-- Identity card: who you're signed in as -->
+    <section class="acct-id" aria-label="Signed-in account">
+      <span class="acct-id-avatar" aria-hidden="true">{{ initial() }}</span>
+      <div class="acct-id-text">
+        <span class="acct-id-primary">{{ name() || email() || 'Your account' }}</span>
+        <span class="acct-id-meta">
+          @if (name() && email()) { {{ email() }} · }
+          {{ isAdmin ? 'Administrator' : 'Partner account' }}
+        </span>
+      </div>
+    </section>
+
+    <app-security-panel></app-security-panel>
+  </div>
+
+</main>
+
+<app-footer variant="dash"></app-footer>

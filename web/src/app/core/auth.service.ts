@@ -4,10 +4,13 @@ import {
   User,
   UserCredential,
   GoogleAuthProvider,
+  OAuthProvider,
   EmailAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
   sendPasswordResetEmail,
+  verifyPasswordResetCode,
+  confirmPasswordReset,
   linkWithPopup,
   linkWithCredential,
   reauthenticateWithPopup,
@@ -75,6 +78,17 @@ function authError(err: unknown): Error {
   return e;
 }
 
+// Microsoft (Azure AD) sign-in. Firebase identifies the provider by this id; the
+// same OAuthProvider drives sign-in, account linking and re-authentication.
+const MICROSOFT_PROVIDER_ID = 'microsoft.com';
+function microsoftProvider(): OAuthProvider {
+  const provider = new OAuthProvider(MICROSOFT_PROVIDER_ID);
+  // Always let the user choose the account (helps people who have both a
+  // work/school and a personal Microsoft account).
+  provider.setCustomParameters({ prompt: 'select_account' });
+  return provider;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private auth = inject(Auth);
@@ -83,6 +97,10 @@ export class AuthService {
   // Cached partners/{uid} doc + admin flag for the current session.
   private partnerCache: Partner | null = null;
   private adminCache = false;
+  // True when the LAST partner-profile read threw (network/offline) rather
+  // than resolving "no doc". Guards must not treat that as unprovisioned and
+  // sign the user out.
+  private partnerLoadError = false;
 
   // Reactive copies for templates (the cache stays the source of truth for
   // synchronous reads from services/guards).
@@ -95,6 +113,7 @@ export class AuthService {
       if (!u) {
         this.partnerCache = null;
         this.adminCache = false;
+        this.partnerLoadError = false;
         this.partner.set(null);
       }
     });
@@ -112,22 +131,30 @@ export class AuthService {
     return this.adminCache;
   }
 
-  // Load + cache partners/{uid}; also resolves the admin flag.
+  // The last loadPartner() attempt failed to READ (as opposed to the profile
+  // genuinely not existing).
+  partnerLoadFailed(): boolean {
+    return this.partnerLoadError;
+  }
+
+  // Load + cache partners/{uid}; also resolves the admin flag. A read failure
+  // (network/offline) keeps the previous cache and rethrows — it must never be
+  // mistaken for "not provisioned".
   async loadPartner(uid: string): Promise<Partner | null> {
+    let snap;
     try {
-      const snap = await getDoc(doc(this.db, 'partners', uid));
-      const data = snap.exists() ? (snap.data() as Partner) : null;
-      this.partnerCache = data;
-      this.adminCache = !!(data && data.role === 'admin');
-      this.partner.set(data);
-      return data;
+      snap = await getDoc(doc(this.db, 'partners', uid));
     } catch (err) {
       console.warn('[AuthService] loadPartner failed:', (err as Error)?.message);
-      this.partnerCache = null;
-      this.adminCache = false;
-      this.partner.set(null);
-      return null;
+      this.partnerLoadError = true;
+      throw new Error('Could not load your partner profile. Check your connection and try again.');
     }
+    this.partnerLoadError = false;
+    const data = snap.exists() ? (snap.data() as Partner) : null;
+    this.partnerCache = data;
+    this.adminCache = !!(data && data.role === 'admin');
+    this.partner.set(data);
+    return data;
   }
 
   // Sign in via Firebase Auth (email/password), then enforce provisioning.
@@ -160,6 +187,22 @@ export class AuthService {
     return this.finishSignIn(cred);
   }
 
+  // Sign in with Microsoft (Azure AD, popup), then enforce provisioning. Same
+  // invite-only gate as Google — an account with no admin-created partners/{uid}
+  // profile is signed back out and rejected (see finishSignIn).
+  async signInWithMicrosoft(): Promise<LoginResult> {
+    let cred: UserCredential;
+    try {
+      cred = await signInWithPopup(this.auth, microsoftProvider());
+    } catch (err) {
+      // Log the raw Firebase code so failures are diagnosable (the UI only
+      // shows the friendly text).
+      console.error('[auth] sign-in failed:', (err as { code?: string })?.code, err);
+      throw new Error(friendlyAuthError(err));
+    }
+    return this.finishSignIn(cred);
+  }
+
   // Send Firebase's built-in password-reset email. Doubles as a "set your
   // password" email for an account that has none yet (clicking the link adds a
   // password credential). Safe for any address — Firebase doesn't reveal whether
@@ -172,13 +215,42 @@ export class AuthService {
     }
   }
 
+  // Verify a password-reset code (oobCode from the emailed link). Resolves with
+  // the account's email when the code is valid; rejects with a friendly message
+  // when it's invalid or expired. Backs the custom /auth/action reset page.
+  async verifyResetCode(code: string): Promise<string> {
+    try {
+      return await verifyPasswordResetCode(this.auth, code);
+    } catch (err) {
+      throw authError(err);
+    }
+  }
+
+  // Complete a password reset — sets the new password for the account the code
+  // belongs to. Does NOT sign the user in as a side effect.
+  async confirmReset(code: string, newPassword: string): Promise<void> {
+    try {
+      await confirmPasswordReset(this.auth, code, newPassword);
+    } catch (err) {
+      throw authError(err);
+    }
+  }
+
   // Shared post-sign-in step: load the partners/{uid} profile and gate on it.
   // No profile -> the account was never provisioned by an admin: sign out and
   // reject so it can't reach any portal page. The portal allows no self-signup,
-  // regardless of sign-in method (this is what makes enabling Google safe).
+  // regardless of sign-in method (firestore.rules enforces the same gate
+  // server-side via isPartner()).
   private async finishSignIn(cred: UserCredential): Promise<LoginResult> {
-    const token = await cred.user.getIdToken();
-    const partner = await this.loadPartner(cred.user.uid);
+    let partner: Partner | null;
+    try {
+      partner = await this.loadPartner(cred.user.uid);
+    } catch {
+      // Transient read failure — NOT "unprovisioned". Don't keep a session we
+      // can't verify, but tell the user the truth so they just retry.
+      await this.signOut();
+      throw new Error('Could not load your partner profile. Check your connection and try again.');
+    }
     if (!partner) {
       await this.signOut();
       throw new Error(
@@ -186,7 +258,6 @@ export class AuthService {
       );
     }
     return {
-      token,
       partner: {
         name: partner.name || cred.user.displayName || '',
         track: partner.track || '',
@@ -198,16 +269,23 @@ export class AuthService {
     await fbSignOut(this.auth);
     this.partnerCache = null;
     this.adminCache = false;
+    this.partnerLoadError = false;
     this.partner.set(null);
   }
 
   // Resolve once the first auth state is known. When signed in, the partner
   // doc is loaded + cached before resolving — guards/pages need it synchronously.
+  // A profile READ failure resolves anyway (partnerLoadFailed() is set); guards
+  // handle it without signing the user out.
+  // The cached profile is reused on subsequent calls: guards run this on EVERY
+  // navigation, and refetching partners/{uid} each time would block every route
+  // change on a Firestore round trip. The cache is cleared on sign-out and a
+  // failed load leaves it empty, so a retry still hits the network.
   authReady(): Promise<User | null> {
     return new Promise((resolve) => {
       const unsub = onAuthStateChanged(this.auth, async (u) => {
         unsub();
-        if (u) await this.loadPartner(u.uid);
+        if (u && !this.partnerCache) await this.loadPartner(u.uid).catch(() => null);
         resolve(u);
       });
     });
@@ -218,10 +296,11 @@ export class AuthService {
    * the partners/{uid} profile and the invite-only gate stay valid. */
 
   // Which sign-in methods are linked to the current account (+ its email).
-  linkedProviders(): { google: boolean; password: boolean; email: string | null } {
+  linkedProviders(): { google: boolean; microsoft: boolean; password: boolean; email: string | null } {
     const pd = this.auth.currentUser?.providerData ?? [];
     return {
       google: pd.some((p) => p.providerId === GoogleAuthProvider.PROVIDER_ID),
+      microsoft: pd.some((p) => p.providerId === MICROSOFT_PROVIDER_ID),
       password: pd.some((p) => p.providerId === EmailAuthProvider.PROVIDER_ID),
       email: this.auth.currentUser?.email ?? null,
     };
@@ -244,6 +323,22 @@ export class AuthService {
     }
     try {
       await linkWithPopup(user, new GoogleAuthProvider());
+    } catch (err) {
+      throw authError(err);
+    }
+    await this.refreshUser();
+  }
+
+  // Link Microsoft to the signed-in account. Call directly from a click — the
+  // popup needs a user gesture.
+  async linkMicrosoft(): Promise<void> {
+    const user = this.auth.currentUser;
+    if (!user) throw new Error('Please sign in first, then connect Microsoft.');
+    if (user.providerData.some((p) => p.providerId === MICROSOFT_PROVIDER_ID)) {
+      throw new Error('Microsoft is already connected to this account.');
+    }
+    try {
+      await linkWithPopup(user, microsoftProvider());
     } catch (err) {
       throw authError(err);
     }
@@ -275,6 +370,17 @@ export class AuthService {
     if (!user) throw new Error('Please sign in first.');
     try {
       await reauthenticateWithPopup(user, new GoogleAuthProvider());
+    } catch (err) {
+      throw authError(err);
+    }
+  }
+
+  // Re-authenticate with Microsoft (remedy for 'auth/requires-recent-login').
+  async reauthMicrosoft(): Promise<void> {
+    const user = this.auth.currentUser;
+    if (!user) throw new Error('Please sign in first.');
+    try {
+      await reauthenticateWithPopup(user, microsoftProvider());
     } catch (err) {
       throw authError(err);
     }

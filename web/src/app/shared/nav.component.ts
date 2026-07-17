@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, inject, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnDestroy, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../core/auth.service';
 
@@ -11,8 +11,8 @@ import { AuthService } from '../core/auth.service';
   imports: [RouterLink],
   templateUrl: './nav.component.html',
 })
-export class NavComponent {
-  @Input() active: 'dashboard' | 'register' | 'admin' | null = null;
+export class NavComponent implements OnDestroy {
+  @Input() active: 'dashboard' | 'register' | 'admin' | 'account' | null = null;
 
   private auth = inject(AuthService);
   private router = inject(Router);
@@ -65,9 +65,18 @@ export class NavComponent {
 
   signOut(e: Event): void {
     e.preventDefault();
+    // Signing out from the open mobile menu navigates away with the menu still
+    // "open" — unlock body scrolling before leaving.
+    this.closeMenu();
     this.auth
       .signOut()
       .then(() => this.router.navigateByUrl('/login'))
       .catch(() => this.router.navigateByUrl('/login'));
+  }
+
+  // Safety net: never leave body { overflow: hidden } behind when the nav is
+  // destroyed mid-navigation (SPA route change, no page reload to reset it).
+  ngOnDestroy(): void {
+    document.body.style.overflow = '';
   }
 }

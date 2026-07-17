@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, computed, inject, signal, viewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Functions, httpsCallable } from '@angular/fire/functions';
 import { Subscription } from 'rxjs';
@@ -12,7 +12,6 @@ import { NavComponent } from '../../shared/nav.component';
 import { FooterComponent } from '../../shared/footer.component';
 import { CommissionScheduleComponent } from '../../shared/commission-schedule.component';
 import { DealRegistrationComponent } from '../deal-registration/deal-registration.component';
-import { SecurityPanelComponent } from '../../shared/security-panel.component';
 
 type Filter = 'all' | DealStatus;
 
@@ -66,7 +65,7 @@ const COLUMNS: SortCol[] = [
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterLink, NavComponent, FooterComponent, CommissionScheduleComponent, DealRegistrationComponent, SecurityPanelComponent],
+  imports: [RouterLink, NavComponent, FooterComponent, CommissionScheduleComponent, DealRegistrationComponent],
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit, OnDestroy {
@@ -88,6 +87,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // Deals
   readonly allDeals = signal<Deal[]>([]);
   readonly dealsLoading = signal(true);
+  // Non-empty when the last deals load FAILED — distinct from "no deals", so
+  // an outage doesn't render as an innocent empty state.
+  readonly dealsError = signal('');
   readonly activeFilter = signal<Filter>('all');
   readonly search = signal('');
   readonly page = signal(1);
@@ -202,6 +204,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   readonly registerOpen = signal(false);
   private submittedInModal = false;
   private fragSub?: Subscription;
+  // Focus management: where focus was before the modal opened, restored on close.
+  private lastFocused: HTMLElement | null = null;
+  // The embedded wizard, so we can refuse to close it mid-submit (closing would
+  // destroy it and drop the (submitted) callback after the deal is written).
+  private regComp = viewChild(DealRegistrationComponent);
 
   readonly fmtMoney = fmtMoney;
 
@@ -248,6 +255,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // the deal's own registered track (Solution/Referral), falling back to the
   // partner's default track for legacy deals with no track recorded.
   dealRate(deal: Deal): number {
+    // Prefer the rate locked in at settlement (persisted server-side by the
+    // pull); fall back to the live rolling tier rate for deals not yet locked.
+    if (typeof deal.lockedRate === 'number') return deal.lockedRate;
     const track = deal.track || this.effectiveTrack();
     return rateFor(tierFor(this.trailingArrAsOf(deal)), track);
   }
@@ -263,14 +273,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // deal is settled; otherwise both Tier % and Commission read "—".
   dealComm(d: Deal): DealComm {
     if (!this.isSettled(d)) return { show: false, amount: '', pct: '—', tier: '' };
-    // Tier in effect at this deal's point in time → the rate that locked in.
-    const tier = tierFor(this.trailingArrAsOf(d));
-    const rate = rateFor(tier, d.track || this.effectiveTrack());
+    // Prefer the tier/rate locked in when the deal settled (persisted server-side
+    // by the pull) so the figure never drifts as later deals move the trailing
+    // window; fall back to the live rolling computation for deals settled before
+    // locking existed.
+    let rate: number;
+    let tierName: string;
+    if (typeof d.lockedRate === 'number') {
+      rate = d.lockedRate;
+      tierName = d.lockedTier || tierFor(this.trailingArrAsOf(d)).name;
+    } else {
+      const tier = tierFor(this.trailingArrAsOf(d));
+      rate = rateFor(tier, d.track || this.effectiveTrack());
+      tierName = tier.name;
+    }
     return {
       show: true,
       amount: fmtMoney(Math.round((Number(d.arr) || 0) * rate)),
       pct: Math.round(rate * 100) + '%',
-      tier: tier.name,
+      tier: tierName,
     };
   }
 
@@ -302,13 +323,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // Calls the refreshFromSalesforce callable; re-loads deals if it pulled changes.
   // Failures (Salesforce down, throttled) are non-fatal — cached deals still show.
   private refreshFromSalesforce(): void {
-    const call = httpsCallable<unknown, { updated?: number; skipped?: boolean }>(
+    const call = httpsCallable<unknown, { updated?: number; removed?: number; skipped?: boolean }>(
       this.functions,
       'refreshFromSalesforce',
     );
     call({})
       .then((res) => {
-        if (res.data?.updated) this.fillDeals();
+        if (res.data?.updated || res.data?.removed) this.fillDeals();
       })
       .catch((err: { message?: string }) => {
         console.warn('[dashboard] Salesforce refresh skipped:', err?.message || err);
@@ -325,7 +346,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.syncMsg.set('');
     const call = httpsCallable<
       { force: boolean },
-      { updated?: number; count?: number; skipped?: boolean; reason?: string }
+      { updated?: number; count?: number; removed?: number; skipped?: boolean; reason?: string }
     >(this.functions, 'refreshFromSalesforce');
     try {
       const res = await call({ force: true });
@@ -334,9 +355,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.syncMsg.set('No Salesforce account is linked to your profile.');
       } else {
         const n = data.updated || 0;
-        if (n > 0) {
+        const r = data.removed || 0;
+        if (n > 0 || r > 0) {
           this.fillDeals();
-          this.syncMsg.set(`Updated ${n} deal${n === 1 ? '' : 's'} from Salesforce.`);
+          const parts: string[] = [];
+          if (n > 0) parts.push(`updated ${n} deal${n === 1 ? '' : 's'}`);
+          if (r > 0) parts.push(`removed ${r} deal${r === 1 ? '' : 's'}`);
+          const msg = parts.join(', ') + ' from Salesforce.';
+          this.syncMsg.set(msg.charAt(0).toUpperCase() + msg.slice(1));
         } else {
           this.syncMsg.set('Already up to date.');
         }
@@ -429,25 +455,52 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private fillDeals(): void {
     this.dealsLoading.set(true);
+    this.dealsError.set('');
     const uid = this.viewUid();
     const load = uid ? this.api.getDealsForUid(uid) : this.api.getDeals();
-    load.then((deals) => {
-      this.allDeals.set(Array.isArray(deals) ? deals : []);
-      this.dealsLoading.set(false);
-    });
+    load
+      .then((deals) => {
+        this.allDeals.set(Array.isArray(deals) ? deals : []);
+        this.dealsLoading.set(false);
+      })
+      .catch((err: Error) => {
+        console.warn('[dashboard] deals load failed:', err?.message);
+        // Keep whatever was already loaded — don't wipe allDeals to [], which
+        // would collapse the header tier/ARR, filter counts, and commission
+        // schedule to a healthy-looking $0 state on a transient failure.
+        this.dealsLoading.set(false);
+        this.dealsError.set('Could not load your deals. Please refresh to try again.');
+      });
   }
 
   // ---- Register modal ----
+  // aria-modal dialogs must be dismissible from the keyboard.
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (this.registerOpen()) this.closeRegister();
+  }
+
   openRegister(): void {
     if (this.isViewing()) return; // admins don't register on a partner's behalf
     this.submittedInModal = false;
+    this.lastFocused = document.activeElement as HTMLElement | null;
     this.registerOpen.set(true);
     document.body.classList.add('reg-open');
+    // Move focus into the dialog once it has rendered.
+    setTimeout(() => {
+      document.querySelector<HTMLElement>('.reg-modal-close')?.focus();
+    });
   }
 
   closeRegister(): void {
+    if (!this.registerOpen()) return; // re-entrancy guard (Esc during the success timeout)
+    // Don't tear down the wizard while its submit is in flight — the deal would
+    // be written but the (submitted) callback lost, inviting a duplicate.
+    if (this.regComp()?.submitting()) return;
     this.registerOpen.set(false);
     document.body.classList.remove('reg-open');
+    this.lastFocused?.focus();
+    this.lastFocused = null;
     // Clear the #register fragment so it can reopen later.
     if (this.route.snapshot.fragment === 'register') {
       this.router.navigate(['/dashboard']);

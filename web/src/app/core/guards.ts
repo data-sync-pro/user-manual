@@ -12,12 +12,16 @@ const homeFor = (auth: AuthService): string => (auth.isAdmin() ? '/admin' : '/da
 
 // Invite-only gate: an authenticated user must have an admin-provisioned
 // partners/{uid} profile. authReady() has already loaded it, so this just reads
-// the cache. If absent, sign the user out — this blocks accounts that were
-// never provisioned (e.g. an arbitrary Google sign-in) and breaks the
-// guest -> home redirect loop, since after sign-out the guest guard lets them
-// reach the login page.
+// the cache. If the profile is genuinely absent, sign the user out — this
+// blocks accounts that were never provisioned (e.g. an arbitrary Google
+// sign-in) and breaks the guest -> home redirect loop, since after sign-out
+// the guest guard lets them reach the login page.
+// If the profile READ failed (network blip), the session is kept — signing a
+// legitimate partner out over a transient error would be wrong; they land on
+// /login and the next navigation retries the load.
 const isProvisioned = async (auth: AuthService): Promise<boolean> => {
   if (auth.currentPartner()) return true;
+  if (auth.partnerLoadFailed()) return false;
   await auth.signOut();
   return false;
 };

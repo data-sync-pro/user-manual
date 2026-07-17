@@ -8,6 +8,15 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    // Invite-only gate, enforced SERVER-SIDE: the account must have an
+    // admin-provisioned partners/{uid} profile. Signing in with a bare Google
+    // account creates a Firebase Auth user, but without a partner profile it
+    // can't read or write anything here.
+    function isPartner() {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/partners/$(request.auth.uid));
+    }
+
     function isAdmin() {
       return isSignedIn()
         && get(/databases/$(database)/documents/partners/$(request.auth.uid)).data.role == 'admin';
@@ -22,28 +31,44 @@ service cloud.firestore {
 
     // ---- deals/{dealId} ----
     match /deals/{dealId} {
-      allow create: if isSignedIn()
-        && request.resource.data.ownerUid == request.auth.uid
-        && request.resource.data.status == 'pending';
-      allow read: if isSignedIn()
+      // Deals are SERVER-WRITTEN ONLY. Registration is Salesforce-first through
+      // the registerDeal callable, which writes the deals/{sfId} mirror with the
+      // Admin SDK (Admin SDK bypasses these rules). The client never creates a
+      // deal directly, so client create is denied outright. This closes the
+      // path where a raw client setDoc would fire the syncDealToSalesforce
+      // onCreate trigger and push an unvalidated record into Salesforce,
+      // bypassing every guard the callable enforces.
+      allow create: if false;
+      allow read: if isPartner()
         && (resource.data.ownerUid == request.auth.uid || isAdmin());
-      // status changes are admin-only
-      allow update: if isAdmin();
+      // status/paid-date changes are admin-only. Ownership must not change —
+      // this also turns an admin's colliding full-doc setDoc (which would
+      // reassign ownerUid to the admin) into a denial the client retries.
+      allow update: if isAdmin()
+        && request.resource.data.ownerUid == resource.data.ownerUid;
       allow delete: if isAdmin();
     }
 
     // ---- announcements/{id} ----
     match /announcements/{id} {
-      allow read: if isSignedIn();
+      allow read: if isPartner();
       allow write: if isAdmin();
     }
 
     // ---- reports/{id} ----
-    // User-submitted error/issue reports. Any signed-in user files their own;
-    // only admins read or triage them.
+    // User-submitted error/issue reports. Any provisioned partner files their
+    // own; only admins read or triage them.
     match /reports/{id} {
-      allow create: if isSignedIn()
-        && request.resource.data.reporterUid == request.auth.uid;
+      allow create: if isPartner()
+        && request.resource.data.reporterUid == request.auth.uid
+        && request.resource.data.status == 'open'
+        && request.resource.data.id == id
+        && request.resource.data.keys().hasOnly([
+          'id', 'reporterUid', 'reporterEmail', 'category', 'message',
+          'page', 'userAgent', 'status', 'createdAt'
+        ])
+        && request.resource.data.message is string
+        && request.resource.data.message.size() <= 5000;
       allow read, update, delete: if isAdmin();
     }
 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Primary_Contact__c</fullName>
+    <label>Primary Contact</label>
+    <description>The one Contact who gets the portal login (SF_PRIMARY_CONTACT_FIELD). Read via Primary_Contact__r.FirstName/LastName/Email. API name casing is load-bearing — must be Primary_Contact__c (not Primary_contact__c).</description>
+    <type>Lookup</type>
+    <referenceTo>Contact</referenceTo>
+    <relationshipName>Primary_Contact_Accounts</relationshipName>
+    <relationshipLabel>Partner Accounts (Primary Contact)</relationshipLabel>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <required>false</required>
+</CustomField>

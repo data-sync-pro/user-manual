@@ -92,6 +92,8 @@
           <tbody>
             @if (dealsLoading()) {
               <tr class="deals-empty"><td colspan="9">Loading deals…</td></tr>
+            } @else if (dealsError()) {
+              <tr class="deals-empty"><td colspan="9">{{ dealsError() }}</td></tr>
             } @else if (filteredDeals().length === 0) {
               <tr class="deals-empty"><td colspan="9">No deals match this view.</td></tr>
             } @else {
@@ -183,12 +185,6 @@
           <app-commission-schedule [data]="schedule()"></app-commission-schedule>
         </div>
       </section>
-
-      <!-- Account security — only for the signed-in user's own account, not when
-           an admin is viewing a partner's dashboard. -->
-      @if (!isViewing()) {
-        <app-security-panel></app-security-panel>
-      }
 
     </div>
 

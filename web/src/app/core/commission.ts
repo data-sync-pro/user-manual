@@ -69,14 +69,20 @@ export function buildCommissionSchedule(
       // Schedule starts only once the client's payment date is recorded.
       const paid = parseUtc(d.paidDate);
       if (!paid) return;
-      const perInstallment = Math.round(((Number(d.arr) || 0) * rateFn(d)) / COMMISSION_INSTALLMENTS);
+      // Largest-remainder split: the first three installments take the floor,
+      // the last carries the remainder — so the four always sum exactly to the
+      // deal's displayed commission (round(arr * rate)).
+      const total = Math.round((Number(d.arr) || 0) * rateFn(d));
+      const base = Math.floor(total / COMMISSION_INSTALLMENTS);
 
       const eligible = new Date(paid.getTime() + PAYOUT_HOLD_DAYS * DAY_MS);
       let payout = firstPayoutOnOrAfter(eligible);
       for (let i = 0; i < COMMISSION_INSTALLMENTS; i++) {
+        const amount =
+          i < COMMISSION_INSTALLMENTS - 1 ? base : total - base * (COMMISSION_INSTALLMENTS - 1);
         const key = isoUtc(payout);
         const items = byDate.get(key) || [];
-        items.push({ dealId: d.id, customer: d.customer, installment: i + 1, amount: perInstallment });
+        items.push({ dealId: d.id, customer: d.customer, installment: i + 1, amount });
         byDate.set(key, items);
         payout = addQuarters(payout, 1);
       }

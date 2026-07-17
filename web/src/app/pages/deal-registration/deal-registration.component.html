@@ -150,6 +150,11 @@
                 <span class="fl-hint">Use a work address — personal domains (Gmail, Yahoo…) aren't accepted.</span>
               </label>
               <label class="fld">
+                <span class="fl-l">Phone</span>
+                <input type="tel" name="phone" placeholder="+1 555 123 4567"
+                       [(ngModel)]="data['phone']" [ngModelOptions]="{ standalone: true }" />
+              </label>
+              <label class="fld">
                 <span class="fl-l">Track<span class="req">*</span></span>
                 <div class="seg" role="radiogroup" aria-label="Partner track">
                   <input type="radio" name="track" id="trk-sol" value="Solution" [(ngModel)]="data['track']" [ngModelOptions]="{ standalone: true }" />

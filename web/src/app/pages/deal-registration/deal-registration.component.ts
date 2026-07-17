@@ -100,7 +100,13 @@ export class DealRegistrationComponent {
   readonly submitting = signal(false);
   readonly showSuccess = signal(false);
   readonly banner = signal('');
-  readonly dealId = signal('DR-2026');
+  readonly dealId = signal('');
+
+  // Stable idempotency key for the current submission. Generated on the first
+  // submit attempt and reused across retries so an ambiguous failure (timeout,
+  // dropped response) resubmitting doesn't create a duplicate Salesforce record.
+  // Cleared on success so the next deal gets a fresh token.
+  private submissionToken: string | null = null;
 
   readonly total = TOTAL;
 
@@ -357,6 +363,8 @@ export class DealRegistrationComponent {
   }
 
   submit(): void {
+    if (this.submitting()) return; // re-entrancy guard (two clicks in one frame)
+
     if (SubmissionLimiter.isBlocked()) {
       this.banner.set(
         'Submission limit reached. You’ve already sent ' +
@@ -393,20 +401,30 @@ export class DealRegistrationComponent {
     }
 
     const payload = this.buildPayload();
+    // Reuse the token if this is a retry after a failed attempt; mint one otherwise.
+    if (!this.submissionToken) this.submissionToken = this.newSubmissionToken();
     this.submitting.set(true);
     this.banner.set('');
     this.api
-      .submitDeal(payload)
+      .submitDeal(payload, this.submissionToken)
       .then((res) => {
         SubmissionLimiter.record();
+        this.submissionToken = null; // consumed — next deal gets a fresh token
         this.dealId.set(res.id);
         this.showSuccess.set(true);
         this.submitting.set(false);
         if (this.embed) this.submitted.emit(res.id);
       })
       .catch((err: Error) => {
+        // Keep submissionToken so a retry converges on the same SF record.
         this.banner.set(err?.message || 'Submission failed. Please try again.');
         this.submitting.set(false);
       });
+  }
+
+  private newSubmissionToken(): string {
+    const c = (globalThis as { crypto?: { randomUUID?: () => string } }).crypto;
+    if (c?.randomUUID) return c.randomUUID();
+    return 'tok-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
   }
 }

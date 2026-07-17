@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PartnerAccount__c</fullName>
+    <label>Partner Account</label>
+    <description>Attributes the deal to the partner's Account (set from partners/{uid}.salesforceAccountId) so account-scoped pulls see it.</description>
+    <type>Lookup</type>
+    <referenceTo>Account</referenceTo>
+    <relationshipName>Deal_Registrations</relationshipName>
+    <relationshipLabel>Deal Registrations</relationshipLabel>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <required>false</required>
+</CustomField>
