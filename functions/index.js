@@ -1391,15 +1391,30 @@ async function provisionOneAccount(acct, ctx) {
   // otherwise see an existing user and provision them silently, un-notified forever.
   // A bootstrap-provisioned partner has hadDoc=true => no second email.
   if (!hadDoc || intent === 'invite-retry') {
+    let sent = false;
     try {
       await sendPasswordSetupEmail(email);
-      await ref.set({ inviteSentAt: FieldValue.serverTimestamp() }, { merge: true });
-      logger.info(`provisionPartner: provisioned ${email} (account ${accountId}) and sent a set-password email`);
+      sent = true;
     } catch (e) {
       logger.warn(
         `provisionPartner: could not send the setup email to ${email} — ${e.message}; ` +
           'they can use "Forgot password?" on the login page',
       );
+    }
+    // The marker write is deliberately NOT inside the try above. Folded together,
+    // a failure of this write would log "could not send" for mail that DID go out
+    // (a false statement) AND leave inviteSentAt unset — so the next push takes
+    // the invite-retry path and mails the partner a SECOND set-password link.
+    if (sent) {
+      try {
+        await ref.set({ inviteSentAt: FieldValue.serverTimestamp() }, { merge: true });
+        logger.info(`provisionPartner: provisioned ${email} (account ${accountId}) and sent a set-password email`);
+      } catch (e) {
+        logger.error(
+          `provisionPartner: set-password email WAS sent to ${email} but recording inviteSentAt failed — ` +
+            `${e.message}; a later push for this account would send a duplicate invite`,
+        );
+      }
     }
   }
 
@@ -1434,14 +1449,18 @@ exports.sfProvisionPartner = onRequest(
     }
 
     // ---- Secret gate. An unset/short secret means the endpoint is disabled; ----
-    // never reveal WHICH check failed. Length is compared first because
-    // timingSafeEqual throws on unequal-length buffers.
+    // never reveal WHICH check failed.
+    // Compared as fixed-length SHA-256 digests, NOT as raw buffers behind a
+    // string-length check: timingSafeEqual throws RangeError on unequal BYTE
+    // lengths, and JS string length is UTF-16 code units. Node decodes header
+    // values as latin1, so one byte >= 0x80 is 1 char but 2 UTF-8 bytes — a
+    // header that passed a `got.length === secret.length` check could still
+    // throw, and that throw is outside the try below (500, and a length oracle).
+    // Digests are always 32 bytes, so this can neither throw nor leak length.
     const secret = process.env.SF_PUSH_SECRET || '';
     const got = String(req.get('X-Portal-Secret') || '');
-    const authorized =
-      secret.length >= 32 &&
-      got.length === secret.length &&
-      crypto.timingSafeEqual(Buffer.from(got), Buffer.from(secret));
+    const sha256 = (v) => crypto.createHash('sha256').update(v, 'utf8').digest();
+    const authorized = secret.length >= 32 && crypto.timingSafeEqual(sha256(got), sha256(secret));
     if (!authorized) {
       res.status(401).json({ error: 'unauthorized' });
       return;

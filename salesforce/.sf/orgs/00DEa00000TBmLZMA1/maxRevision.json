@@ -1,10 +1,10 @@
 {
     "fileVersion": 0,
-    "serverMaxRevisionCounter": 58,
+    "serverMaxRevisionCounter": 332,
     "sourceMembers": {
         "AppMenu__AppSwitcher": {
             "memberType": "AppMenu",
-            "serverRevisionCounter": 1,
+            "serverRevisionCounter": 308,
             "lastRetrievedFromServer": null,
             "isNameObsolete": false
         },
@@ -52,7 +52,7 @@
         },
         "Profile__Admin": {
             "memberType": "Profile",
-            "serverRevisionCounter": 33,
+            "serverRevisionCounter": 331,
             "lastRetrievedFromServer": null,
             "isNameObsolete": false
         },
@@ -142,8 +142,8 @@
         },
         "CustomObject__DealRegistration__c": {
             "memberType": "CustomObject",
-            "serverRevisionCounter": 55,
-            "lastRetrievedFromServer": 55,
+            "serverRevisionCounter": 233,
+            "lastRetrievedFromServer": 233,
             "isNameObsolete": false
         },
         "CustomField__DealRegistration__c.PartnerPortalDealID__c": {
@@ -192,6 +192,306 @@
             "memberType": "PermissionSet",
             "serverRevisionCounter": 58,
             "lastRetrievedFromServer": 58,
+            "isNameObsolete": false
+        },
+        "PermissionSet__Partner_Portal_Admin": {
+            "memberType": "PermissionSet",
+            "serverRevisionCounter": 59,
+            "lastRetrievedFromServer": 59,
+            "isNameObsolete": false
+        },
+        "CustomField__Lead.PartnerType__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 180,
+            "lastRetrievedFromServer": 180,
+            "isNameObsolete": false
+        },
+        "CustomField__PartnerProvisioningLog__c.Account__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 181,
+            "lastRetrievedFromServer": 181,
+            "isNameObsolete": false
+        },
+        "CustomObject__PartnerProvisioningLog__c": {
+            "memberType": "CustomObject",
+            "serverRevisionCounter": 256,
+            "lastRetrievedFromServer": 212,
+            "isNameObsolete": true
+        },
+        "CustomField__PartnerProvisioningLog__c.AttemptCount__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 183,
+            "lastRetrievedFromServer": 183,
+            "isNameObsolete": false
+        },
+        "CustomField__PartnerProvisioningLog__c.Contact__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 184,
+            "lastRetrievedFromServer": 184,
+            "isNameObsolete": false
+        },
+        "CustomField__PartnerProvisioningLog__c.HttpStatus__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 186,
+            "lastRetrievedFromServer": 186,
+            "isNameObsolete": false
+        },
+        "CustomField__PartnerProvisioningLog__c.LastAttemptAt__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 187,
+            "lastRetrievedFromServer": 187,
+            "isNameObsolete": false
+        },
+        "CustomField__PartnerProvisioningLog__c.Lead__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 188,
+            "lastRetrievedFromServer": 188,
+            "isNameObsolete": false
+        },
+        "CustomField__PartnerProvisioningLog__c.MappingFallback__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 190,
+            "lastRetrievedFromServer": 190,
+            "isNameObsolete": false
+        },
+        "CustomField__PartnerProvisioningLog__c.NextAttemptAt__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 191,
+            "lastRetrievedFromServer": 191,
+            "isNameObsolete": false
+        },
+        "CustomField__PartnerProvisioningLog__c.Notes__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 192,
+            "lastRetrievedFromServer": 192,
+            "isNameObsolete": false
+        },
+        "CustomField__PartnerProvisioningLog__c.Outcome__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 193,
+            "lastRetrievedFromServer": 193,
+            "isNameObsolete": false
+        },
+        "CustomField__PartnerProvisioningLog__c.PartnerTypeSent__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 194,
+            "lastRetrievedFromServer": 194,
+            "isNameObsolete": false
+        },
+        "CustomField__PartnerProvisioningLog__c.PartnerTypeSource__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 195,
+            "lastRetrievedFromServer": 195,
+            "isNameObsolete": false
+        },
+        "CustomField__PartnerProvisioningLog__c.ResponseBody__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 196,
+            "lastRetrievedFromServer": 196,
+            "isNameObsolete": false
+        },
+        "CustomField__PartnerProvisioningLog__c.Status__c": {
+            "memberType": "CustomField",
+            "serverRevisionCounter": 197,
+            "lastRetrievedFromServer": 197,
+            "isNameObsolete": false
+        },
+        "ApexClass__LeadPartnerProvisioningHandler": {
+            "memberType": "ApexClass",
+            "serverRevisionCounter": 251,
+            "lastRetrievedFromServer": 198,
+            "isNameObsolete": true
+        },
+        "ApexClass__LeadPartnerProvisioningHandlerTest": {
+            "memberType": "ApexClass",
+            "serverRevisionCounter": 250,
+            "lastRetrievedFromServer": 199,
+            "isNameObsolete": true
+        },
+        "ApexClass__PartnerProvisionInvocable": {
+            "memberType": "ApexClass",
+            "serverRevisionCounter": 247,
+            "lastRetrievedFromServer": 200,
+            "isNameObsolete": true
+        },
+        "ApexClass__PartnerProvisionInvocableTest": {
+            "memberType": "ApexClass",
+            "serverRevisionCounter": 252,
+            "lastRetrievedFromServer": 201,
+            "isNameObsolete": true
+        },
+        "ApexClass__PartnerProvisionMock": {
+            "memberType": "ApexClass",
+            "serverRevisionCounter": 254,
+            "lastRetrievedFromServer": 202,
+            "isNameObsolete": true
+        },
+        "ApexClass__PartnerProvisionQueueable": {
+            "memberType": "ApexClass",
+            "serverRevisionCounter": 253,
+            "lastRetrievedFromServer": 203,
+            "isNameObsolete": true
+        },
+        "ApexClass__PartnerProvisionQueueableTest": {
+            "memberType": "ApexClass",
+            "serverRevisionCounter": 255,
+            "lastRetrievedFromServer": 226,
+            "isNameObsolete": true
+        },
+        "ApexClass__PartnerProvisionService": {
+            "memberType": "ApexClass",
+            "serverRevisionCounter": 249,
+            "lastRetrievedFromServer": 205,
+            "isNameObsolete": true
+        },
+        "ApexClass__PartnerProvisionServiceTest": {
+            "memberType": "ApexClass",
+            "serverRevisionCounter": 246,
+            "lastRetrievedFromServer": 206,
+            "isNameObsolete": true
+        },
+        "ApexClass__PartnerProvisionSweeper": {
+            "memberType": "ApexClass",
+            "serverRevisionCounter": 248,
+            "lastRetrievedFromServer": 207,
+            "isNameObsolete": true
+        },
+        "ApexTrigger__LeadPartnerProvisioning": {
+            "memberType": "ApexTrigger",
+            "serverRevisionCounter": 245,
+            "lastRetrievedFromServer": 208,
+            "isNameObsolete": true
+        },
+        "ExternalCredential__Partner_Portal_Auth": {
+            "memberType": "ExternalCredential",
+            "serverRevisionCounter": 285,
+            "lastRetrievedFromServer": 232,
+            "isNameObsolete": true
+        },
+        "NamedCredential__Partner_Portal_Provisioning": {
+            "memberType": "NamedCredential",
+            "serverRevisionCounter": 288,
+            "lastRetrievedFromServer": 287,
+            "isNameObsolete": false
+        },
+        "ListView__PartnerProvisioningLog__c.All_Recent": {
+            "memberType": "ListView",
+            "serverRevisionCounter": 213,
+            "lastRetrievedFromServer": 213,
+            "isNameObsolete": false
+        },
+        "ListView__PartnerProvisioningLog__c.Needs_Attention": {
+            "memberType": "ListView",
+            "serverRevisionCounter": 214,
+            "lastRetrievedFromServer": 214,
+            "isNameObsolete": false
+        },
+        "PermissionSet__Partner_Portal_Provisioning": {
+            "memberType": "PermissionSet",
+            "serverRevisionCounter": 283,
+            "lastRetrievedFromServer": 234,
+            "isNameObsolete": true
+        },
+        "ApexClass__PartnerPortalProvisioner": {
+            "memberType": "ApexClass",
+            "serverRevisionCounter": 332,
+            "lastRetrievedFromServer": 332,
+            "isNameObsolete": false
+        },
+        "ApexClass__PartnerPortalProvisionerTest": {
+            "memberType": "ApexClass",
+            "serverRevisionCounter": 266,
+            "lastRetrievedFromServer": 262,
+            "isNameObsolete": true
+        },
+        "FeatureParameterInteger__pushtopics__TotalExecutables": {
+            "memberType": "FeatureParameterInteger",
+            "serverRevisionCounter": 328,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ExternalClientApplication__DSPConnectedClientApp": {
+            "memberType": "ExternalClientApplication",
+            "serverRevisionCounter": 302,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ExtlClntAppConfigurablePolicies__DSPConnectedClientApp_plcy": {
+            "memberType": "ExtlClntAppConfigurablePolicies",
+            "serverRevisionCounter": 303,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ExtlClntAppOauthSettings__DSPConnectedClientApp_oauth": {
+            "memberType": "ExtlClntAppOauthSettings",
+            "serverRevisionCounter": 304,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ExtlClntAppGlobalOauthSettings__DSPConnectedClientApp_glbloauth": {
+            "memberType": "ExtlClntAppGlobalOauthSettings",
+            "serverRevisionCounter": 305,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ExtlClntAppOauthSecuritySettings__DSPConnectedClientApp_oauthSecurity": {
+            "memberType": "ExtlClntAppOauthSecuritySettings",
+            "serverRevisionCounter": 306,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ExtlClntAppOauthConfigurablePolicies__DSPConnectedClientApp_oauthPlcy": {
+            "memberType": "ExtlClntAppOauthConfigurablePolicies",
+            "serverRevisionCounter": 307,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ExternalClientApplication__DSPConnectedClientAppDev": {
+            "memberType": "ExternalClientApplication",
+            "serverRevisionCounter": 317,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ExtlClntAppConfigurablePolicies__DSPConnectedClientAppDev_plcy": {
+            "memberType": "ExtlClntAppConfigurablePolicies",
+            "serverRevisionCounter": 318,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ExtlClntAppOauthSettings__DSPConnectedClientAppDev_oauth": {
+            "memberType": "ExtlClntAppOauthSettings",
+            "serverRevisionCounter": 319,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ExtlClntAppGlobalOauthSettings__DSPConnectedClientAppDev_glbloauth": {
+            "memberType": "ExtlClntAppGlobalOauthSettings",
+            "serverRevisionCounter": 320,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ExtlClntAppOauthSecuritySettings__DSPConnectedClientAppDev_oauthSecurity": {
+            "memberType": "ExtlClntAppOauthSecuritySettings",
+            "serverRevisionCounter": 321,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ExtlClntAppOauthConfigurablePolicies__DSPConnectedClientAppDev_oauthPlcy": {
+            "memberType": "ExtlClntAppOauthConfigurablePolicies",
+            "serverRevisionCounter": 322,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "LeadConvertSettings__LeadConvertSettings": {
+            "memberType": "LeadConvertSettings",
+            "serverRevisionCounter": 326,
+            "lastRetrievedFromServer": null,
+            "isNameObsolete": false
+        },
+        "ApexTrigger__Account": {
+            "memberType": "ApexTrigger",
+            "serverRevisionCounter": 330,
+            "lastRetrievedFromServer": null,
             "isNameObsolete": false
         }
     }

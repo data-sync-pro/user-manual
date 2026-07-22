@@ -21,6 +21,7 @@
         <members>DealRegistration__c.industry__c</members>
         <members>Account.PartnerType__c</members>
         <members>Account.Primary_Contact__c</members>
+        <members>Lead.PartnerType__c</members>
         <name>CustomField</name>
     </types>
     <types>
@@ -28,6 +29,15 @@
         <name>CustomObject</name>
     </types>
     <types>
+        <members>PartnerPortalProvisioner</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>Partner_Portal_Provisioning</members>
+        <name>NamedCredential</name>
+    </types>
+    <types>
+        <members>Partner_Portal_Admin</members>
         <members>Partner_Portal_Integration</members>
         <members>Partner_Portal_Partner_Sync</members>
         <name>PermissionSet</name>

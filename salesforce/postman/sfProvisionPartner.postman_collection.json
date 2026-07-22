@@ -1,0 +1,295 @@
+{
+  "info": {
+    "name": "Partner Portal — sfProvisionPartner",
+    "description": "Contract tests for the Salesforce -> Firebase partner-provisioning endpoint.\n\nSETUP: set the collection variable `secret` to the value of SF_PUSH_SECRET in functions/.env (do NOT commit it — prefer a Postman Environment over the collection variable).\n\nBehaviour depends on SF_PARTNER_SYNC_MODE in functions/.env:\n- dryrun  -> the happy path returns {\"outcome\":\"dryrun-would-create\"} and writes NOTHING.\n- live    -> the happy path returns {\"outcome\":\"created\"}, creates a Firebase Auth user + partners/{uid}, and emails a set-password link.\n\nRun the whole collection with the Postman Runner; each request asserts its own expected status and outcome.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://us-central1-partnerportal-b1d25.cloudfunctions.net/sfProvisionPartner"
+    },
+    { "key": "secret", "value": "" },
+    { "key": "adminEmail", "value": "xuehang.xu@datasyncpro.io" },
+    { "key": "testEmail", "value": "push-test@example.com" }
+  ],
+  "item": [
+    {
+      "name": "1. GET is rejected (405)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('405 method-not-allowed', function () {",
+              "  pm.response.to.have.status(405);",
+              "  pm.expect(pm.response.json().error).to.eql('method-not-allowed');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. No secret (401)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{}" },
+        "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('401 unauthorized', function () {",
+              "  pm.response.to.have.status(401);",
+              "  pm.expect(pm.response.json().error).to.eql('unauthorized');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Wrong secret (401)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "X-Portal-Secret", "value": "0000000000000000000000000000000000000000000000000000000000000000" }
+        ],
+        "body": { "mode": "raw", "raw": "{}" },
+        "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('401 unauthorized', function () {",
+              "  pm.response.to.have.status(401);",
+              "  pm.expect(pm.response.json().error).to.eql('unauthorized');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Good secret, empty body (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "X-Portal-Secret", "value": "{{secret}}" }
+        ],
+        "body": { "mode": "raw", "raw": "{}" },
+        "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('400 bad-payload', function () {",
+              "  pm.response.to.have.status(400);",
+              "  pm.expect(pm.response.json().error).to.eql('bad-payload');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Malformed Salesforce ids (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "X-Portal-Secret", "value": "{{secret}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"accountId\": \"nope\",\n  \"accountName\": \"Acme\",\n  \"partnerType\": \"Referral\",\n  \"contact\": { \"id\": \"003Ea00000Test0AAA\", \"firstName\": \"A\", \"lastName\": \"B\", \"email\": \"a@b.co\" }\n}"
+        },
+        "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('400 bad-payload', function () {",
+              "  pm.response.to.have.status(400);",
+              "  pm.expect(pm.response.json().error).to.eql('bad-payload');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Missing partnerType (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "X-Portal-Secret", "value": "{{secret}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"accountId\": \"001Ea00000Test0AAA\",\n  \"accountName\": \"Acme\",\n  \"contact\": { \"id\": \"003Ea00000Test0AAA\", \"firstName\": \"A\", \"lastName\": \"B\", \"email\": \"a@b.co\" }\n}"
+        },
+        "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('400 bad-payload', function () {",
+              "  pm.response.to.have.status(400);",
+              "  pm.expect(pm.response.json().error).to.eql('bad-payload');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Unusable contact email (200 skipped-bad-email)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "X-Portal-Secret", "value": "{{secret}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"accountId\": \"001Ea00000Test1AAA\",\n  \"accountName\": \"Acme\",\n  \"partnerType\": \"Referral\",\n  \"contact\": { \"id\": \"003Ea00000Test1AAA\", \"firstName\": \"A\", \"lastName\": \"B\", \"email\": \"not-an-email\" }\n}"
+        },
+        "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 skipped-bad-email', function () {",
+              "  pm.response.to.have.status(200);",
+              "  pm.expect(pm.response.json().outcome).to.eql('skipped-bad-email');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Admin email is untouchable (200 skipped-admin)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "X-Portal-Secret", "value": "{{secret}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"accountId\": \"001Ea00000Test3AAA\",\n  \"accountName\": \"Acme\",\n  \"partnerType\": \"Referral\",\n  \"contact\": { \"id\": \"003Ea00000Test3AAA\", \"firstName\": \"A\", \"lastName\": \"B\", \"email\": \"{{adminEmail}}\" }\n}"
+        },
+        "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 skipped-admin — an admin must never be demoted to partner', function () {",
+              "  pm.response.to.have.status(200);",
+              "  pm.expect(pm.response.json().outcome).to.eql('skipped-admin');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. HAPPY PATH — provision a partner",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "X-Portal-Secret", "value": "{{secret}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"accountId\": \"001Ea00000Test4AAA\",\n  \"accountName\": \"Push Test Partner\",\n  \"partnerType\": \"Referral\",\n  \"contact\": {\n    \"id\": \"003Ea00000Test4AAA\",\n    \"firstName\": \"Push\",\n    \"lastName\": \"Test\",\n    \"email\": \"{{testEmail}}\"\n  }\n}"
+        },
+        "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+        "description": "This is exactly the payload the Apex Queueable will send.\n\ndryrun -> {\"outcome\":\"dryrun-would-create\"} (nothing written)\nlive   -> {\"outcome\":\"created\"} (Auth user + partners/{uid} + set-password email)\n\nIn live mode set `testEmail` to a real inbox you control — the set-password link is mailed there."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 and a create-ish outcome', function () {",
+              "  pm.response.to.have.status(200);",
+              "  var outcome = pm.response.json().outcome;",
+              "  console.log('outcome =', outcome);",
+              "  pm.expect(['dryrun-would-create', 'created', 'noop', 'backfilled']).to.include(outcome);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Idempotency — same account again",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "X-Portal-Secret", "value": "{{secret}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"accountId\": \"001Ea00000Test4AAA\",\n  \"accountName\": \"Push Test Partner\",\n  \"partnerType\": \"Referral\",\n  \"contact\": {\n    \"id\": \"003Ea00000Test4AAA\",\n    \"firstName\": \"Push\",\n    \"lastName\": \"Test\",\n    \"email\": \"{{testEmail}}\"\n  }\n}"
+        },
+        "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+        "description": "Re-sending the SAME account must not create a second login or mail a second invite.\n\ndryrun -> dryrun-would-create again (dry runs hold no state between requests)\nlive   -> noop (steady state, zero writes)"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200, and never a duplicate create', function () {",
+              "  pm.response.to.have.status(200);",
+              "  var outcome = pm.response.json().outcome;",
+              "  console.log('outcome =', outcome);",
+              "  pm.expect(['dryrun-would-create', 'noop', 'invite-retried']).to.include(outcome);",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
